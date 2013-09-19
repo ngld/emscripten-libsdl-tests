@@ -9,9 +9,11 @@ fi
 cd build
 echo "Compiling..."
 
-rm *.js *.log
 for path in ../SDL-1.2.*/*.c; do
     file="$(basename "$path")"
+    [ -f "$file.js" ] && rm "$file.js"
+    [ -f "$file.log" ] && rm "$file.log"
+    
     echo "$file"
     emcc -O2 -o "$file.js" "$path" 2>&1 | tee "$file.log"
 done

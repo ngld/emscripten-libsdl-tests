@@ -44,16 +44,18 @@
       }
       
       function makeWrapper(callMain) {
-        try {
-          callMain.apply(this, arguments);
-          report($('#output').html().indexOf('exit(1) called') == -1);
-        } catch(e) {
-          Module.printErr('Failed: ' + (e.toString()));
-          if(typeof console != 'undefined') {
-            console.log(e);
+        return function () {
+          try {
+            callMain.apply(this, arguments);
+            report(EXITSTATUS === 0);
+          } catch(e) {
+            Module.printErr('Failed: ' + (e.toString()));
+            if(typeof console != 'undefined') {
+              console.log(e);
+            }
+            report(false);
           }
-          report(false);
-        }
+        };
       }
       
       // connect to canvas

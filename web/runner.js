@@ -1,5 +1,5 @@
 (function () {
-    var term, term_cw, term_ch, term_locked = false, term_line = '', term_cwd = '/', prompt_pos = 0;
+    var term, term_cw, term_ch, term_locked = false, term_line = '', term_cwd = '/logs', prompt_pos = 0;
     
     function initTerm() {
         $('.log-viewer').show();
@@ -19,7 +19,7 @@
                 switch(key) {
                     case '\x7f':
                         // Backspace
-                        term_line = term_line.substr(0, prompt_pos - 2) + term_line.substr(prompt_pos);
+                        term_line = term_line.substr(0, prompt_pos - 1) + term_line.substr(prompt_pos);
                         term.write("\r" + _prompt + term_line + ' \x1b[D');
                         prompt_pos--;
                     break;
@@ -48,6 +48,11 @@
                         } else {
                             term_line = term_line.substr(0, prompt_pos) + key + term_line.substr(prompt_pos);
                             term.write('\r' + _prompt + term_line);
+                            var str = '';
+                            for(var i = 0; i < (term_line.length - prompt_pos - 1); i++) {
+                                str += '\x1b[D';
+                            }
+                            term.write(str);
                         }
                         prompt_pos++;
                     break;
@@ -59,13 +64,14 @@
     }
     
     function resizeTerm() {
-        term.resize(Math.floor(($('.log-viewer').width() - 3) / term_cw), Math.floor(($('.log-viewer').height() - 15) / term_ch));
+        //term.resize(Math.floor(($('.log-viewer').width() - 3) / term_cw), Math.floor(($('.log-viewer').height() - 15) / term_ch));
     }
     
     function promptTerm() {
         term.write(_prompt = term_cwd + '# ');
         term_locked = false;
         term_line = '';
+        prompt_pos = 0;
     }
     
     function resolvPath(path) {
@@ -98,7 +104,7 @@
         cmd = cmd.split(' ');
         switch(cmd[0]) {
             case 'exit':
-                $('.log-viewer').hide();
+                $('.log-viewer').modal('hide');
             break;
             case 'll':
             case 'ls':
@@ -232,9 +238,9 @@
         function next(result, msg) {
             if(idx != -1) {
                 if(result) {
-                    tests[idx][1].addClass('success').find('.run').text('Success!');
+                    tests[idx][1].removeClass('warning').addClass('success').find('.run').text('Success!');
                 } else {
-                    tests[idx][1].addClass('warning').find('.run').text('Fail!');
+                    tests[idx][1].removeClass('success').addClass('warning').find('.run').text('Fail!');
                 }
                 if(msg) {
                     tests[idx][1].find('.run').append(' ').append($('<pre>').html(msg));
@@ -257,9 +263,9 @@
             setTimeout(function () {
                 if(idx == my_idx) {
                     // Timeout
-                    next(false);
+                    next(false, 'Timeout!');
                 }
-            }, 20000);
+            }, 15000);
         }
         window.testResult = next;
         next(true);
@@ -302,9 +308,9 @@
                 
                 window.testResult = function (result, msg) {
                     if(result) {
-                        row.addClass('success').find('.run').text('Success!');
+                        row.removeClass('warning').addClass('success').find('.run').text('Success!');
                     } else {
-                        row.addClass('warning').find('.run').text('Fail!');
+                        row.removeClass('success').addClass('warning').find('.run').text('Fail!');
                     }
                     if(msg) {
                         row.find('.run').append(' ').append($('<pre>').html(msg));
@@ -346,8 +352,8 @@
         $(window).resize(function () {
             resizeTerm();
             $('#test-frame').css({
-                width: $('body').width() + 'px',
-                height: $('body').height() - 63 + 'px'
+                width: $(window).width() + 'px',
+                height: $(window).height() - 63 + 'px'
             });
         });
         
