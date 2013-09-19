@@ -15,7 +15,7 @@ for path in ../SDL-1.2.*/*.c; do
     [ -f "$file.log" ] && rm "$file.log"
     
     echo "$file"
-    emcc -O2 -o "$file.js" "$path" 2>&1 | tee "$file.log"
+    emcc -O2 -Xclang -fcolor-diagnostics -o "$file.js" "$path" 2>&1 | tee "$file.log"
 done
 
 echo "Starting web server..."

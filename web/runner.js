@@ -9,9 +9,12 @@
         var term_cw = ref.find('span').width(), term_ch = ref.find('span').height() + 3;
         ref.html('');
         
+        // Forcefully enable boldness, even if it's broken (in the browser).
+        Terminal.brokenBold = false;
         term = new Terminal({
            geometry: [Math.floor((ref.width() - 3) / term_cw), Math.floor(($('.log-viewer').height() - 15) / term_ch)],
-           useStyle: true
+           useStyle: true,
+           colors: Terminal.tangoColors
         });
         term.open($('.terminal-cont')[0]);
         term.on('data', function (key) {
@@ -20,7 +23,9 @@
                     case '\x7f':
                         // Backspace
                         term_line = term_line.substr(0, prompt_pos - 1) + term_line.substr(prompt_pos);
-                        term.write("\r" + _prompt + term_line + ' \x1b[D');
+                        term.write('\x1b[s');
+                        term.write("\r" + _prompt + term_line + '    ');
+                        term.write('\x1b[u\x1b[D');
                         prompt_pos--;
                     break;
                     case '\x1b[D':
@@ -47,12 +52,9 @@
                             term.write(key);
                         } else {
                             term_line = term_line.substr(0, prompt_pos) + key + term_line.substr(prompt_pos);
+                            term.write('\x1b[s');
                             term.write('\r' + _prompt + term_line);
-                            var str = '';
-                            for(var i = 0; i < (term_line.length - prompt_pos - 1); i++) {
-                                str += '\x1b[D';
-                            }
-                            term.write(str);
+                            term.write('\x1b[u\x1b[C');
                         }
                         prompt_pos++;
                     break;
@@ -327,7 +329,10 @@
                 
                 var name = $(this).parents('tr').find('.name').text();
                 $('.log-viewer').modal('show');
-                term.write('# cat ' + name + '.log\r\n');
+                
+                term_cwd = '/tests';
+                term.write('\x1b[H\x1b[2J');
+                term.write('/tests# cat ' + name + '.log\r\n');
                 
                 $.get('tests/' + name + '.log', function (data) {
                     term.write(data.replace(/\n/g, '\r\n'));
