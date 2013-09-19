@@ -13,3 +13,4 @@ config.status
 depcomp
 install-sh
 missing
+build

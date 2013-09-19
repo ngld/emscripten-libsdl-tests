@@ -1,0 +1,43 @@
+.log-viewer {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    
+    padding: 10px;
+    overflow: scroll;
+    
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.log-viewer .close {
+    position: fixed;
+    top: 5px;
+    right: 30px;
+    color: white;
+    opacity: 1;
+}
+
+#test-display {
+    position: fixed;
+    top: 0px;
+    left: 5px;
+    right: 5px;
+    
+    padding: 2px;
+    height: 60px;
+    background: white;
+}
+
+#test-frame {
+    position: fixed;
+    top: 60px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    
+    border: 0;
+    background: white;
+}
