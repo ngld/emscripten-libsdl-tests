@@ -7,6 +7,7 @@ import SocketServer
 
 PORT = 8080
 TEST_PATH = os.path.abspath('.')
+BUILD_PATH = os.path.abspath('../build')
 
 class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def send_head(self):
@@ -22,6 +23,9 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         if path[:7] == '/tests/':
             return os.path.join(TEST_PATH, path[7:].split('?')[0])
+        
+        if path[:7] == '/build/':
+            return os.path.join(BUILD_PATH, path[7:].split('?')[0])
         
         return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
     
@@ -61,7 +65,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         PORT = int(sys.argv[1])
     
-    os.chdir('../web')
+    os.chdir(os.path.join(os.path.dirname(__file__), 'web'))
+    
+    SocketServer.TCPServer.allow_reuse_address = True
     httpd = SocketServer.TCPServer(("", PORT), Handler)
     
     print("serving at port", PORT)

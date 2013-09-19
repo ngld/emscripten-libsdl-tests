@@ -132,7 +132,7 @@
                     var dir = resolvPath(cmd[1]);
                 }
                 
-                if(dir != '/tests' && dir != '/logs' && dir != '/') {
+                if(dir != '/build' && dir != '/logs' && dir != '/') {
                     term.writeln('cd: Directory not found!');
                 } else {
                     term_cwd = dir;
@@ -163,10 +163,10 @@
     function termLs(path, long) {
         switch(path) {
             case '/':
-                term.writeln('tests/');
+                term.writeln('build/');
                 term.writeln('logs/');
             break;
-            case '/tests':
+            case '/build':
                 $('tr.can-run').each(function () {
                     var $this = $(this);
                     term.writeln($this.find('.name').text() + '.js');
@@ -189,20 +189,20 @@
             return;
         }
         
-        $.get('tests/' + path.substring(6), function (content) {
+        $.get('build/' + path.substring(6), function (content) {
             term.writeln(content);
             promptTerm();
         });
     }
     
     function runTest(path) {
-        if(path.indexOf('/tests/') != 0) {
+        if(path.indexOf('/build/') != 0) {
             term.writeln('cat: File not found!');
             promptTerm();
             return;
         }
         
-        location.href = 'shell.html#tests/' + path.substring(7);
+        location.href = 'shell.html#' + path.substring(7);
     }
     
     //  ========/ Term
@@ -260,7 +260,7 @@
             }
             
             $('#test-display .progress-bar').css('width', (100 * idx / tests.length) + '%');
-            $('#test-frame').attr('src', 'shell.html?' + $.now() + '#tests/' + tests[idx][0] + '.js');
+            $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + tests[idx][0] + '.js');
             
             var my_idx = idx;
             setTimeout(function () {
@@ -275,7 +275,7 @@
     }
     
     $(function () {
-        $.getJSON('tests/index.json', function (flist) {
+        $.getJSON('build/index.json', function (flist) {
             var list = $('table');
             
             flist.files.sort();
@@ -288,7 +288,7 @@
                     row.addClass('can-run');
                     row.find('.built').html('Success');
                     row.find('.run').html('?');
-                    row.find('.actions').append(' <a href="#" class="run-test">Run test</a>');
+                    row.find('.actions').append('<a href="#" class="run-test">Run test</a><br><a href="#" class="clear-rlog">Clear run log</a><br>');
                 } else if(name.match(/\.log$/)) {
                     var name = /^(.*)\.log$/.exec(name)[1];
                     var row = getRow(name);
@@ -299,7 +299,7 @@
                         row.find('.built').html('Fail');
                         row.find('.run').html('N/A');
                     }
-                    row.find('.actions').append(' <a href="#" class="log">Show build log</a>');
+                    row.find('.actions').append('<a href="#" class="log">Show build log</a><br>');
                 }
             });
 
@@ -321,7 +321,13 @@
                 };
                 
                 $('#test-frame, #test-display').show();
-                $('#test-frame').attr('src', 'shell.html?' + $.now() + '#tests/' + name + '.js');
+                $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + name + '.js');
+            });
+            
+            $('.clear-rlog').click(function (e) {
+                e.preventDefault();
+                
+                $(this).parents('tr').find('.run pre').remove();
             });
             
             $('.log').click(function (e) {
@@ -330,11 +336,11 @@
                 var name = $(this).parents('tr').find('.name').text();
                 $('.log-viewer').modal('show');
                 
-                term_cwd = '/tests';
+                term_cwd = '/build';
                 term.write('\x1b[H\x1b[2J');
-                term.write('/tests# cat ' + name + '.log\r\n');
+                term.write('/build# cat ' + name + '.log\r\n');
                 
-                $.get('tests/' + name + '.log', function (data) {
+                $.get('build/' + name + '.log', function (data) {
                     term.write(data.replace(/\n/g, '\r\n'));
                     promptTerm();
                 });
@@ -343,12 +349,12 @@
             $('.runner-go').click(function (e) {
                 e.preventDefault();
                 runTests();
-            })
+            });
             
             $('#test-display').click(function (e) {
                 e.preventDefault();
                 $('#test-frame, #test-display').hide();
-            })
+            });
             
             $('.loading').remove();
         });

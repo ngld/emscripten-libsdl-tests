@@ -60,7 +60,19 @@
       
       // connect to canvas
       var Module = {
-        preRun: [],
+        preRun: [function () {
+          Module.addRunDependency('load_fs');
+          
+          $.getJSON('tests/index.json', function (data) {
+            $.each(data.files, function (i, name) {
+              if(!name.match(/\.c$/)) {
+                FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
+              }
+            });
+            
+            Module.removeRunDependency('load_fs');
+          });
+        }],
         postRun: [],
         print: function(text) {
           $('#output').append($('<span>').text(text)).append('<br>');
@@ -101,7 +113,7 @@
       
       if(location.hash && location.hash[0] == '#') {
         var path = location.hash.substr(1);
-        $.getScript(path);
+        $.getScript('build/' + path);
       }
     </script>
   </body>

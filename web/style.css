@@ -12,6 +12,10 @@
     font-size: 12px;
 }
 
+.terminal {
+    font-size: 12px !important;
+}
+
 .log-viewer .close {
     position: fixed;
     top: 5px;
@@ -40,4 +44,8 @@
     
     border: 0;
     background: white;
+}
+
+table td.actions {
+    white-space:nowrap;
 }

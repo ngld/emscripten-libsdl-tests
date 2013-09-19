@@ -233,7 +233,7 @@ static void PrintKey(const SDL_keysym *sym, int pressed)
 	printf("\n");
 }
 
-int SDLCALL FilterEvents(const SDL_Event *event)
+int SDLCALL FilterEvents(void *userdata, const SDL_Event *event)
 {
 	static int reallyquit = 0;
 
@@ -412,9 +412,11 @@ int main(int argc, char *argv[])
 	if ( SetVideoMode(w, h) < 0 ) {
 		quit(1);
 	}
+	
+	int userdata = 1;
 
 	/* Set an event filter that discards everything but QUIT */
-	SDL_SetEventFilter(FilterEvents);
+	SDL_SetEventFilter(FilterEvents, ((void*)&userdata));
 
 	/* Loop, waiting for QUIT */
 	while ( SDL_WaitEvent(&event) ) {
