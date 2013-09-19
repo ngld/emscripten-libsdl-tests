@@ -253,6 +253,7 @@
                 $('#test-frame').attr('src', 'shell.html');
                 
                 window.testResult = null;
+                $('.test-result').text($('tr.can-run.success').length + ' of ' + ($('tr').length - 1) + ' tests passed, ' + ($('tr:not(.can-run)').length) + ' failed to build.');
                 return;
             }
             
@@ -285,7 +286,7 @@
                     row.addClass('can-run');
                     row.find('.built').html('Success');
                     row.find('.run').html('?');
-                    row.find('.actions').append(' <a href="#" class="run-test">Run Test</a>');
+                    row.find('.actions').append(' <a href="#" class="run-test">Run test</a>');
                 } else if(name.match(/\.log$/)) {
                     var name = /^(.*)\.log$/.exec(name)[1];
                     var row = getRow(name);
@@ -296,7 +297,7 @@
                         row.find('.built').html('Fail');
                         row.find('.run').html('N/A');
                     }
-                    row.find('.actions').append(' <a href="#" class="log">Show Log</a>');
+                    row.find('.actions').append(' <a href="#" class="log">Show build log</a>');
                 }
             });
 
@@ -339,7 +340,7 @@
                 runTests();
             })
             
-            $('.test-back').click(function (e) {
+            $('#test-display').click(function (e) {
                 e.preventDefault();
                 $('#test-frame, #test-display').hide();
             })
