@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+
+void main_loop();
+#endif
 
 #include "SDL.h"
 #include "picture.xbm"
@@ -50,15 +55,14 @@ SDL_Surface *LoadXBM(SDL_Surface *screen, int w, int h, Uint8 *bits)
 	return(bitmap);
 }
 
+SDL_Surface *bitmap;
+SDL_Surface *screen;
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
-	SDL_Surface *bitmap;
 	Uint8  video_bpp;
 	Uint32 videoflags;
 	Uint8 *buffer;
 	int i, k, done;
-	SDL_Event event;
 	Uint16 *buffer16;
         Uint16 color;
         Uint8  gradient;
@@ -147,10 +151,22 @@ int main(int argc, char *argv[])
 	if ( bitmap == NULL ) {
 		quit(1);
 	}
-
+	
+#ifndef EMSCRIPTEN
+	SDL_Event event;
 	/* Wait for a keystroke */
 	done = 0;
 	while ( !done ) {
+#else
+	emscripten_set_main_loop(&main_loop, 30, 1);
+	return 0;
+}
+
+void main_loop()
+{
+	int done = 0;
+	SDL_Event event;
+#endif
 		/* Check for events */
 		while ( SDL_PollEvent(&event) ) {
 			switch (event.type) {
@@ -164,6 +180,7 @@ int main(int argc, char *argv[])
 					SDL_BlitSurface(bitmap, NULL,
 								screen, &dst);
 					SDL_UpdateRects(screen,1,&dst);
+					printf("User clicked!\n");
 					}
 					break;
 				case SDL_KEYDOWN:
@@ -177,8 +194,17 @@ int main(int argc, char *argv[])
 					break;
 			}
 		}
+#ifndef EMSCRIPTEN
 	}
+	
 	SDL_FreeSurface(bitmap);
 	SDL_Quit();
 	return(0);
+#else
+	if(done) {
+		SDL_FreeSurface(bitmap);
+		SDL_Quit();
+		exit(0);
+	}
+#endif
 }
