@@ -1,3 +1,7 @@
+.container {
+    padding-top: 20px;
+}
+
 .log-viewer {
     position: fixed;
     top: 0px;

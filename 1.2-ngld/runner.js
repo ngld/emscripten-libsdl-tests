@@ -370,7 +370,9 @@
                 }
             });
             
-            $('.loading').remove();
+            $.get('build/emcc_version.txt', function (ver) {
+                $('.emcc-version').text(ver);
+            });
         });
         
         initTerm();
