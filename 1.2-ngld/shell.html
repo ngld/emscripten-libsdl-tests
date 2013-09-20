@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Emscripten-Generated Code</title>
+    <style>
+      @import url(style.css);
+      
+      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+      #output { font-family: monospace; width: 80%; height: 300px; overflow-y: scroll; }
+      #output .error { color: red; }
+      div.emscripten { text-align: center; }
+      div.emscripten_border { border: 1px solid black; }
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      canvas.emscripten { border: 0px none; }
+    </style>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="tracekit.js"></script>
+  </head>
+  <body>
+    <hr/>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
+    <div class="emscripten_border">
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    </div>
+    <hr/>
+    <div class="emscripten">
+      <input type="checkbox" id="resize">Resize canvas
+      <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
+      &nbsp;&nbsp;&nbsp;
+      <input type="button" value="Fullscreen" onclick="Module.requestFullScreen(document.getElementById('pointerLock').checked, 
+                                                                                document.getElementById('resize').checked)">
+    </div>
+    
+    <hr/>
+    <pre id="output"></pre>
+    <hr>
+    <script type='text/javascript'>
+      var reported = false;
+      
+      $('body').on('click', '.stack-line', function (e) {
+          var context = $(this).find('.context');
+          
+          if(context.length == 0) return;
+          if(context.is(':visible')) {
+              context.hide();
+          } else {
+              context.show();
+          }
+      });
+      
+      function report(result) {
+        if(!reported && typeof top != 'undefined' && top.testResult) {
+          top.testResult(result, $('#output').html());
+          reported = true;
+        }
+      }
+      
+      function makeMainWrapper(callMain) {
+        return function () {
+          try {
+            callMain.apply(this, arguments);
+            
+            if(!Module.noExitRuntime) {
+              report(EXITSTATUS === 0);
+            }
+          } catch(e) {
+            if(typeof e == 'string') e = new Error('String error: ' + e);
+            TraceKit.report(e);
+            
+            if(typeof console != 'undefined') {
+              console.log(e);
+            }
+          }
+        };
+      }
+      
+      function makeAbortWrapper(abort) {
+        return function () {
+          try {
+            abort.apply(this, arguments);
+          } catch(e) {
+            TraceKit.report(e);
+            throw e;
+          }
+        }
+      }
+      
+      TraceKit.report.subscribe(function (exc) {
+        var msg = exc.name;
+        if(exc.message) {
+          msg += ': ' + (exc.message.indexOf('abort()') != 0 ? exc.message : 'abort()');
+        }
+        
+        Module.printErr('\nFail: ' + msg);
+        
+        $.each(exc.stack, function (i, frame) {
+          var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + frame.url);
+          $('#output').append(line);
+          
+          if(frame.context) {
+            line.addClass('has-context');
+            var context = $('<pre class="context">').appendTo(line);
+            var offset = frame.line - Math.floor(frame.context.length / 2);
+            var pad_count = (offset + frame.context.length + '').length - ('' + offset).length;
+            var pad = '';
+            for(var a = 0; a < pad_count; a++) pad += ' ';
+            
+            $.each(frame.context, function (i, line) {
+              line = $('<div class="line">').text(pad + (offset + i) + ' ' + line).appendTo(context);
+              if(offset + i == frame.line) line.addClass('middle');
+            });
+          }
+        });
+        
+        report(false);
+      });
+      
+      // connect to canvas
+      var Module = {
+        preRun: [function () {
+          Module.callMain = makeMainWrapper(Module.callMain);
+          abort = makeAbortWrapper(abort);
+          
+          Module.addRunDependency('load_fs');
+          
+          $.getJSON('tests/index.json', function (data) {
+            $.each(data.files, function (i, name) {
+              if(!name.match(/\.(c|wav)$/)) {
+                FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
+              }
+            });
+            
+            Module.removeRunDependency('load_fs');
+          });
+        }],
+        postRun: [],
+        print: function(text) {
+          $('#output').append($('<span>').text(text)).append('<br>').scrollTop(9999999);
+        },
+        printErr: function(text) {
+          $('#output').append($('<span class="error">').text(text)).append('<br>').scrollTop(9999999);
+        },
+        canvas: document.getElementById('canvas'),
+        setStatus: function(text) {
+          if (Module.setStatus.interval) clearInterval(Module.setStatus.interval);
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var statusElement = document.getElementById('status');
+          var progressElement = document.getElementById('progress');
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+      
+      if(location.hash && location.hash[0] == '#') {
+        var path = location.hash.substr(1);
+        // Manually add the tag to our head and avoid $.getScript() to prevent screwed stacktraces.
+        // $('head').append($('<script type="text/javascript">').attr('src', 'build/' + path)); // This doesn't work...
+        
+        var tag = $('<script>')[0];
+        tag.setAttribute('type', 'text/javascript');
+        tag.setAttribute('src', 'build/' + path);
+        $('head')[0].appendChild(tag);
+      }
+    </script>
+  </body>
+</html>
