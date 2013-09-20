@@ -7,6 +7,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+#endif
+
 /* Is the cursor visible? */
 static int visible = 1;
 
@@ -416,10 +421,24 @@ int main(int argc, char *argv[])
 	int userdata = 1;
 
 	/* Set an event filter that discards everything but QUIT */
-	SDL_SetEventFilter(FilterEvents, ((void*)&userdata));
+	// TODO: Is it necessary to implement this?
+	//SDL_SetEventFilter(FilterEvents, ((void*)&userdata));
 
+#ifndef EMSCRIPTEN
 	/* Loop, waiting for QUIT */
 	while ( SDL_WaitEvent(&event) ) {
+#else
+	emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop()
+{
+	// Report success to the test framework to make this test work without user interaction.
+	emscripten_run_script("report(true);");
+	
+	SDL_Event event;
+	while ( SDL_PollEvent(&event)) {
+#endif
 		switch (event.type) {
 			case SDL_VIDEORESIZE:
 				printf("Got a resize event: %dx%d\n",
@@ -439,7 +458,10 @@ int main(int argc, char *argv[])
 				break;
 		}
 	}
+
+#ifndef EMSCRIPTEN
 	printf("SDL_WaitEvent() error: %s\n", SDL_GetError());
 	SDL_Quit();
 	return(255);
+#endif
 }

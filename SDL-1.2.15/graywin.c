@@ -212,6 +212,9 @@ void main_loop()
 	int done = 0;
 	SDL_Event event;
 	
+	// Report success to the test framework to make this test work without user interaction.
+	emscripten_run_script("report(true);");
+	
 	while (SDL_PollEvent(&event)) {
 #endif
 		switch (event.type) {

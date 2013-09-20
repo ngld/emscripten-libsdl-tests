@@ -166,6 +166,9 @@ void main_loop()
 {
 	int done = 0;
 	SDL_Event event;
+	
+	// Report success to the test framework to make this test work without user interaction.
+	emscripten_run_script("report(true);");
 #endif
 		/* Check for events */
 		while ( SDL_PollEvent(&event) ) {
@@ -180,7 +183,7 @@ void main_loop()
 					SDL_BlitSurface(bitmap, NULL,
 								screen, &dst);
 					SDL_UpdateRects(screen,1,&dst);
-					printf("User clicked!\n");
+					printf("User clicked at %d, %d!\n", dst.x, dst.y);
 					}
 					break;
 				case SDL_KEYDOWN:

@@ -8,6 +8,12 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+   #include <emscripten.h>
+   void main2(void *);
+   void main3(void *);
+#endif
+
 #define DEFAULT_RESOLUTION	1
 
 static int ticks = 0;
@@ -24,11 +30,10 @@ static Uint32 SDLCALL callback(Uint32 interval, void *param)
   return interval;
 }
 
+int desired;
+SDL_TimerID t1, t2, t3;
 int main(int argc, char *argv[])
 {
-	int desired;
-	SDL_TimerID t1, t2, t3;
-
 	if ( SDL_Init(SDL_INIT_TIMER) < 0 ) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		return(1);
@@ -46,8 +51,15 @@ int main(int argc, char *argv[])
 
 	/* Wait 10 seconds */
 	printf("Waiting 10 seconds\n");
+#ifndef EMSCRIPTEN
 	SDL_Delay(10*1000);
+#else
+	emscripten_async_call(&main2, 0, 10*1000);
+	emscripten_exit_with_live_runtime();
+}
 
+void main2(void *param) {
+#endif
 	/* Stop the timer */
 	SDL_SetTimer(0, NULL);
 
@@ -72,8 +84,15 @@ int main(int argc, char *argv[])
 	
 	/* Wait 10 seconds */
 	printf("Waiting 10 seconds\n");
+#ifndef EMSCRIPTEN
 	SDL_Delay(10*1000);
+#else
+	emscripten_async_call(&main3, 0, 10*1000);
+	emscripten_exit_with_live_runtime();
+}
 
+void main3(void *param) {
+#endif
 	printf("Removing timer 1 and waiting 5 more seconds\n");
 	SDL_RemoveTimer(t1);
 
@@ -83,5 +102,11 @@ int main(int argc, char *argv[])
 	SDL_RemoveTimer(t3);
 
 	SDL_Quit();
+
+#ifndef EMSCRIPTEN
 	return(0);
+#else
+	// Report success to the test framework because it can't determine when we exit.
+	emscripten_run_script("report(true);");
+#endif
 }

@@ -200,13 +200,22 @@ int main(int argc, char *argv[])
 void main_loop()
 {
     SDL_bool quit = SDL_FALSE;
+    
+    // Report success to the test framework to make this test work without user interaction.
+    emscripten_run_script("report(true);");
 #endif
 		SDL_Event	event;
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
 				case SDL_MOUSEBUTTONDOWN:
-					current = (current + 1)%3;
-					SDL_SetCursor(cursor[current]);
+					current = (current + 1)%4;
+                    if(current == 3) {
+                        // Test hiding the cursor
+                        SDL_ShowCursor(0);
+                    } else {
+                        SDL_ShowCursor(1);
+				        SDL_SetCursor(cursor[current]);
+                    }
 					break;
 				case SDL_KEYDOWN:
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
