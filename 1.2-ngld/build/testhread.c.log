@@ -1,0 +1,4 @@
+[1m../SDL-1.2.15/testhread.c:23:19: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+                                (char *)data, SDL_ThreadID());
+[0;1;32m                                              ^~~~~~~~~~~~~~
+[0m1 warning generated.
