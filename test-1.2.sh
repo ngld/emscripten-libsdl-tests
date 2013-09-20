@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! which emcc > /dev/null; then
-    echo "Couldn\'t find Emscripten!"
+    echo "Couldn't find Emscripten!"
     exit 1
 fi
 

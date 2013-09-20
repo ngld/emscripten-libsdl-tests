@@ -49,3 +49,23 @@
 table td.actions {
     white-space:nowrap;
 }
+
+.stack-line.has-context {
+    cursor: pointer;
+}
+
+.stack-line .context {
+    display: none;
+}
+
+.context div.line {
+    background: rgb(255, 255, 255);
+}
+
+.context div.line:nth-child(2n+1) {
+    background: rgb(230, 230, 230);
+}
+
+.context div.line.middle {
+    background: rgb(250, 250, 180);
+}

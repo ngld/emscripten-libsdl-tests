@@ -260,7 +260,7 @@
             }
             
             $('#test-display .progress-bar').css('width', (100 * idx / tests.length) + '%');
-            $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + tests[idx][0] + '.js');
+            $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + tests[idx][0] + '.js').focus();
             
             var my_idx = idx;
             setTimeout(function () {
@@ -268,7 +268,7 @@
                     // Timeout
                     next(false, 'Timeout!');
                 }
-            }, 15000);
+            }, 60000);
         }
         window.testResult = next;
         next(true);
@@ -321,7 +321,7 @@
                 };
                 
                 $('#test-frame, #test-display').show();
-                $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + name + '.js');
+                $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + name + '.js').focus();
             });
             
             $('.clear-rlog').click(function (e) {
@@ -354,6 +354,17 @@
             $('#test-display').click(function (e) {
                 e.preventDefault();
                 $('#test-frame, #test-display').hide();
+            });
+            
+            $('body').on('click', '.stack-line', function (e) {
+                var context = $(this).find('.context');
+                
+                if(context.length == 0) return;
+                if(context.is(':visible')) {
+                    context.hide();
+                } else {
+                    context.show();
+                }
             });
             
             $('.loading').remove();

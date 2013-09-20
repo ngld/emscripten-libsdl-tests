@@ -1,5 +1,6 @@
 #!/bin/env python2
 
+from __future__ import print_function
 import sys, os, json
 import webbrowser
 import SimpleHTTPServer
@@ -71,5 +72,7 @@ if __name__ == '__main__':
     httpd = SocketServer.TCPServer(("", PORT), Handler)
     
     print("serving at port", PORT)
-    webbrowser.open_new_tab('http://localhost:' + str(PORT))
+    if launch:
+        webbrowser.open_new_tab('http://localhost:' + str(PORT))
+    
     httpd.serve_forever()
