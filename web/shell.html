@@ -91,6 +91,12 @@
       }
       
       TraceKit.report.subscribe(function (exc) {
+        if(!exc.name && !exc.message) {
+          // Is this even a proper error?
+          // NOTE: This happens when Emscripten launches the "SimulateInfiniteLoop" exception. Ignore it for now.
+          return;
+        }
+        
         var msg = exc.name;
         if(exc.message) {
           msg += ': ' + (exc.message.indexOf('abort()') != 0 ? exc.message : 'abort()');
@@ -99,7 +105,9 @@
         Module.printErr('\nFail: ' + msg);
         
         $.each(exc.stack, function (i, frame) {
-          var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + frame.url.split('/').pop());
+          var file = frame.url;
+          if(file) file = file.split('/').pop()
+          var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + file);
           $('#output').append(line);
           
           if(frame.context) {
@@ -132,7 +140,9 @@
           $.get('tests/' + path, function (data) {
             $.each(data.split("\n"), function (i, name) {
               name = name.replace(/\s+$/, '');
-              FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
+              if(name != '') {
+                FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
+              }
             });
             
             Module.removeRunDependency('load_fs');
