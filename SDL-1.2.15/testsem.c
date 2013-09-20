@@ -61,10 +61,10 @@ int main(int argc, char **argv)
 	uintptr_t i;
 	int init_sem;
 
-	if(argc < 2) {
+	/*if(argc < 2) {
 		fprintf(stderr,"Usage: %s init_value\n", argv[0]);
 		return(1);
-	}
+	}*/
 
 	/* Load the SDL library */
 	if ( SDL_Init(0) < 0 ) {
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	signal(SIGTERM, killed);
 	signal(SIGINT, killed);
 	
-	init_sem = atoi(argv[1]);
+	init_sem = 2; //atoi(argv[1]);
 	sem = SDL_CreateSemaphore(init_sem);
 	
 	printf("Running %d threads, semaphore value = %d\n", NUM_THREADS, init_sem);

@@ -18,12 +18,12 @@ int main(int argc, char *argv[])
 	void *lib = NULL;
 	fntype fn = NULL;
 
-	if (argc != 3) {
+	/*if (argc != 3) {
 		const char *app = argv[0];
 		fprintf(stderr, "USAGE: %s <library> <functionname>\n", app);
 		fprintf(stderr, "       %s --hello <lib with puts()>\n", app);
 		return 1;
-	}
+	}*/
 
 	/* Initialize SDL */
 	if ( SDL_Init(0) < 0 ) {
@@ -31,15 +31,19 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	if (strcmp(argv[1], "--hello") == 0) {
+	/*if (strcmp(argv[1], "--hello") == 0) {
 		hello = 1;
 		libname = argv[2];
 		symname = "puts";
 	} else {
 		libname = argv[1];
 		symname = argv[2];
-	}
-
+	}*/
+	
+	// TODO: Add a lib...
+	libname = "hello.so";
+	symname = "hello";
+	
 	lib = SDL_LoadObject(libname);
         if (lib == NULL) {
 		fprintf(stderr, "SDL_LoadObject('%s') failed: %s\n",

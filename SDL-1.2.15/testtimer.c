@@ -12,6 +12,7 @@
    #include <emscripten.h>
    void main2(void *);
    void main3(void *);
+   void main4(void *);
 #endif
 
 #define DEFAULT_RESOLUTION	1
@@ -88,7 +89,6 @@ void main2(void *param) {
 	SDL_Delay(10*1000);
 #else
 	emscripten_async_call(&main3, 0, 10*1000);
-	emscripten_exit_with_live_runtime();
 }
 
 void main3(void *param) {
@@ -96,13 +96,19 @@ void main3(void *param) {
 	printf("Removing timer 1 and waiting 5 more seconds\n");
 	SDL_RemoveTimer(t1);
 
+#ifndef EMSCRIPTEN
 	SDL_Delay(5*1000);
+#else
+	emscripten_async_call(&main4, 0, 5*1000);
+}
 
+void main4(void *param) {
+#endif
 	SDL_RemoveTimer(t2);
 	SDL_RemoveTimer(t3);
-
+	
 	SDL_Quit();
-
+	
 #ifndef EMSCRIPTEN
 	return(0);
 #else

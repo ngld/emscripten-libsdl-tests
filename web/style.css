@@ -51,6 +51,11 @@ table td.actions {
     white-space:nowrap;
 }
 
+table td.run pre {
+    max-height: 400px;
+    overflow: auto;
+}
+
 .stack-line {
     padding-left: 20px;
 }
