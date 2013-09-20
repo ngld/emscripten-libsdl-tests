@@ -924,19 +924,6 @@ function writeArrayToMemory(array, buffer) {
   }
 }
 Module['writeArrayToMemory'] = writeArrayToMemory;
-function getEmptySlot(x) {
-  var slot = null;
-  for (var i = 0; i < x.length; i++) {
-    if (x[i] === null) {
-      slot = i;
-      break;
-    }
-  }
-  if (slot === null) {
-    slot = x.length;
-  }
-  return slot;
-}
 function unSign(value, bits, ignore, sig) {
   if (value >= 0) {
     return value;
@@ -1006,8 +993,9 @@ function removeRunDependency(id) {
       runDependencyWatcher = null;
     }
     if (dependenciesFulfilled) {
-      dependenciesFulfilled();
+      var callback = dependenciesFulfilled;
       dependenciesFulfilled = null;
+      callback(); // can add another dependenciesFulfilled
     }
   }
 }
@@ -1446,7 +1434,10 @@ function copyTempDouble(ptr) {
           return node.link;
         }},stream_ops:{read:function (stream, buffer, offset, length, position) {
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (size > 8 && contents.subarray) { // non-trivial, and typed array
             buffer.set(contents.subarray(position, position + size), offset);
           } else
@@ -2681,7 +2672,10 @@ function copyTempDouble(ptr) {
             throw new FS.ErrnoError(ERRNO_CODES.EIO);
           }
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (contents.slice) { // normal array
             for (var i = 0; i < size; i++) {
               buffer[offset + i] = contents[position + i];
@@ -2802,7 +2796,7 @@ function copyTempDouble(ptr) {
         };
         openRequest.onerror = onerror;
       }};
-  function _open(path, oflag, varargs) {
+  var ___dirent_struct_layout={__size__:268,d_ino:0,d_off:4,d_reclen:8,d_type:10,d_name:11};function _open(path, oflag, varargs) {
       // int open(const char *path, int oflag, ...);
       // http://pubs.opengroup.org/onlinepubs/009695399/functions/open.html
       var mode = HEAP32[((varargs)>>2)];
@@ -4739,9 +4733,10 @@ var initialStackTop;
 var preloadStartTime = null;
 var calledMain = false;
 var calledRun = false;
-dependenciesFulfilled = function() {
+dependenciesFulfilled = function runCaller() {
   // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
   if (!calledRun && shouldRunNow) run();
+  if (!calledRun) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
 }
 Module['callMain'] = Module.callMain = function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on __ATMAIN__)');
@@ -4847,7 +4842,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw new Error('abort() at ' + (new Error().stack));
+  throw 'abort() at ' + (new Error().stack);
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}

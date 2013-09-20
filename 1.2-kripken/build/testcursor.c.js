@@ -924,19 +924,6 @@ function writeArrayToMemory(array, buffer) {
   }
 }
 Module['writeArrayToMemory'] = writeArrayToMemory;
-function getEmptySlot(x) {
-  var slot = null;
-  for (var i = 0; i < x.length; i++) {
-    if (x[i] === null) {
-      slot = i;
-      break;
-    }
-  }
-  if (slot === null) {
-    slot = x.length;
-  }
-  return slot;
-}
 function unSign(value, bits, ignore, sig) {
   if (value >= 0) {
     return value;
@@ -1006,8 +993,9 @@ function removeRunDependency(id) {
       runDependencyWatcher = null;
     }
     if (dependenciesFulfilled) {
-      dependenciesFulfilled();
+      var callback = dependenciesFulfilled;
       dependenciesFulfilled = null;
+      callback(); // can add another dependenciesFulfilled
     }
   }
 }
@@ -1444,7 +1432,10 @@ function copyTempDouble(ptr) {
           return node.link;
         }},stream_ops:{read:function (stream, buffer, offset, length, position) {
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (size > 8 && contents.subarray) { // non-trivial, and typed array
             buffer.set(contents.subarray(position, position + size), offset);
           } else
@@ -2679,7 +2670,10 @@ function copyTempDouble(ptr) {
             throw new FS.ErrnoError(ERRNO_CODES.EIO);
           }
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (contents.slice) { // normal array
             for (var i = 0; i < size; i++) {
               buffer[offset + i] = contents[position + i];
@@ -3210,12 +3204,12 @@ function copyTempDouble(ptr) {
         	HEAP32[((SDL.screen+Runtime.QUANTUM_SIZE*0)>>2)]=flags
         }
         Browser.updateResizeListeners();
-      }};var SDL={defaults:{width:320,height:200,copyOnLock:true},version:null,surfaces:{},cursors:{},canvasPool:[],events:[],fonts:[null],timers:["reserved"],audios:[null],rwops:[null],music:{audio:null,volume:1},mixerFrequency:22050,mixerFormat:32784,mixerNumChannels:2,mixerChunkSize:1024,channelMinimumNumber:0,GL:false,keyboardState:null,keyboardMap:{},canRequestFullscreen:false,isRequestingFullscreen:false,windowTitle:null,windowIcon:null,textInput:false,startTime:null,buttonState:0,modState:0,DOMButtons:[0,0,0],DOMEventToSDLEvent:{},keyCodes:{16:1249,17:1248,18:1250,33:1099,34:1102,37:1104,38:1106,39:1103,40:1105,46:127,96:1112,97:1113,98:1114,99:1115,100:1116,101:1117,102:1118,103:1119,104:1120,105:1121,112:1082,113:1083,114:1084,115:1085,116:1086,117:1087,118:1088,119:1089,120:1090,121:1091,122:1092,123:1093,173:45,188:44,190:46,191:47,192:96},scanCodes:{9:43,13:40,27:41,32:44,44:54,46:55,47:56,48:39,49:30,50:31,51:32,52:33,53:34,54:35,55:36,56:37,57:38,92:49,97:4,98:5,99:6,100:7,101:8,102:9,103:10,104:11,105:12,106:13,107:14,108:15,109:16,110:17,111:18,112:19,113:20,114:21,115:22,116:23,117:24,118:25,119:26,120:27,121:28,122:29,305:224,308:226},loadRect:function (rect) {
+      }};var SDL={defaults:{width:320,height:200,copyOnLock:true},version:null,surfaces:{},canvasPool:[],events:[],fonts:[null],audios:[null],rwops:[null],music:{audio:null,volume:1},mixerFrequency:22050,mixerFormat:32784,mixerNumChannels:2,mixerChunkSize:1024,channelMinimumNumber:0,GL:false,keyboardState:null,keyboardMap:{},canRequestFullscreen:false,isRequestingFullscreen:false,textInput:false,startTime:null,buttonState:0,modState:0,DOMButtons:[0,0,0],DOMEventToSDLEvent:{},keyCodes:{16:1249,17:1248,18:1250,33:1099,34:1102,37:1104,38:1106,39:1103,40:1105,46:127,96:1112,97:1113,98:1114,99:1115,100:1116,101:1117,102:1118,103:1119,104:1120,105:1121,112:1082,113:1083,114:1084,115:1085,116:1086,117:1087,118:1088,119:1089,120:1090,121:1091,122:1092,123:1093,173:45,188:44,190:46,191:47,192:96},scanCodes:{9:43,13:40,27:41,32:44,44:54,46:55,47:56,48:39,49:30,50:31,51:32,52:33,53:34,54:35,55:36,56:37,57:38,92:49,97:4,98:5,99:6,100:7,101:8,102:9,103:10,104:11,105:12,106:13,107:14,108:15,109:16,110:17,111:18,112:19,113:20,114:21,115:22,116:23,117:24,118:25,119:26,120:27,121:28,122:29,305:224,308:226},structs:{Rect:{__size__:16,x:0,y:4,w:8,h:12},PixelFormat:{__size__:36,format:0,palette:4,BitsPerPixel:8,BytesPerPixel:9,padding1:10,padding2:11,Rmask:12,Gmask:16,Bmask:20,Amask:24,Rloss:28,Gloss:29,Bloss:30,Aloss:31,Rshift:32,Gshift:33,Bshift:34,Ashift:35},KeyboardEvent:{__size__:16,type:0,windowID:4,state:8,repeat:9,padding2:10,padding3:11,keysym:12},keysym:{__size__:16,scancode:0,sym:4,mod:8,unicode:12},TextInputEvent:{__size__:264,type:0,windowID:4,text:8},MouseMotionEvent:{__size__:28,type:0,windowID:4,state:8,padding1:9,padding2:10,padding3:11,x:12,y:16,xrel:20,yrel:24},MouseButtonEvent:{__size__:20,type:0,windowID:4,button:8,state:9,padding1:10,padding2:11,x:12,y:16},ResizeEvent:{__size__:12,type:0,w:4,h:8},AudioSpec:{__size__:24,freq:0,format:4,channels:6,silence:7,samples:8,size:12,callback:16,userdata:20},version:{__size__:3,major:0,minor:1,patch:2}},loadRect:function (rect) {
         return {
-          x: HEAP32[((rect + 0)>>2)],
-          y: HEAP32[((rect + 4)>>2)],
-          w: HEAP32[((rect + 8)>>2)],
-          h: HEAP32[((rect + 12)>>2)]
+          x: HEAP32[((rect + SDL.structs.Rect.x)>>2)],
+          y: HEAP32[((rect + SDL.structs.Rect.y)>>2)],
+          w: HEAP32[((rect + SDL.structs.Rect.w)>>2)],
+          h: HEAP32[((rect + SDL.structs.Rect.h)>>2)]
         };
       },loadColorToCSSRGB:function (color) {
         var rgba = HEAP32[((color)>>2)];
@@ -3231,32 +3225,32 @@ function copyTempDouble(ptr) {
         return r | g << 8 | b << 16 | a << 24;
       },makeSurface:function (width, height, flags, usePageCanvas, source, rmask, gmask, bmask, amask) {
         flags = flags || 0;
-        var surf = _malloc(60);  // SDL_Surface has 15 fields of quantum size
+        var surf = _malloc(15*Runtime.QUANTUM_SIZE);  // SDL_Surface has 15 fields of quantum size
         var buffer = _malloc(width*height*4); // TODO: only allocate when locked the first time
-        var pixelFormat = _malloc(48);
+        var pixelFormat = _malloc(18*Runtime.QUANTUM_SIZE);
         flags |= 1; // SDL_HWSURFACE - this tells SDL_MUSTLOCK that this needs to be locked
         //surface with SDL_HWPALETTE flag is 8bpp surface (1 byte)
         var is_SDL_HWPALETTE = flags & 0x00200000;  
         var bpp = is_SDL_HWPALETTE ? 1 : 4;
-        HEAP32[((surf)>>2)]=flags         // SDL_Surface.flags
-        HEAP32[(((surf)+(8))>>2)]=pixelFormat // SDL_Surface.format TODO
-        HEAP32[(((surf)+(16))>>2)]=width         // SDL_Surface.w
-        HEAP32[(((surf)+(20))>>2)]=height        // SDL_Surface.h
-        HEAP32[(((surf)+(24))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*0)>>2)]=flags         // SDL_Surface.flags
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*1)>>2)]=pixelFormat // SDL_Surface.format TODO
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*2)>>2)]=width         // SDL_Surface.w
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*3)>>2)]=height        // SDL_Surface.h
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*4)>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
                                                                                  // since that is what ImageData gives us in browsers
-        HEAP32[(((surf)+(32))>>2)]=buffer      // SDL_Surface.pixels
-        HEAP32[(((surf)+(64))>>2)]=0      // SDL_Surface.offset
-        HEAP32[(((surf)+(88))>>2)]=1
-        HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
-        HEAP32[(((pixelFormat)+(8))>>2)]=0 // TODO
-        HEAP8[(((pixelFormat)+(16))|0)]=bpp * 8
-        HEAP8[(((pixelFormat)+(17))|0)]=bpp
-        HEAP32[(((pixelFormat)+(20))>>2)]=rmask || 0x000000ff
-        HEAP32[(((pixelFormat)+(24))>>2)]=gmask || 0x0000ff00
-        HEAP32[(((pixelFormat)+(28))>>2)]=bmask || 0x00ff0000
-        HEAP32[(((pixelFormat)+(32))>>2)]=amask || 0xff000000
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*5)>>2)]=buffer      // SDL_Surface.pixels
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*6)>>2)]=0      // SDL_Surface.offset
+        HEAP32[((surf+Runtime.QUANTUM_SIZE*14)>>2)]=1
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.format)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.palette)>>2)]=0 // TODO
+        HEAP8[((pixelFormat + SDL.structs.PixelFormat.BitsPerPixel)|0)]=bpp * 8
+        HEAP8[((pixelFormat + SDL.structs.PixelFormat.BytesPerPixel)|0)]=bpp
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.Rmask)>>2)]=rmask || 0x000000ff
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.Gmask)>>2)]=gmask || 0x0000ff00
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.Bmask)>>2)]=bmask || 0x00ff0000
+        HEAP32[((pixelFormat + SDL.structs.PixelFormat.Amask)>>2)]=amask || 0xff000000
         // Decide if we want to use WebGL or not
-        var useWebGL = (flags & 67108864) != 0;
+        var useWebGL = (flags & 0x04000000) != 0; // SDL_OPENGL
         SDL.GL = SDL.GL || useWebGL;
         var canvas;
         if (!usePageCanvas) {
@@ -3318,9 +3312,10 @@ function copyTempDouble(ptr) {
           }
         }
       },freeSurface:function (surf) {
-        var refcount = HEAP32[(((surf)+(88))>>2)];
+        var refcountPointer = surf + Runtime.QUANTUM_SIZE * 14;
+        var refcount = HEAP32[((refcountPointer)>>2)];
         if (refcount > 1) {
-          HEAP32[(((surf)+(88))>>2)]=refcount - 1;
+          HEAP32[((refcountPointer)>>2)]=refcount - 1;
           return;
         }
         var info = SDL.surfaces[surf];
@@ -3539,7 +3534,7 @@ function copyTempDouble(ptr) {
       },makeCEvent:function (event, ptr) {
         if (typeof event === 'number') {
           // This is a pointer to a native C event that was SDL_PushEvent'ed
-          _memcpy(ptr, event, 28); // XXX
+          _memcpy(ptr, event, SDL.structs.KeyboardEvent.__size__); // XXX
           return;
         }
         SDL.handleEvent(event);
@@ -3559,51 +3554,51 @@ function copyTempDouble(ptr) {
             } else {
               scan = SDL.scanCodes[key] || key;
             }
-            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type]
-            HEAP8[(((ptr)+(8))|0)]=down ? 1 : 0
-            HEAP8[(((ptr)+(9))|0)]=0 // TODO
-            HEAP32[(((ptr)+(12))>>2)]=scan
-            HEAP32[(((ptr)+(16))>>2)]=key
-            HEAP16[(((ptr)+(20))>>1)]=SDL.modState
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type]
+            HEAP8[(((ptr)+(SDL.structs.KeyboardEvent.state))|0)]=down ? 1 : 0
+            HEAP8[(((ptr)+(SDL.structs.KeyboardEvent.repeat))|0)]=0 // TODO
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.keysym + SDL.structs.keysym.scancode))>>2)]=scan
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.keysym + SDL.structs.keysym.sym))>>2)]=key
+            HEAP16[(((ptr)+(SDL.structs.KeyboardEvent.keysym + SDL.structs.keysym.mod))>>1)]=SDL.modState
             // some non-character keys (e.g. backspace and tab) won't have keypressCharCode set, fill in with the keyCode.
-            HEAP32[(((ptr)+(24))>>2)]=event.keypressCharCode || key
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.keysym + SDL.structs.keysym.unicode))>>2)]=event.keypressCharCode || key
             break;
           }
           case 'keypress': {
-            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type]
+            HEAP32[(((ptr)+(SDL.structs.TextInputEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type]
             // Not filling in windowID for now
             var cStr = intArrayFromString(String.fromCharCode(event.charCode));
             for (var i = 0; i < cStr.length; ++i) {
-              HEAP8[(((ptr)+(8 + i))|0)]=cStr[i];
+              HEAP8[(((ptr)+(SDL.structs.TextInputEvent.text + i))|0)]=cStr[i];
             }
             break;
           }
           case 'mousedown': case 'mouseup': case 'mousemove': {
             if (event.type != 'mousemove') {
               var down = event.type === 'mousedown';
-              HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
-              HEAP8[(((ptr)+(8))|0)]=event.button+1; // DOM buttons are 0-2, SDL 1-3
-              HEAP8[(((ptr)+(9))|0)]=down ? 1 : 0;
-              HEAP32[(((ptr)+(12))>>2)]=Browser.mouseX;
-              HEAP32[(((ptr)+(16))>>2)]=Browser.mouseY;
+              HEAP32[(((ptr)+(SDL.structs.MouseButtonEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type];
+              HEAP8[(((ptr)+(SDL.structs.MouseButtonEvent.button))|0)]=event.button+1; // DOM buttons are 0-2, SDL 1-3
+              HEAP8[(((ptr)+(SDL.structs.MouseButtonEvent.state))|0)]=down ? 1 : 0;
+              HEAP32[(((ptr)+(SDL.structs.MouseButtonEvent.x))>>2)]=Browser.mouseX;
+              HEAP32[(((ptr)+(SDL.structs.MouseButtonEvent.y))>>2)]=Browser.mouseY;
             } else {
-              HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
-              HEAP8[(((ptr)+(8))|0)]=SDL.buttonState;
-              HEAP32[(((ptr)+(12))>>2)]=Browser.mouseX;
-              HEAP32[(((ptr)+(16))>>2)]=Browser.mouseY;
-              HEAP32[(((ptr)+(20))>>2)]=Browser.mouseMovementX;
-              HEAP32[(((ptr)+(24))>>2)]=Browser.mouseMovementY;
+              HEAP32[(((ptr)+(SDL.structs.MouseMotionEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type];
+              HEAP8[(((ptr)+(SDL.structs.MouseMotionEvent.state))|0)]=SDL.buttonState;
+              HEAP32[(((ptr)+(SDL.structs.MouseMotionEvent.x))>>2)]=Browser.mouseX;
+              HEAP32[(((ptr)+(SDL.structs.MouseMotionEvent.y))>>2)]=Browser.mouseY;
+              HEAP32[(((ptr)+(SDL.structs.MouseMotionEvent.xrel))>>2)]=Browser.mouseMovementX;
+              HEAP32[(((ptr)+(SDL.structs.MouseMotionEvent.yrel))>>2)]=Browser.mouseMovementY;
             }
             break;
           }
           case 'unload': {
-            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type];
             break;
           }
           case 'resize': {
-            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
-            HEAP32[(((ptr)+(4))>>2)]=event.w;
-            HEAP32[(((ptr)+(8))>>2)]=event.h;
+            HEAP32[(((ptr)+(SDL.structs.KeyboardEvent.type))>>2)]=SDL.DOMEventToSDLEvent[event.type];
+            HEAP32[(((ptr)+(SDL.structs.ResizeEvent.w))>>2)]=event.w;
+            HEAP32[(((ptr)+(SDL.structs.ResizeEvent.h))>>2)]=event.h;
             break;
           }
           default: throw 'Unhandled SDL event: ' + event.type;
@@ -4590,50 +4585,9 @@ function copyTempDouble(ptr) {
       surfData.ctx.restore();
       return 0;
     }
-  function _SDL_CreateColorCursor(surf, hot_x, hot_y) {
-      SDL.cursors[surf] = {
-        //surface: surf,
-        hot_x: hot_x,
-        hot_y: hot_y
-      };
-      // The application shouldn't use this pointer at all, only pass it to SDL_*() functions.
-      return surf;
-    }function _SDL_CreateCursor(data, mask, w, h, hot_x, hot_y) {
-      var surf = SDL.makeSurface(w, h, 0, false, 'SDL_CreateCursor', 0, 0, 0, 0);
-      var surfData = SDL.surfaces[surf];
-      var iData = surfData.ctx.getImageData(0, 0, w, h);
-      var offset;
-      var pos = (w * h) / 8;
-      var dv, mv, c = 0;
-      var pdata = iData.data;
-      for(var y = h - 1; y > -1; y--) {
-        for(var x = w - 1; x > -1; x--) {
-          offset = (y*w + x)*4;
-          if(c == 0) {
-            c = 7;
-            pos--;
-            dv = HEAP8[(((data)+(pos))|0)];
-            mv = HEAP8[(((mask)+(pos))|0)];
-          } else {
-            dv = dv >> 1;
-            mv = mv >> 1;
-            c--;
-          }
-          if(mv & 0x01) {
-            if(dv & 0x01 == 0) {
-              pdata[offset] = pdata[offset + 1] = pdata[offset + 2] = 255;
-            } else {
-              pdata[offset] = pdata[offset + 1] = pdata[offset + 2] = 0;
-            }
-            pdata[offset + 3] = 255;
-          } else {
-            pdata[offset + 3] = 0;
-          }
-        }
-      }
-      surfData.ctx.putImageData(iData, 0, 0);
-      return _SDL_CreateColorCursor(surf, hot_x, hot_y);
-    }
+  function _SDL_CreateCursor() {
+  Module['printErr']('missing function: SDL_CreateCursor'); abort(-1);
+  }
   function _SDL_Quit() {
       for (var i = 0; i < SDL.numChannels; ++i) {
         if (SDL.channels[i].audio) {
@@ -4645,17 +4599,12 @@ function copyTempDouble(ptr) {
       }
       Module.print('SDL_Quit called (and ignored)');
     }
-  function _SDL_FreeCursor(cursor) {
-      if(cursor) {
-        SDL.cursors[cursor] = null;
-        // NOTE: The cursor handle is actually the pointer to the surface, so we can easily do this.
-        SDL.freeSurface(cursor);
-      }
-    }
-  function _SDL_SetCursor(cursor) {
-      var url = SDL.surfaces[cursor].canvas.toDataURL();
-      document.body.style.cursor = 'url("' + url + '"), auto';
-    }
+  function _SDL_FreeCursor() {
+  Module['printErr']('missing function: SDL_FreeCursor'); abort(-1);
+  }
+  function _SDL_SetCursor() {
+  Module['printErr']('missing function: SDL_SetCursor'); abort(-1);
+  }
   function _emscripten_set_main_loop(func, fps, simulateInfiniteLoop) {
       Module['noExitRuntime'] = true;
       Browser.mainLoop.runner = function() {
@@ -4734,25 +4683,17 @@ function copyTempDouble(ptr) {
       return 1;
     }
   function _SDL_ShowCursor(toggle) {
-      // An empty png graphic.
-      var hidden = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAEklEQVQ4jWNgGAWjYBSMAggAAAQQAAF/TXiOAAAAAElFTkSuQmCC';
       switch (toggle) {
         case 0: // SDL_DISABLE
           if (Browser.isFullScreen) { // only try to lock the pointer when in full screen mode
             Module['canvas'].requestPointerLock();
             return 0;
           } else { // else return SDL_ENABLE to indicate the failure
-            // Workaround: Set a transparent image as cursor.
-            document.body.style.cursor = 'url(' + hidden + '), auto';
-            return 0;
-            //return 1;
+            return 1;
           }
           break;
         case 1: // SDL_ENABLE
           Module['canvas'].exitPointerLock();
-          if(document.body.style.cursor.indexOf(hidden) > -1) {
-            document.body.style.cursor = '';
-          }
           return 1;
           break;
         case -1: // SDL_QUERY
@@ -4817,7 +4758,7 @@ function copyTempDouble(ptr) {
           if (nextC > 0) {
             var maxx = 1;
             if (nextC > formatIndex+1) {
-              var sub = format.substring(formatIndex+1, nextC)
+              var sub = format.substring(formatIndex+1, nextC);
               maxx = parseInt(sub);
               if (maxx != sub) maxx = 0;
             }
@@ -4834,6 +4775,48 @@ function copyTempDouble(ptr) {
             }
           }
         }
+        // handle %[...]
+        if (format[formatIndex] === '%' && format.indexOf('[', formatIndex+1) > 0) {
+          var match = /\%([0-9]*)\[(\^)?(\]?[^\]]*)\]/.exec(format.substring(formatIndex));
+          if (match) {
+            var maxNumCharacters = parseInt(match[1]) || Infinity;
+            var negateScanList = (match[2] === '^');
+            var scanList = match[3];
+            // expand "middle" dashs into character sets
+            var middleDashMatch;
+            while ((middleDashMatch = /([^\-])\-([^\-])/.exec(scanList))) {
+              var rangeStartCharCode = middleDashMatch[1].charCodeAt(0);
+              var rangeEndCharCode = middleDashMatch[2].charCodeAt(0);
+              for (var expanded = ''; rangeStartCharCode <= rangeEndCharCode; expanded += String.fromCharCode(rangeStartCharCode++));
+              scanList = scanList.replace(middleDashMatch[1] + '-' + middleDashMatch[2], expanded);
+            }
+            var argPtr = HEAP32[(((varargs)+(argIndex))>>2)];
+            argIndex += Runtime.getAlignSize('void*', null, true);
+            fields++;
+            for (var i = 0; i < maxNumCharacters; i++) {
+              next = get();
+              if (negateScanList) {
+                if (scanList.indexOf(String.fromCharCode(next)) < 0) {
+                  HEAP8[((argPtr++)|0)]=next;
+                } else {
+                  unget();
+                  break;
+                }
+              } else {
+                if (scanList.indexOf(String.fromCharCode(next)) >= 0) {
+                  HEAP8[((argPtr++)|0)]=next;
+                } else {
+                  unget();
+                  break;
+                }
+              }
+            }
+            // write out null-terminating character
+            HEAP8[((argPtr++)|0)]=0;
+            formatIndex += match[0].length;
+            continue;
+          }
+        }      
         // remove whitespace
         while (1) {
           next = get();
@@ -4894,6 +4877,15 @@ function copyTempDouble(ptr) {
           } else {
             next = get();
             var first = true;
+            // Strip the optional 0x prefix for %x.
+            if ((type == 'x' || type == 'X') && (next == 48)) {
+              var peek = get();
+              if (peek == 120 || peek == 88) {
+                next = get();
+              } else {
+                unget();
+              }
+            }
             while ((curr < max_ || isNaN(max_)) && next > 0) {
               if (!(next in __scanString.whiteSpace) && // stop on whitespace
                   (type == 's' ||
@@ -5288,14 +5280,13 @@ var asm = (function(global, env, buffer) {
   var _fwrite=env._fwrite;
   var _send=env._send;
   var _write=env._write;
-  var _SDL_CreateColorCursor=env._SDL_CreateColorCursor;
+  var _SDL_GetError=env._SDL_GetError;
   var _SDL_CreateCursor=env._SDL_CreateCursor;
   var _emscripten_set_main_loop=env._emscripten_set_main_loop;
   var __formatString=env.__formatString;
   var _pwrite=env._pwrite;
   var _sbrk=env._sbrk;
   var _SDL_FreeCursor=env._SDL_FreeCursor;
-  var _SDL_GetError=env._SDL_GetError;
   var ___errno_location=env.___errno_location;
   var _SDL_Init=env._SDL_Init;
   var _SDL_Quit=env._SDL_Quit;
@@ -7903,7 +7894,7 @@ function runPostSets() {
   return { _strlen: _strlen, _free: _free, _main: _main, __GLOBAL__I_a: __GLOBAL__I_a, _memset: _memset, _malloc: _malloc, _memcpy: _memcpy, runPostSets: runPostSets, stackAlloc: stackAlloc, stackSave: stackSave, stackRestore: stackRestore, setThrew: setThrew, setTempRet0: setTempRet0, setTempRet1: setTempRet1, setTempRet2: setTempRet2, setTempRet3: setTempRet3, setTempRet4: setTempRet4, setTempRet5: setTempRet5, setTempRet6: setTempRet6, setTempRet7: setTempRet7, setTempRet8: setTempRet8, setTempRet9: setTempRet9, dynCall_ii: dynCall_ii, dynCall_v: dynCall_v, dynCall_iii: dynCall_iii, dynCall_vi: dynCall_vi };
 })
 // EMSCRIPTEN_END_ASM
-({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_llvm_lifetime_end": _llvm_lifetime_end, "_sscanf": _sscanf, "_sysconf": _sysconf, "_llvm_dbg_value": _llvm_dbg_value, "__scanString": __scanString, "_abort": _abort, "_fprintf": _fprintf, "_SDL_SetCursor": _SDL_SetCursor, "__isFloat": __isFloat, "_fflush": _fflush, "__reallyNegative": __reallyNegative, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_FillRect": _SDL_FillRect, "_SDL_ShowCursor": _SDL_ShowCursor, "_SDL_PollEvent": _SDL_PollEvent, "_llvm_lifetime_start": _llvm_lifetime_start, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_send": _send, "_write": _write, "_SDL_CreateColorCursor": _SDL_CreateColorCursor, "_SDL_CreateCursor": _SDL_CreateCursor, "_emscripten_set_main_loop": _emscripten_set_main_loop, "__formatString": __formatString, "_pwrite": _pwrite, "_sbrk": _sbrk, "_SDL_FreeCursor": _SDL_FreeCursor, "_SDL_GetError": _SDL_GetError, "___errno_location": ___errno_location, "_SDL_Init": _SDL_Init, "_SDL_Quit": _SDL_Quit, "_time": _time, "_emscripten_run_script": _emscripten_run_script, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
+({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_llvm_lifetime_end": _llvm_lifetime_end, "_sscanf": _sscanf, "_sysconf": _sysconf, "_llvm_dbg_value": _llvm_dbg_value, "__scanString": __scanString, "_abort": _abort, "_fprintf": _fprintf, "_SDL_SetCursor": _SDL_SetCursor, "__isFloat": __isFloat, "_fflush": _fflush, "__reallyNegative": __reallyNegative, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_FillRect": _SDL_FillRect, "_SDL_ShowCursor": _SDL_ShowCursor, "_SDL_PollEvent": _SDL_PollEvent, "_llvm_lifetime_start": _llvm_lifetime_start, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_send": _send, "_write": _write, "_SDL_GetError": _SDL_GetError, "_SDL_CreateCursor": _SDL_CreateCursor, "_emscripten_set_main_loop": _emscripten_set_main_loop, "__formatString": __formatString, "_pwrite": _pwrite, "_sbrk": _sbrk, "_SDL_FreeCursor": _SDL_FreeCursor, "___errno_location": ___errno_location, "_SDL_Init": _SDL_Init, "_SDL_Quit": _SDL_Quit, "_time": _time, "_emscripten_run_script": _emscripten_run_script, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
 var _strlen = Module["_strlen"] = asm["_strlen"];
 var _free = Module["_free"] = asm["_free"];
 var _main = Module["_main"] = asm["_main"];
@@ -7949,9 +7940,10 @@ var initialStackTop;
 var preloadStartTime = null;
 var calledMain = false;
 var calledRun = false;
-dependenciesFulfilled = function() {
+dependenciesFulfilled = function runCaller() {
   // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
   if (!calledRun && shouldRunNow) run();
+  if (!calledRun) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
 }
 Module['callMain'] = Module.callMain = function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on __ATMAIN__)');
@@ -8057,7 +8049,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw new Error('abort() at ' + (new Error().stack));
+  throw 'abort() at ' + (new Error().stack);
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}
