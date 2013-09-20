@@ -339,9 +339,9 @@
                 var name = $(this).parents('tr').find('.name').text();
                 $('.log-viewer').modal('show');
                 
-                term_cwd = '/build';
+                term_cwd = '/logs';
                 term.write('\x1b[H\x1b[2J');
-                term.write('/build# cat ' + name + '.log\r\n');
+                term.write('/logs# cat ' + name + '.log\r\n');
                 
                 $.get('build/' + name + '.log', function (data) {
                     term.write(data.replace(/\n/g, '\r\n'));
