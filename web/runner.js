@@ -12,9 +12,9 @@
         // Forcefully enable boldness, even if it's broken (in the browser).
         Terminal.brokenBold = false;
         term = new Terminal({
-           geometry: [Math.floor((ref.width() - 3) / term_cw), Math.floor(($('.log-viewer').height() - 15) / term_ch)],
+           geometry: [Math.floor((ref.width() - 3) / term_cw), Math.floor(($('.log-viewer').height() - 30) / term_ch)],
            useStyle: true,
-           colors: Terminal.tangoColors
+           //colors: Terminal.tangoColors
         });
         term.open($('.terminal-cont')[0]);
         term.on('data', function (key) {
@@ -250,6 +250,7 @@
             }
             idx++;
             if(idx == tests.length) {
+                $('#test-display .progress-bar').css('width', '100%');
                 $('#test-display .progress').removeClass('active');
                 $('#test-frame, #test-display').hide();
                 $('#test-frame').attr('src', 'shell.html');
@@ -261,6 +262,7 @@
             
             $('#test-display .progress-bar').css('width', (100 * idx / tests.length) + '%');
             $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + tests[idx][0] + '.js').focus();
+            $('#test-name').text(tests[idx][0]);
             
             var my_idx = idx;
             setTimeout(function () {
@@ -322,6 +324,7 @@
                 
                 $('#test-frame, #test-display').show();
                 $('#test-frame').attr('src', 'shell.html?' + $.now() + '#' + name + '.js').focus();
+                $('#test-name').text(name);
             });
             
             $('.clear-rlog').click(function (e) {

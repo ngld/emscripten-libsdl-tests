@@ -33,6 +33,7 @@
     padding: 2px;
     height: 60px;
     background: white;
+    text-align: center;
 }
 
 #test-frame {
@@ -63,7 +64,7 @@ table td.actions {
 }
 
 .context div.line:nth-child(2n+1) {
-    background: rgb(230, 230, 230);
+    background: rgb(240, 240, 240);
 }
 
 .context div.line.middle {

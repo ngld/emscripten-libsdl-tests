@@ -8,7 +8,7 @@
       @import url(style.css);
       
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-      #output { font-family: monospace; width: 80%; }
+      #output { font-family: monospace; width: 80%; height: 300px; overflow-y: scroll; }
       #output .error { color: red; }
       div.emscripten { text-align: center; }
       div.emscripten_border { border: 1px solid black; }
@@ -40,6 +40,8 @@
     <pre id="output"></pre>
     <hr>
     <script type='text/javascript'>
+      var reported = false;
+      
       $('body').on('click', '.stack-line', function (e) {
           var context = $(this).find('.context');
           
@@ -52,8 +54,9 @@
       });
       
       function report(result) {
-        if(typeof top != 'undefined' && top.testResult) {
+        if(!reported && typeof top != 'undefined' && top.testResult) {
           top.testResult(result, $('#output').html());
+          reported = true;
         }
       }
       
@@ -66,6 +69,7 @@
               report(EXITSTATUS === 0);
             }
           } catch(e) {
+            if(typeof e == 'string') e = new Error('String error: ' + e);
             TraceKit.report(e);
             
             if(typeof console != 'undefined') {
@@ -87,7 +91,12 @@
       }
       
       TraceKit.report.subscribe(function (exc) {
-        Module.printErr('Fail: ' + exc.name + ': ' + exc.message);
+        var msg = exc.name;
+        if(exc.message) {
+          msg += ': ' + (exc.message.indexOf('abort()') != 0 ? exc.message : 'abort()');
+        }
+        
+        Module.printErr('\nFail: ' + msg);
         
         $.each(exc.stack, function (i, frame) {
           var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + frame.url);
@@ -131,10 +140,10 @@
         }],
         postRun: [],
         print: function(text) {
-          $('#output').append($('<span>').text(text)).append('<br>');
+          $('#output').append($('<span>').text(text)).append('<br>').scrollTop(9999999);
         },
         printErr: function(text) {
-          $('#output').append($('<span class="error">').text(text)).append('<br>');
+          $('#output').append($('<span class="error">').text(text)).append('<br>').scrollTop(9999999);
         },
         canvas: document.getElementById('canvas'),
         setStatus: function(text) {
