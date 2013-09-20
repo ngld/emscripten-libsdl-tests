@@ -75,4 +75,7 @@ if __name__ == '__main__':
     if launch:
         webbrowser.open_new_tab('http://localhost:' + str(PORT))
     
-    httpd.serve_forever()
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        sys.exit(0)

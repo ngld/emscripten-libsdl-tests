@@ -10,7 +10,18 @@ fi
 
 echo "Compressing files..."
 ln -s SDL-1.2.* tests
+
+cd SDL-1.2.*
+../test_server.py &
+serv="$!"
+sleep 0.3
+
+cd ..
+curl -s "http://localhost:8080/build/index.json" > build/index.json
+kill "$serv"
+
 tar --exclude '*.c' --exclude-vcs -hcf dist-1.2.tar tests build LICENSE README*
+rm build/index.json
 unlink tests
 
 cd web

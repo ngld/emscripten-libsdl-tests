@@ -99,7 +99,7 @@
         Module.printErr('\nFail: ' + msg);
         
         $.each(exc.stack, function (i, frame) {
-          var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + frame.url);
+          var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + frame.url.split('/').pop());
           $('#output').append(line);
           
           if(frame.context) {
@@ -127,14 +127,17 @@
           abort = makeAbortWrapper(abort);
           
           Module.addRunDependency('load_fs');
+          var path = location.hash.substr(1).replace(/\.js$/, '.files');
           
-          $.getJSON('tests/index.json', function (data) {
-            $.each(data.files, function (i, name) {
-              if(!name.match(/\.(c|wav)$/)) {
-                FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
-              }
+          $.get('tests/' + path, function (data) {
+            $.each(data.split("\n"), function (i, name) {
+              name = name.replace(/\s+$/, '');
+              FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
             });
             
+            Module.removeRunDependency('load_fs');
+          }).fail(function () {
+            // We couldn't load the files list. There is probably none. Continue on.
             Module.removeRunDependency('load_fs');
           });
         }],
