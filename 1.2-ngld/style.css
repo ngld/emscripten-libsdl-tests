@@ -51,6 +51,10 @@ table td.actions {
     white-space:nowrap;
 }
 
+.stack-line {
+    padding-left: 10px;
+}
+
 .stack-line.has-context {
     cursor: pointer;
 }

@@ -1,5 +1,5 @@
 (function () {
-    var term, term_cw, term_ch, term_locked = false, term_line = '', term_cwd = '/logs', prompt_pos = 0;
+    var term, term_cw, term_ch, term_locked = false, term_line = '', term_cwd = '/logs', _prompt = '', prompt_pos = 0;
     
     function initTerm() {
         $('.log-viewer').show();
@@ -250,6 +250,7 @@
             }
             idx++;
             if(idx == tests.length) {
+                $('#test-display .progress-bar').css('width', '100%');
                 $('#test-display .progress').removeClass('active');
                 $('#test-frame, #test-display').hide();
                 $('#test-frame').attr('src', 'shell.html');
