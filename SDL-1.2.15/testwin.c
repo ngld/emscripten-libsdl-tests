@@ -134,7 +134,7 @@ NOTICE("testwin: moving image\n");
 		printf("Couldn't save screen: %s\n", SDL_GetError());
 #endif
 
-#ifndef BENCHMARK_SDL
+#if !defined(BENCHMARK_SDL) && !defined(EMSCRIPTEN)
 	/* Let it sit there for a while */
 	SDL_Delay(5*1000);
 #endif
@@ -170,7 +170,9 @@ NOTICE("testwin: fading out...\n");
 					palcolors[c].b+((cdist[c].b*i))/maxstep;
 			}
 			SDL_SetColors(screen, colors, 0, ncolors);
+#ifndef EMSCRIPTEN
 			SDL_Delay(1);
+#endif
 		}
 		final.r = 0x00;
 		final.g = 0x00;
@@ -193,7 +195,9 @@ NOTICE("testwin: fading out...\n");
 					palcolors[c].b+((cdist[c].b*i))/maxstep;
 			}
 			SDL_SetColors(screen, colors, 0, ncolors);
+#ifndef EMSCRIPTEN
 			SDL_Delay(1);
+#endif
 		}
 		for ( i=0; i<ncolors; ++i ) {
 			colors[i].r = final.r;
@@ -219,7 +223,9 @@ NOTICE("testwin: fading in...\n");
 					palcolors[c].b+((cdist[c].b*i))/maxstep;
 			}
 			SDL_SetColors(screen, colors, 0, ncolors);
+#ifndef EMSCRIPTEN
 			SDL_Delay(1);
+#endif
 		}
 NOTICE("testwin: fading over\n");
 	}
@@ -371,7 +377,9 @@ int main(int argc, char *argv[])
 #else
 	DrawPict(screen, argv[1], speedy, flip, nofade);
 #endif
+#ifndef EMSCRIPTEN
 	SDL_Delay(delay*1000);
+#endif
 	SDL_Quit();
 	return(0);
 }

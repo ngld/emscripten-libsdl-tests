@@ -2,6 +2,10 @@
 #include <stdlib.h>
 
 #include "SDL.h"
+#ifdef EMSCRIPTEN
+    #include <emscripten.h>
+    void main_loop();
+#endif
 
 /* This is an example 16x16 cursor
 	top left :	black
@@ -139,12 +143,12 @@ static SDL_Cursor *create_arrow_cursor()
 }
 
 
+SDL_Cursor *cursor[3];
+SDL_Surface *screen;
+int current;
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
-	SDL_bool quit = SDL_FALSE, first_time = SDL_TRUE;
-	SDL_Cursor *cursor[3];
-	int current;
+	SDL_bool first_time = SDL_TRUE;
 
 	/* Load the SDL library */
 	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
@@ -181,11 +185,22 @@ int main(int argc, char *argv[])
 		SDL_Quit();
 		return(1);
 	}
-
-	current = 0;
+    
+    current = 0;
 	SDL_SetCursor(cursor[current]);
 
+#ifndef EMSCRIPTEN
+    SDL_bool quit = SDL_FALSE;
+
 	while (!quit) {
+#else
+    emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop()
+{
+    SDL_bool quit = SDL_FALSE;
+#endif
 		SDL_Event	event;
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -202,7 +217,8 @@ int main(int argc, char *argv[])
 					quit = SDL_TRUE;
 					break;
 			}
-		}	
+		}
+#ifndef EMSCRIPTEN
 		SDL_Flip(screen);
 		SDL_Delay(1);
 	}
@@ -213,4 +229,13 @@ int main(int argc, char *argv[])
 
 	SDL_Quit();
 	return(0);
+#else
+    if(quit) {
+        SDL_FreeCursor(cursor[0]);
+        SDL_FreeCursor(cursor[1]);
+        SDL_FreeCursor(cursor[2]);
+
+        SDL_Quit();
+    }
+#endif
 }

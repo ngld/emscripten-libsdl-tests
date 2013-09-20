@@ -10,6 +10,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+#endif
+
 /* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
 static void quit(int rc)
 {
@@ -119,11 +124,23 @@ int main(int argc, char *argv[])
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
 	                    SDL_DEFAULT_REPEAT_INTERVAL);
 
+#ifndef EMSCRIPTEN
 	/* Watch keystrokes */
 	done = 0;
 	while ( !done ) {
 		/* Check for events */
 		SDL_WaitEvent(&event);
+#else
+	emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop()
+{
+	int done = 0;
+	SDL_Event event;
+	
+	while(SDL_PollEvent(&event)) {
+#endif
 		switch (event.type) {
 			case SDL_KEYDOWN:
 				PrintKey(&event.key.keysym, 1);
@@ -141,6 +158,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
+#ifndef EMSCRIPTEN
 	SDL_Quit();
 	return(0);
+#else
+	if(done) {
+		SDL_Quit();
+	}
+#endif
 }

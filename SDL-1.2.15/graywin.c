@@ -8,6 +8,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+#endif
+
 #ifdef TEST_VGA16 /* Define this if you want to test VGA 16-color video modes */
 #define NUM_COLORS	16
 #else
@@ -131,14 +136,12 @@ SDL_Surface *CreateScreen(Uint16 w, Uint16 h, Uint8 bpp, Uint32 flags)
 	return(screen);
 }
 
+Uint32 videoflags;
+SDL_Surface *screen;
+int width, height, bpp;
+
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
-	Uint32 videoflags;
-	int    done;
-	SDL_Event event;
-	int width, height, bpp;
-
 	/* Initialize SDL */
 	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
@@ -195,10 +198,22 @@ int main(int argc, char *argv[])
 	}
         
         DrawBackground(screen);
-		
+
+#ifndef EMSCRIPTEN
 	/* Wait for a keystroke */
 	done = 0;
 	while ( !done && SDL_WaitEvent(&event) ) {
+#else
+	emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop()
+{
+	int done = 0;
+	SDL_Event event;
+	
+	while (SDL_PollEvent(&event)) {
+#endif
 		switch (event.type) {
 			case SDL_MOUSEBUTTONDOWN:
 				DrawBox(screen, event.button.x, event.button.y, width, height);
@@ -252,6 +267,13 @@ int main(int argc, char *argv[])
 				break;
 		}
 	}
+
+#ifndef EMSCRIPTEN
 	SDL_Quit();
 	return(0);
+#else
+	if(done) {
+		SDL_Quit();
+	}
+#endif
 }

@@ -5,6 +5,8 @@ if ! which emcc > /dev/null; then
     exit 1
 fi
 
+cd "$(dirname "$0")"
+
 [ ! -d build ] && mkdir build
 cd build
 echo "Compiling..."
@@ -19,4 +21,5 @@ for path in ../SDL-1.2.*/*.c; do
 done
 
 echo "Starting web server..."
+cd ../SDL-1.2.*
 ../test_server.py -l
