@@ -1,4 +1,4 @@
-[1m../SDL-1.2.15/testalpha.c:285:26: [0m[0;1;31merror: [0m[1mno member named 'alpha' in 'struct SDL_PixelFormat'[0m
+[1m../SDL-1.2.15/testalpha.c:290:26: [0m[0;1;31merror: [0m[1mno member named 'alpha' in 'struct SDL_PixelFormat'[0m
         alpha = sprite->format->alpha;
 [0;1;32m                ~~~~~~~~~~~~~~  ^
 [0m1 error generated.

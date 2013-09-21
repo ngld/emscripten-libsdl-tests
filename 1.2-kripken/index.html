@@ -8,6 +8,7 @@
         <script type="text/javascript" src="jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="term.js"></script>
+        <script type="text/javascript" src="shell_emu.js"></script>
         <script type="text/javascript" src="runner.js"></script>
     </head>
     <body>
@@ -15,16 +16,19 @@
             <p class="emcc-version">
                 Loading...
             </p>
-            <a href="#" class="runner-go">Run tests</a> <span class="test-result"></span><br><br>
+            <a href="#" class="runner-compile">Compile tests</a> | <a href="#" class="runner-go">Run tests</a> |
+            <a href="#" class="runner-console">Console</a> | <span class="test-result">Loading...</span>
+            <a href="https://github.com/ngld/emscripten-libsdl-tests" class="pull-right">Source Code</a>
+            <br><br>
             
             <table class="table">
                 <thead>
-                    <tr><th>Test</th><th>Built?</th><th>Run?</th><th>&nbsp;</th></tr>
+                    <tr><th>Test</th><th>Built?</th><th>Run?</th><th>Actions</th></tr>
                 </thead>
             </table>
         </div>
         
-        <div class="log-viewer modal fade">
+        <div class="terminal-win modal fade">
             <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div class="terminal-cont"></div>
         </div>
@@ -33,7 +37,10 @@
             <div class="progress progress-striped">
               <div class="progress-bar"  role="progressbar" style="width: 0%"></div>
             </div>
-            <a href="#" class="test-back">Back</a> Test: <span id="test-name"></span>
+            <span class="controls">
+                <a href="#" id="test-back">Back</a> | <a href="#" id="test-rerun">Run again</a> | <a href="#" id="test-compile">Rebuild</a> | 
+            </span>
+            Test: <span id="test-name"></span>
         </div>
         <iframe id="test-frame" src="shell.html" style="display:none;"></iframe>
     </body>

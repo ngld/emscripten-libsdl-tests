@@ -2,7 +2,7 @@
     padding-top: 20px;
 }
 
-.log-viewer {
+.terminal-win {
     position: fixed;
     top: 0px;
     left: 0px;
@@ -20,7 +20,7 @@
     font-size: 12px !important;
 }
 
-.log-viewer .close {
+.terminal-win .close {
     position: fixed;
     top: 5px;
     right: 30px;
@@ -38,6 +38,7 @@
     height: 60px;
     background: white;
     text-align: center;
+    z-index: 1041;
 }
 
 #test-frame {
@@ -49,6 +50,10 @@
     
     border: 0;
     background: white;
+}
+
+#test-compile {
+    display: none;
 }
 
 table td.actions {
