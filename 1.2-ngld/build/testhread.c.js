@@ -4120,22 +4120,23 @@ function copyTempDouble(ptr) {
         var is_SDL_HWPALETTE = flags & 0x00200000;  
         var bpp = is_SDL_HWPALETTE ? 1 : 4;
         HEAP32[((surf)>>2)]=flags         // SDL_Surface.flags
-        HEAP32[(((surf)+(8))>>2)]=pixelFormat // SDL_Surface.format TODO
-        HEAP32[(((surf)+(16))>>2)]=width         // SDL_Surface.w
-        HEAP32[(((surf)+(20))>>2)]=height        // SDL_Surface.h
-        HEAP32[(((surf)+(24))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
+        HEAP32[(((surf)+(4))>>2)]=pixelFormat // SDL_Surface.format TODO
+        HEAP32[(((surf)+(8))>>2)]=width         // SDL_Surface.w
+        HEAP32[(((surf)+(12))>>2)]=height        // SDL_Surface.h
+        HEAP32[(((surf)+(16))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
                                                                                  // since that is what ImageData gives us in browsers
-        HEAP32[(((surf)+(32))>>2)]=buffer      // SDL_Surface.pixels
-        HEAP32[(((surf)+(64))>>2)]=0      // SDL_Surface.offset
-        HEAP32[(((surf)+(88))>>2)]=1
+        HEAP32[(((surf)+(20))>>2)]=buffer      // SDL_Surface.pixels
+        HEAP32[(((surf)+(36))>>2)]=0      // SDL_Surface.offset
+        HEAP32[(((surf)+(56))>>2)]=1
         HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
-        HEAP32[(((pixelFormat)+(8))>>2)]=0 // TODO
-        HEAP8[(((pixelFormat)+(16))|0)]=bpp * 8
-        HEAP8[(((pixelFormat)+(17))|0)]=bpp
-        HEAP32[(((pixelFormat)+(20))>>2)]=rmask || 0x000000ff
-        HEAP32[(((pixelFormat)+(24))>>2)]=gmask || 0x0000ff00
-        HEAP32[(((pixelFormat)+(28))>>2)]=bmask || 0x00ff0000
-        HEAP32[(((pixelFormat)+(32))>>2)]=amask || 0xff000000
+        HEAP32[(((pixelFormat)+(4))>>2)]=0 // TODO
+        HEAP8[(((pixelFormat)+(8))|0)]=bpp * 8
+        HEAP8[(((pixelFormat)+(9))|0)]=bpp
+        HEAP8[(((pixelFormat)+(36))|0)]=255
+        HEAP32[(((pixelFormat)+(12))>>2)]=rmask || 0x000000ff
+        HEAP32[(((pixelFormat)+(16))>>2)]=gmask || 0x0000ff00
+        HEAP32[(((pixelFormat)+(20))>>2)]=bmask || 0x00ff0000
+        HEAP32[(((pixelFormat)+(24))>>2)]=amask || 0xff000000
         // Decide if we want to use WebGL or not
         var useWebGL = (flags & 67108864) != 0;
         SDL.GL = SDL.GL || useWebGL;
@@ -4199,9 +4200,9 @@ function copyTempDouble(ptr) {
           }
         }
       },freeSurface:function (surf) {
-        var refcount = HEAP32[(((surf)+(88))>>2)];
+        var refcount = HEAP32[(((surf)+(56))>>2)];
         if (refcount > 1) {
-          HEAP32[(((surf)+(88))>>2)]=refcount - 1;
+          HEAP32[(((surf)+(56))>>2)]=refcount - 1;
           return;
         }
         var info = SDL.surfaces[surf];

@@ -4124,22 +4124,23 @@ function copyTempDouble(ptr) {
         var is_SDL_HWPALETTE = flags & 0x00200000;  
         var bpp = is_SDL_HWPALETTE ? 1 : 4;
         HEAP32[((surf)>>2)]=flags         // SDL_Surface.flags
-        HEAP32[(((surf)+(8))>>2)]=pixelFormat // SDL_Surface.format TODO
-        HEAP32[(((surf)+(16))>>2)]=width         // SDL_Surface.w
-        HEAP32[(((surf)+(20))>>2)]=height        // SDL_Surface.h
-        HEAP32[(((surf)+(24))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
+        HEAP32[(((surf)+(4))>>2)]=pixelFormat // SDL_Surface.format TODO
+        HEAP32[(((surf)+(8))>>2)]=width         // SDL_Surface.w
+        HEAP32[(((surf)+(12))>>2)]=height        // SDL_Surface.h
+        HEAP32[(((surf)+(16))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
                                                                                  // since that is what ImageData gives us in browsers
-        HEAP32[(((surf)+(32))>>2)]=buffer      // SDL_Surface.pixels
-        HEAP32[(((surf)+(64))>>2)]=0      // SDL_Surface.offset
-        HEAP32[(((surf)+(88))>>2)]=1
+        HEAP32[(((surf)+(20))>>2)]=buffer      // SDL_Surface.pixels
+        HEAP32[(((surf)+(36))>>2)]=0      // SDL_Surface.offset
+        HEAP32[(((surf)+(56))>>2)]=1
         HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
-        HEAP32[(((pixelFormat)+(8))>>2)]=0 // TODO
-        HEAP8[(((pixelFormat)+(16))|0)]=bpp * 8
-        HEAP8[(((pixelFormat)+(17))|0)]=bpp
-        HEAP32[(((pixelFormat)+(20))>>2)]=rmask || 0x000000ff
-        HEAP32[(((pixelFormat)+(24))>>2)]=gmask || 0x0000ff00
-        HEAP32[(((pixelFormat)+(28))>>2)]=bmask || 0x00ff0000
-        HEAP32[(((pixelFormat)+(32))>>2)]=amask || 0xff000000
+        HEAP32[(((pixelFormat)+(4))>>2)]=0 // TODO
+        HEAP8[(((pixelFormat)+(8))|0)]=bpp * 8
+        HEAP8[(((pixelFormat)+(9))|0)]=bpp
+        HEAP8[(((pixelFormat)+(36))|0)]=255
+        HEAP32[(((pixelFormat)+(12))>>2)]=rmask || 0x000000ff
+        HEAP32[(((pixelFormat)+(16))>>2)]=gmask || 0x0000ff00
+        HEAP32[(((pixelFormat)+(20))>>2)]=bmask || 0x00ff0000
+        HEAP32[(((pixelFormat)+(24))>>2)]=amask || 0xff000000
         // Decide if we want to use WebGL or not
         var useWebGL = (flags & 67108864) != 0;
         SDL.GL = SDL.GL || useWebGL;
@@ -4203,9 +4204,9 @@ function copyTempDouble(ptr) {
           }
         }
       },freeSurface:function (surf) {
-        var refcount = HEAP32[(((surf)+(88))>>2)];
+        var refcount = HEAP32[(((surf)+(56))>>2)];
         if (refcount > 1) {
-          HEAP32[(((surf)+(88))>>2)]=refcount - 1;
+          HEAP32[(((surf)+(56))>>2)]=refcount - 1;
           return;
         }
         var info = SDL.surfaces[surf];
@@ -4542,7 +4543,9 @@ function copyTempDouble(ptr) {
       } else {
         dr = { x: 0, y: 0, w: -1, h: -1 };
       }
+      dstData.ctx.globalAlpha = srcData.alpha / 255;
       dstData.ctx.drawImage(srcData.canvas, sr.x, sr.y, sr.w, sr.h, dr.x, dr.y, sr.w, sr.h);
+      dstData.ctx.globalAlpha = 1;
       if (dst != SDL.screen) {
         // XXX As in IMG_Load, for compatibility we write out |pixels|
         console.log('WARNING: copying canvas data to memory for compatibility');
@@ -4752,18 +4755,21 @@ function copyTempDouble(ptr) {
       Runtime.warnOnce('SDL_SetColorKey is a no-op for performance reasons');
       return 0;
     }
-  function _SDL_DisplayFormat(surf) {
-      // This is supposed to convert the passed surface to the display format for faster blitting.
-      // TODO: Is there any optimization possible here?
-      var refcount = HEAP32[(((surf)+(88))>>2)]
-      HEAP32[(((surf)+(88))>>2)]=refcount + 1
-      return surf;
-    }
+  function _SDL_DisplayFormatAlpha(surf) {
+      var oldData = SDL.surfaces[surf];
+      var ret = SDL.makeSurface(oldData.width, oldData.height, oldData.flags, false, 'copy:' + oldData.source);
+      var newData = SDL.surfaces[ret];
+      //newData.ctx.putImageData(oldData.ctx.getImageData(0, 0, oldData.width, oldData.height), 0, 0);
+      newData.ctx.drawImage(oldData.canvas, 0, 0);
+      return ret;
+    }var _SDL_DisplayFormat=_SDL_DisplayFormatAlpha;
   function _SDL_FreeSurface(surf) {
       if (surf) SDL.freeSurface(surf);
     }
   function _SDL_SetAlpha(surf, flag, alpha) {
       SDL.surfaces[surf].alpha = alpha;
+      var format = HEAP32[(((surf)+(4))>>2)]
+      HEAP8[(((format)+(36))|0)]=alpha
     }
   function _SDL_WM_SetCaption(title, icon) {
       if(title) {
@@ -5246,6 +5252,7 @@ var asm = (function(global, env, buffer) {
   var _strncmp=env._strncmp;
   var _rand=env._rand;
   var _SDL_SetColorKey=env._SDL_SetColorKey;
+  var _fputc=env._fputc;
   var _sysconf=env._sysconf;
   var _SDL_MapRGB=env._SDL_MapRGB;
   var _abort=env._abort;
@@ -5256,7 +5263,7 @@ var asm = (function(global, env, buffer) {
   var __reallyNegative=env.__reallyNegative;
   var _SDL_WM_SetCaption=env._SDL_WM_SetCaption;
   var _SDL_FillRect=env._SDL_FillRect;
-  var _SDL_ShowCursor=env._SDL_ShowCursor;
+  var _SDL_DisplayFormatAlpha=env._SDL_DisplayFormatAlpha;
   var _SDL_PollEvent=env._SDL_PollEvent;
   var _SDL_GetVideoInfo=env._SDL_GetVideoInfo;
   var ___setErrNo=env.___setErrNo;
@@ -5271,9 +5278,8 @@ var asm = (function(global, env, buffer) {
   var _exit=env._exit;
   var _SDL_SetAlpha=env._SDL_SetAlpha;
   var _SDL_GetError=env._SDL_GetError;
-  var _SDL_DisplayFormat=env._SDL_DisplayFormat;
   var _SDL_ListModes=env._SDL_ListModes;
-  var _fputc=env._fputc;
+  var _SDL_ShowCursor=env._SDL_ShowCursor;
   var _llvm_dbg_value=env._llvm_dbg_value;
   var _SDL_VideoDriverName=env._SDL_VideoDriverName;
   var __formatString=env.__formatString;
@@ -7109,7 +7115,7 @@ function _RunModeTests($screen) {
   STACKTOP = sp; //@line 622
   return $_0 | 0; //@line 623
  }
- $157 = _SDL_DisplayFormat($59 | 0) | 0; //@line 625
+ $157 = _SDL_DisplayFormatAlpha($59 | 0) | 0; //@line 625
  _SDL_FreeSurface($59 | 0); //@line 626
  if (($157 | 0) == 0) {
   $160 = _SDL_GetError() | 0; //@line 630
@@ -7155,7 +7161,7 @@ function _RunModeTests($screen) {
   STACKTOP = sp; //@line 694
   return $_0 | 0; //@line 695
  }
- $203 = _SDL_DisplayFormat($106 | 0) | 0; //@line 697
+ $203 = _SDL_DisplayFormatAlpha($106 | 0) | 0; //@line 697
  _SDL_FreeSurface($106 | 0); //@line 698
  if (($203 | 0) == 0) {
   $206 = _SDL_GetError() | 0; //@line 702
@@ -7205,7 +7211,7 @@ function _RunModeTests($screen) {
    _SDL_FreeSurface($157 | 0); //@line 776
    $255 = _IMG_Load_RW(_SDL_RWFromFile(2144, 2136) | 0, 1) | 0; //@line 778
    _SDL_SetAlpha($255 | 0, 65536, 85) | 0; //@line 779
-   $257 = _SDL_DisplayFormat($255 | 0) | 0; //@line 780
+   $257 = _SDL_DisplayFormatAlpha($255 | 0) | 0; //@line 780
    _SDL_FreeSurface($255 | 0); //@line 781
    if (($257 | 0) == 0) {
     $260 = _SDL_GetError() | 0; //@line 785
@@ -7266,7 +7272,7 @@ function _RunModeTests($screen) {
    _SDL_SetAlpha($310 | 0, 65536, 85) | 0; //@line 872
    $315 = HEAPU8[HEAP32[$310 + 20 >> 2] | 0] | 0; //@line 876
    _SDL_SetColorKey($310 | 0, 131074, $315 | 0) | 0; //@line 877
-   $317 = _SDL_DisplayFormat($310 | 0) | 0; //@line 878
+   $317 = _SDL_DisplayFormatAlpha($310 | 0) | 0; //@line 878
    _SDL_FreeSurface($310 | 0); //@line 879
    if (($317 | 0) == 0) {
     $320 = _SDL_GetError() | 0; //@line 883
@@ -8396,7 +8402,7 @@ function runPostSets() {
   return { _strlen: _strlen, _free: _free, _main: _main, __GLOBAL__I_a: __GLOBAL__I_a, _memset: _memset, _malloc: _malloc, _memcpy: _memcpy, runPostSets: runPostSets, stackAlloc: stackAlloc, stackSave: stackSave, stackRestore: stackRestore, setThrew: setThrew, setTempRet0: setTempRet0, setTempRet1: setTempRet1, setTempRet2: setTempRet2, setTempRet3: setTempRet3, setTempRet4: setTempRet4, setTempRet5: setTempRet5, setTempRet6: setTempRet6, setTempRet7: setTempRet7, setTempRet8: setTempRet8, setTempRet9: setTempRet9, dynCall_ii: dynCall_ii, dynCall_v: dynCall_v, dynCall_iii: dynCall_iii, dynCall_vi: dynCall_vi };
 })
 // EMSCRIPTEN_END_ASM
-({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_strncmp": _strncmp, "_rand": _rand, "_SDL_SetColorKey": _SDL_SetColorKey, "_sysconf": _sysconf, "_SDL_MapRGB": _SDL_MapRGB, "_abort": _abort, "_fprintf": _fprintf, "_printf": _printf, "_fflush": _fflush, "_SDL_LockSurface": _SDL_LockSurface, "__reallyNegative": __reallyNegative, "_SDL_WM_SetCaption": _SDL_WM_SetCaption, "_SDL_FillRect": _SDL_FillRect, "_SDL_ShowCursor": _SDL_ShowCursor, "_SDL_PollEvent": _SDL_PollEvent, "_SDL_GetVideoInfo": _SDL_GetVideoInfo, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_Flip": _SDL_Flip, "_SDL_RWFromFile": _SDL_RWFromFile, "_send": _send, "_write": _write, "_fputs": _fputs, "_SDL_UpperBlit": _SDL_UpperBlit, "_exit": _exit, "_SDL_SetAlpha": _SDL_SetAlpha, "_SDL_GetError": _SDL_GetError, "_SDL_DisplayFormat": _SDL_DisplayFormat, "_SDL_ListModes": _SDL_ListModes, "_fputc": _fputc, "_llvm_dbg_value": _llvm_dbg_value, "_SDL_VideoDriverName": _SDL_VideoDriverName, "__formatString": __formatString, "_IMG_Load_RW": _IMG_Load_RW, "_SDL_GetTicks": _SDL_GetTicks, "_pwrite": _pwrite, "_putchar": _putchar, "_puts": _puts, "_sbrk": _sbrk, "_SDL_Init": _SDL_Init, "___errno_location": ___errno_location, "_SDL_Quit": _SDL_Quit, "_SDL_FreeSurface": _SDL_FreeSurface, "_time": _time, "__exit": __exit, "_SDL_FreeRW": _SDL_FreeRW, "_strcmp": _strcmp, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
+({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_strncmp": _strncmp, "_rand": _rand, "_SDL_SetColorKey": _SDL_SetColorKey, "_fputc": _fputc, "_sysconf": _sysconf, "_SDL_MapRGB": _SDL_MapRGB, "_abort": _abort, "_fprintf": _fprintf, "_printf": _printf, "_fflush": _fflush, "_SDL_LockSurface": _SDL_LockSurface, "__reallyNegative": __reallyNegative, "_SDL_WM_SetCaption": _SDL_WM_SetCaption, "_SDL_FillRect": _SDL_FillRect, "_SDL_DisplayFormatAlpha": _SDL_DisplayFormatAlpha, "_SDL_PollEvent": _SDL_PollEvent, "_SDL_GetVideoInfo": _SDL_GetVideoInfo, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_Flip": _SDL_Flip, "_SDL_RWFromFile": _SDL_RWFromFile, "_send": _send, "_write": _write, "_fputs": _fputs, "_SDL_UpperBlit": _SDL_UpperBlit, "_exit": _exit, "_SDL_SetAlpha": _SDL_SetAlpha, "_SDL_GetError": _SDL_GetError, "_SDL_ListModes": _SDL_ListModes, "_SDL_ShowCursor": _SDL_ShowCursor, "_llvm_dbg_value": _llvm_dbg_value, "_SDL_VideoDriverName": _SDL_VideoDriverName, "__formatString": __formatString, "_IMG_Load_RW": _IMG_Load_RW, "_SDL_GetTicks": _SDL_GetTicks, "_pwrite": _pwrite, "_putchar": _putchar, "_puts": _puts, "_sbrk": _sbrk, "_SDL_Init": _SDL_Init, "___errno_location": ___errno_location, "_SDL_Quit": _SDL_Quit, "_SDL_FreeSurface": _SDL_FreeSurface, "_time": _time, "__exit": __exit, "_SDL_FreeRW": _SDL_FreeRW, "_strcmp": _strcmp, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
 var _strlen = Module["_strlen"] = asm["_strlen"];
 var _free = Module["_free"] = asm["_free"];
 var _main = Module["_main"] = asm["_main"];

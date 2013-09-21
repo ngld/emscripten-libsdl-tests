@@ -1017,11 +1017,11 @@ Module["preloadedAudios"] = {}; // maps url to audio data
 var memoryInitializer = null;
 // === Body ===
 STATIC_BASE = 8;
-STATICTOP = STATIC_BASE + 1392;
+STATICTOP = STATIC_BASE + 1544;
 var _stderr;
 /* global initializers */ __ATINIT__.push({ func: function() { runPostSets() } },{ func: function() { __GLOBAL__I_a() } });
 var _stderr = _stderr=allocate([0,0,0,0,0,0,0,0], "i8", ALLOC_STATIC);
-/* memory initializer */ allocate([83,112,114,105,116,101,32,98,108,105,116,32,100,111,115,110,39,116,32,117,115,101,115,32,104,97,114,100,119,97,114,101,32,97,108,112,104,97,32,97,99,99,101,108,101,114,97,116,105,111,110,0,0,0,0,0,83,112,114,105,116,101,32,98,108,105,116,32,117,115,101,115,32,104,97,114,100,119,97,114,101,32,97,108,112,104,97,32,97,99,99,101,108,101,114,97,116,105,111,110,0,0,0,0,83,112,114,105,116,101,32,105,115,32,105,110,32,115,121,115,116,101,109,32,109,101,109,111,114,121,0,0,0,0,0,0,83,112,114,105,116,101,32,105,115,32,105,110,32,118,105,100,101,111,32,109,101,109,111,114,121,0,0,0,0,0,0,0,83,99,114,101,101,110,32,104,97,115,32,100,111,117,98,108,101,45,98,117,102,102,101,114,105,110,103,32,101,110,97,98,108,101,100,0,0,0,0,0,83,99,114,101,101,110,32,105,115,32,105,110,32,115,121,115,116,101,109,32,109,101,109,111,114,121,0,0,0,0,0,0,83,99,114,101,101,110,32,105,115,32,105,110,32,118,105,100,101,111,32,109,101,109,111,114,121,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,119,97,114,112,0,0,0,45,104,119,0,0,0,0,0,45,98,112,112,0,0,0,0,102,111,114,99,101,100,32,49,54,32,98,112,112,32,109,111,100,101,10,0,0,0,0,0,67,111,117,108,100,110,39,116,32,105,110,105,116,105,97,108,105,122,101,32,83,68,76,58,32,37,115,10,0,0,0,0,67,111,117,108,100,110,39,116,32,99,114,101,97,116,101,32,98,97,99,107,103,114,111,117,110,100,58,32,37,115,10,0,67,111,117,108,100,110,39,116,32,99,111,110,118,101,114,116,32,98,97,99,107,103,114,111,117,110,100,58,32,37,115,10,0,0,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,108,111,99,107,32,116,104,101,32,100,105,115,112,108,97,121,32,115,117,114,102,97,99,101,58,32,37,115,10,0,0,37,100,32,97,108,112,104,97,32,98,108,105,116,115,44,32,126,37,52,46,52,102,32,109,115,32,112,101,114,32,98,108,105,116,10,0,0,0,0,0,67,111,117,108,100,110,39,116,32,116,111,103,103,108,101,32,118,105,100,101,111,32,109,111,100,101,58,32,37,115,10,0,67,111,117,108,100,110,39,116,32,108,111,97,100,32,37,115,58,32,37,115,0,0,0,0,83,99,114,101,101,110,32,105,115,32,97,116,32,37,100,32,98,105,116,115,32,112,101,114,32,112,105,120,101,108,10,0,105,99,111,110,46,98,109,112,0,0,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,115,101,116,32,37,100,120,37,100,120,37,100,32,118,105,100,101,111,32,109,111,100,101,58,32,37,115,10,0,0,0,85,115,97,103,101,58,32,37,115,32,91,45,119,105,100,116,104,32,78,93,32,91,45,104,101,105,103,104,116,32,78,93,32,91,45,98,112,112,32,78,93,32,91,45,119,97,114,112,93,32,91,45,104,119,93,32,91,45,102,117,108,108,115,99,114,101,101,110,93,10,0,0,45,102,117,108,108,115,99,114,101,101,110,0,0,0,0,0,45,110,111,102,114,97,109,101,0,0,0,0,0,0,0,0,45,114,101,115,105,122,101,0,45,104,101,105,103,104,116,0,45,119,105,100,116,104,0,0,114,98,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,99,114,101,97,116,101,32,108,105,103,104,116,58,32,37,115,10,0,0,0,0,0,0], "i8", ALLOC_NONE, Runtime.GLOBAL_BASE)
+/* memory initializer */ allocate([83,112,114,105,116,101,32,98,108,105,116,32,100,111,115,110,39,116,32,117,115,101,115,32,104,97,114,100,119,97,114,101,32,97,108,112,104,97,32,97,99,99,101,108,101,114,97,116,105,111,110,0,0,0,0,0,83,112,114,105,116,101,32,98,108,105,116,32,117,115,101,115,32,104,97,114,100,119,97,114,101,32,97,108,112,104,97,32,97,99,99,101,108,101,114,97,116,105,111,110,0,0,0,0,83,112,114,105,116,101,32,105,115,32,105,110,32,115,121,115,116,101,109,32,109,101,109,111,114,121,0,0,0,0,0,0,83,112,114,105,116,101,32,105,115,32,105,110,32,118,105,100,101,111,32,109,101,109,111,114,121,0,0,0,0,0,0,0,83,99,114,101,101,110,32,104,97,115,32,100,111,117,98,108,101,45,98,117,102,102,101,114,105,110,103,32,101,110,97,98,108,101,100,0,0,0,0,0,83,99,114,101,101,110,32,105,115,32,105,110,32,115,121,115,116,101,109,32,109,101,109,111,114,121,0,0,0,0,0,0,83,99,114,101,101,110,32,105,115,32,105,110,32,118,105,100,101,111,32,109,101,109,111,114,121,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,119,97,114,112,0,0,0,45,104,119,0,0,0,0,0,45,98,112,112,0,0,0,0,102,111,114,99,101,100,32,49,54,32,98,112,112,32,109,111,100,101,10,0,0,0,0,0,67,111,117,108,100,110,39,116,32,105,110,105,116,105,97,108,105,122,101,32,83,68,76,58,32,37,115,10,0,0,0,0,67,111,117,108,100,110,39,116,32,99,114,101,97,116,101,32,98,97,99,107,103,114,111,117,110,100,58,32,37,115,10,0,67,111,117,108,100,110,39,116,32,99,111,110,118,101,114,116,32,98,97,99,107,103,114,111,117,110,100,58,32,37,115,10,0,0,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,108,111,99,107,32,116,104,101,32,100,105,115,112,108,97,121,32,115,117,114,102,97,99,101,58,32,37,115,10,0,0,37,100,32,97,108,112,104,97,32,98,108,105,116,115,44,32,126,37,52,46,52,102,32,109,115,32,112,101,114,32,98,108,105,116,10,0,0,0,0,0,67,111,117,108,100,110,39,116,32,116,111,103,103,108,101,32,118,105,100,101,111,32,109,111,100,101,58,32,37,115,10,0,114,101,112,111,114,116,40,116,114,117,101,41,59,0,0,0,67,111,117,108,100,110,39,116,32,108,111,97,100,32,37,115,58,32,37,115,0,0,0,0,83,99,114,101,101,110,32,105,115,32,97,116,32,37,100,32,98,105,116,115,32,112,101,114,32,112,105,120,101,108,10,0,105,99,111,110,46,98,109,112,0,0,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,115,101,116,32,37,100,120,37,100,120,37,100,32,118,105,100,101,111,32,109,111,100,101,58,32,37,115,10,0,0,0,85,115,97,103,101,58,32,37,115,32,91,45,119,105,100,116,104,32,78,93,32,91,45,104,101,105,103,104,116,32,78,93,32,91,45,98,112,112,32,78,93,32,91,45,119,97,114,112,93,32,91,45,104,119,93,32,91,45,102,117,108,108,115,99,114,101,101,110,93,10,0,0,45,102,117,108,108,115,99,114,101,101,110,0,0,0,0,0,45,110,111,102,114,97,109,101,0,0,0,0,0,0,0,0,45,114,101,115,105,122,101,0,45,104,101,105,103,104,116,0,45,119,105,100,116,104,0,0,114,98,0,0,0,0,0,0,67,111,117,108,100,110,39,116,32,99,114,101,97,116,101,32,108,105,103,104,116,58,32,37,115,10,0,0,0,0,0,0], "i8", ALLOC_NONE, Runtime.GLOBAL_BASE)
 var tempDoublePtr = Runtime.alignMemory(allocate(12, "i8", ALLOC_STATIC), 8);
 assert(tempDoublePtr % 8 == 0);
 function copyTempFloat(ptr) { // functions, because inlining this code increases code size too much
@@ -3239,22 +3239,23 @@ function copyTempDouble(ptr) {
         var is_SDL_HWPALETTE = flags & 0x00200000;  
         var bpp = is_SDL_HWPALETTE ? 1 : 4;
         HEAP32[((surf)>>2)]=flags         // SDL_Surface.flags
-        HEAP32[(((surf)+(8))>>2)]=pixelFormat // SDL_Surface.format TODO
-        HEAP32[(((surf)+(16))>>2)]=width         // SDL_Surface.w
-        HEAP32[(((surf)+(20))>>2)]=height        // SDL_Surface.h
-        HEAP32[(((surf)+(24))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
+        HEAP32[(((surf)+(4))>>2)]=pixelFormat // SDL_Surface.format TODO
+        HEAP32[(((surf)+(8))>>2)]=width         // SDL_Surface.w
+        HEAP32[(((surf)+(12))>>2)]=height        // SDL_Surface.h
+        HEAP32[(((surf)+(16))>>2)]=width * bpp       // SDL_Surface.pitch, assuming RGBA or indexed for now,
                                                                                  // since that is what ImageData gives us in browsers
-        HEAP32[(((surf)+(32))>>2)]=buffer      // SDL_Surface.pixels
-        HEAP32[(((surf)+(64))>>2)]=0      // SDL_Surface.offset
-        HEAP32[(((surf)+(88))>>2)]=1
+        HEAP32[(((surf)+(20))>>2)]=buffer      // SDL_Surface.pixels
+        HEAP32[(((surf)+(36))>>2)]=0      // SDL_Surface.offset
+        HEAP32[(((surf)+(56))>>2)]=1
         HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
-        HEAP32[(((pixelFormat)+(8))>>2)]=0 // TODO
-        HEAP8[(((pixelFormat)+(16))|0)]=bpp * 8
-        HEAP8[(((pixelFormat)+(17))|0)]=bpp
-        HEAP32[(((pixelFormat)+(20))>>2)]=rmask || 0x000000ff
-        HEAP32[(((pixelFormat)+(24))>>2)]=gmask || 0x0000ff00
-        HEAP32[(((pixelFormat)+(28))>>2)]=bmask || 0x00ff0000
-        HEAP32[(((pixelFormat)+(32))>>2)]=amask || 0xff000000
+        HEAP32[(((pixelFormat)+(4))>>2)]=0 // TODO
+        HEAP8[(((pixelFormat)+(8))|0)]=bpp * 8
+        HEAP8[(((pixelFormat)+(9))|0)]=bpp
+        HEAP8[(((pixelFormat)+(36))|0)]=255
+        HEAP32[(((pixelFormat)+(12))>>2)]=rmask || 0x000000ff
+        HEAP32[(((pixelFormat)+(16))>>2)]=gmask || 0x0000ff00
+        HEAP32[(((pixelFormat)+(20))>>2)]=bmask || 0x00ff0000
+        HEAP32[(((pixelFormat)+(24))>>2)]=amask || 0xff000000
         // Decide if we want to use WebGL or not
         var useWebGL = (flags & 67108864) != 0;
         SDL.GL = SDL.GL || useWebGL;
@@ -3318,9 +3319,9 @@ function copyTempDouble(ptr) {
           }
         }
       },freeSurface:function (surf) {
-        var refcount = HEAP32[(((surf)+(88))>>2)];
+        var refcount = HEAP32[(((surf)+(56))>>2)];
         if (refcount > 1) {
-          HEAP32[(((surf)+(88))>>2)]=refcount - 1;
+          HEAP32[(((surf)+(56))>>2)]=refcount - 1;
           return;
         }
         var info = SDL.surfaces[surf];
@@ -4536,6 +4537,8 @@ function copyTempDouble(ptr) {
   var _sqrt=Math.sqrt;
   function _SDL_SetAlpha(surf, flag, alpha) {
       SDL.surfaces[surf].alpha = alpha;
+      var format = HEAP32[(((surf)+(4))>>2)]
+      HEAP8[(((format)+(36))|0)]=alpha
     }
   function _SDL_GetTicks() {
       return Math.floor(Date.now() - SDL.startTime);
@@ -4554,7 +4557,9 @@ function copyTempDouble(ptr) {
       } else {
         dr = { x: 0, y: 0, w: -1, h: -1 };
       }
+      dstData.ctx.globalAlpha = srcData.alpha / 255;
       dstData.ctx.drawImage(srcData.canvas, sr.x, sr.y, sr.w, sr.h, dr.x, dr.y, sr.w, sr.h);
+      dstData.ctx.globalAlpha = 1;
       if (dst != SDL.screen) {
         // XXX As in IMG_Load, for compatibility we write out |pixels|
         console.log('WARNING: copying canvas data to memory for compatibility');
@@ -4726,13 +4731,14 @@ function copyTempDouble(ptr) {
       Runtime.warnOnce('SDL_SetColorKey is a no-op for performance reasons');
       return 0;
     }
-  function _SDL_DisplayFormat(surf) {
-      // This is supposed to convert the passed surface to the display format for faster blitting.
-      // TODO: Is there any optimization possible here?
-      var refcount = HEAP32[(((surf)+(88))>>2)]
-      HEAP32[(((surf)+(88))>>2)]=refcount + 1
-      return surf;
-    }
+  function _SDL_DisplayFormatAlpha(surf) {
+      var oldData = SDL.surfaces[surf];
+      var ret = SDL.makeSurface(oldData.width, oldData.height, oldData.flags, false, 'copy:' + oldData.source);
+      var newData = SDL.surfaces[ret];
+      //newData.ctx.putImageData(oldData.ctx.getImageData(0, 0, oldData.width, oldData.height), 0, 0);
+      newData.ctx.drawImage(oldData.canvas, 0, 0);
+      return ret;
+    }var _SDL_DisplayFormat=_SDL_DisplayFormatAlpha;
   function _SDL_FreeSurface(surf) {
       if (surf) SDL.freeSurface(surf);
     }
@@ -4900,14 +4906,83 @@ function copyTempDouble(ptr) {
       var stdout = HEAP32[((_stdout)>>2)];
       return _fprintf(stdout, format, varargs);
     }
-  function _SDL_SetClipRect() {
-  Module['printErr']('missing function: SDL_SetClipRect'); abort(-1);
-  }
-  function _SDL_Delay(delay) {
-      if (!ENVIRONMENT_IS_WORKER) abort('SDL_Delay called on the main thread! Potential infinite loop, quitting.');
-      // horrible busy-wait, but in a worker it at least does not block rendering
-      var now = Date.now();
-      while (Date.now() - now < delay) {}
+  function _SDL_SetClipRect(surf, clip_rect) {
+      HEAP32[(((surf)+(36))>>2)]=clip_rect
+      var clip = SDL.loadRect(clip_rect);
+      var ctx = SDL.surfaces[surf].ctx;
+      ctx.beginPath();
+      ctx.rect(clip.x, clip.y, clip.w, clip.h);
+      ctx.clip();
+    }
+  function _emscripten_run_script(ptr) {
+      eval(Pointer_stringify(ptr));
+    }
+  function _emscripten_set_main_loop(func, fps, simulateInfiniteLoop) {
+      Module['noExitRuntime'] = true;
+      Browser.mainLoop.runner = function() {
+        if (ABORT) return;
+        if (Browser.mainLoop.queue.length > 0) {
+          var start = Date.now();
+          var blocker = Browser.mainLoop.queue.shift();
+          blocker.func(blocker.arg);
+          if (Browser.mainLoop.remainingBlockers) {
+            var remaining = Browser.mainLoop.remainingBlockers;
+            var next = remaining%1 == 0 ? remaining-1 : Math.floor(remaining);
+            if (blocker.counted) {
+              Browser.mainLoop.remainingBlockers = next;
+            } else {
+              // not counted, but move the progress along a tiny bit
+              next = next + 0.5; // do not steal all the next one's progress
+              Browser.mainLoop.remainingBlockers = (8*remaining + next)/9;
+            }
+          }
+          console.log('main loop blocker "' + blocker.name + '" took ' + (Date.now() - start) + ' ms'); //, left: ' + Browser.mainLoop.remainingBlockers);
+          Browser.mainLoop.updateStatus();
+          setTimeout(Browser.mainLoop.runner, 0);
+          return;
+        }
+        if (Browser.mainLoop.shouldPause) {
+          // catch pauses from non-main loop sources
+          Browser.mainLoop.paused = true;
+          Browser.mainLoop.shouldPause = false;
+          return;
+        }
+        if (Module['preMainLoop']) {
+          Module['preMainLoop']();
+        }
+        try {
+          Runtime.dynCall('v', func);
+        } catch (e) {
+          if (e instanceof ExitStatus) {
+            return;
+          } else {
+            throw e;
+          }
+        }
+        if (Module['postMainLoop']) {
+          Module['postMainLoop']();
+        }
+        if (Browser.mainLoop.shouldPause) {
+          // catch pauses from the main loop itself
+          Browser.mainLoop.paused = true;
+          Browser.mainLoop.shouldPause = false;
+          return;
+        }
+        Browser.mainLoop.scheduler();
+      }
+      if (fps && fps > 0) {
+        Browser.mainLoop.scheduler = function() {
+          setTimeout(Browser.mainLoop.runner, 1000/fps); // doing this each time means that on exception, we stop
+        }
+      } else {
+        Browser.mainLoop.scheduler = function() {
+          Browser.requestAnimationFrame(Browser.mainLoop.runner);
+        }
+      }
+      Browser.mainLoop.scheduler();
+      if (simulateInfiniteLoop) {
+        throw 'SimulateInfiniteLoop';
+      }
     }
   function _SDL_PollEvent(ptr) {
       if (SDL.events.length === 0) return 0;
@@ -5328,6 +5403,7 @@ var asm = (function(global, env, buffer) {
   var _sysconf=env._sysconf;
   var _SDL_RWFromFile=env._SDL_RWFromFile;
   var _abort=env._abort;
+  var _exit=env._exit;
   var _fprintf=env._fprintf;
   var _sqrt=env._sqrt;
   var _printf=env._printf;
@@ -5338,31 +5414,31 @@ var asm = (function(global, env, buffer) {
   var _SDL_SetVideoMode=env._SDL_SetVideoMode;
   var _SDL_FillRect=env._SDL_FillRect;
   var _strtol=env._strtol;
-  var _fputc=env._fputc;
+  var _SDL_DisplayFormatAlpha=env._SDL_DisplayFormatAlpha;
   var _SDL_GetMouseState=env._SDL_GetMouseState;
   var _SDL_PollEvent=env._SDL_PollEvent;
   var _SDL_GetVideoInfo=env._SDL_GetVideoInfo;
   var ___setErrNo=env.___setErrNo;
   var _fwrite=env._fwrite;
-  var _SDL_MapRGB=env._SDL_MapRGB;
+  var _emscripten_run_script=env._emscripten_run_script;
   var _SDL_MapRGBA=env._SDL_MapRGBA;
   var _send=env._send;
   var _write=env._write;
   var _fputs=env._fputs;
   var _SDL_UpperBlit=env._SDL_UpperBlit;
-  var _exit=env._exit;
+  var _SDL_MapRGB=env._SDL_MapRGB;
   var _SDL_UpdateRect=env._SDL_UpdateRect;
   var _SDL_SetAlpha=env._SDL_SetAlpha;
   var _SDL_GetError=env._SDL_GetError;
   var _isspace=env._isspace;
-  var _SDL_DisplayFormat=env._SDL_DisplayFormat;
   var _puts=env._puts;
   var __parseInt=env.__parseInt;
+  var _fputc=env._fputc;
   var _llvm_dbg_value=env._llvm_dbg_value;
+  var _emscripten_set_main_loop=env._emscripten_set_main_loop;
   var __formatString=env.__formatString;
   var _IMG_Load_RW=env._IMG_Load_RW;
   var _atoi=env._atoi;
-  var _SDL_Delay=env._SDL_Delay;
   var _SDL_GetTicks=env._SDL_GetTicks;
   var _SDL_SetClipRect=env._SDL_SetClipRect;
   var _pwrite=env._pwrite;
@@ -5385,192 +5461,192 @@ function _malloc($bytes) {
  do {
   if ($bytes >>> 0 < 245) {
    if ($bytes >>> 0 < 11) {
-    $8 = 16; //@line 1466
+    $8 = 16; //@line 1482
    } else {
-    $8 = $bytes + 11 & -8; //@line 1470
+    $8 = $bytes + 11 & -8; //@line 1486
    }
-   $9 = $8 >>> 3; //@line 1473
-   $10 = HEAP32[232] | 0; //@line 1474
-   $11 = $10 >>> ($9 >>> 0); //@line 1475
+   $9 = $8 >>> 3; //@line 1489
+   $10 = HEAP32[270] | 0; //@line 1490
+   $11 = $10 >>> ($9 >>> 0); //@line 1491
    if (($11 & 3 | 0) != 0) {
-    $17 = ($11 & 1 ^ 1) + $9 | 0; //@line 1481
-    $18 = $17 << 1; //@line 1482
-    $20 = 968 + ($18 << 2) | 0; //@line 1484
-    $21 = 968 + ($18 + 2 << 2) | 0; //@line 1486
-    $22 = HEAP32[$21 >> 2] | 0; //@line 1487
-    $23 = $22 + 8 | 0; //@line 1488
-    $24 = HEAP32[$23 >> 2] | 0; //@line 1489
+    $17 = ($11 & 1 ^ 1) + $9 | 0; //@line 1497
+    $18 = $17 << 1; //@line 1498
+    $20 = 1120 + ($18 << 2) | 0; //@line 1500
+    $21 = 1120 + ($18 + 2 << 2) | 0; //@line 1502
+    $22 = HEAP32[$21 >> 2] | 0; //@line 1503
+    $23 = $22 + 8 | 0; //@line 1504
+    $24 = HEAP32[$23 >> 2] | 0; //@line 1505
     do {
      if (($20 | 0) == ($24 | 0)) {
-      HEAP32[232] = $10 & ~(1 << $17); //@line 1496
+      HEAP32[270] = $10 & ~(1 << $17); //@line 1512
      } else {
-      if ($24 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-       _abort(); //@line 1502
-       return 0; //@line 1502
+      if ($24 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+       _abort(); //@line 1518
+       return 0; //@line 1518
       }
-      $35 = $24 + 12 | 0; //@line 1505
+      $35 = $24 + 12 | 0; //@line 1521
       if ((HEAP32[$35 >> 2] | 0) == ($22 | 0)) {
-       HEAP32[$35 >> 2] = $20; //@line 1509
-       HEAP32[$21 >> 2] = $24; //@line 1510
+       HEAP32[$35 >> 2] = $20; //@line 1525
+       HEAP32[$21 >> 2] = $24; //@line 1526
        break;
       } else {
-       _abort(); //@line 1513
-       return 0; //@line 1513
+       _abort(); //@line 1529
+       return 0; //@line 1529
       }
      }
     } while (0);
-    $40 = $17 << 3; //@line 1518
-    HEAP32[$22 + 4 >> 2] = $40 | 3; //@line 1521
-    $45 = $22 + ($40 | 4) | 0; //@line 1525
-    HEAP32[$45 >> 2] = HEAP32[$45 >> 2] | 1; //@line 1528
-    $mem_0 = $23; //@line 1530
-    return $mem_0 | 0; //@line 1533
+    $40 = $17 << 3; //@line 1534
+    HEAP32[$22 + 4 >> 2] = $40 | 3; //@line 1537
+    $45 = $22 + ($40 | 4) | 0; //@line 1541
+    HEAP32[$45 >> 2] = HEAP32[$45 >> 2] | 1; //@line 1544
+    $mem_0 = $23; //@line 1546
+    return $mem_0 | 0; //@line 1549
    }
-   if ($8 >>> 0 <= (HEAP32[234] | 0) >>> 0) {
-    $nb_0 = $8; //@line 1538
+   if ($8 >>> 0 <= (HEAP32[272] | 0) >>> 0) {
+    $nb_0 = $8; //@line 1554
     break;
    }
    if (($11 | 0) != 0) {
-    $56 = 2 << $9; //@line 1544
-    $59 = $11 << $9 & ($56 | -$56); //@line 1547
-    $62 = ($59 & -$59) - 1 | 0; //@line 1550
-    $64 = $62 >>> 12 & 16; //@line 1552
-    $65 = $62 >>> ($64 >>> 0); //@line 1553
-    $67 = $65 >>> 5 & 8; //@line 1555
-    $69 = $65 >>> ($67 >>> 0); //@line 1557
-    $71 = $69 >>> 2 & 4; //@line 1559
-    $73 = $69 >>> ($71 >>> 0); //@line 1561
-    $75 = $73 >>> 1 & 2; //@line 1563
-    $77 = $73 >>> ($75 >>> 0); //@line 1565
-    $79 = $77 >>> 1 & 1; //@line 1567
-    $82 = ($67 | $64 | $71 | $75 | $79) + ($77 >>> ($79 >>> 0)) | 0; //@line 1570
-    $83 = $82 << 1; //@line 1571
-    $85 = 968 + ($83 << 2) | 0; //@line 1573
-    $86 = 968 + ($83 + 2 << 2) | 0; //@line 1575
-    $87 = HEAP32[$86 >> 2] | 0; //@line 1576
-    $88 = $87 + 8 | 0; //@line 1577
-    $89 = HEAP32[$88 >> 2] | 0; //@line 1578
+    $56 = 2 << $9; //@line 1560
+    $59 = $11 << $9 & ($56 | -$56); //@line 1563
+    $62 = ($59 & -$59) - 1 | 0; //@line 1566
+    $64 = $62 >>> 12 & 16; //@line 1568
+    $65 = $62 >>> ($64 >>> 0); //@line 1569
+    $67 = $65 >>> 5 & 8; //@line 1571
+    $69 = $65 >>> ($67 >>> 0); //@line 1573
+    $71 = $69 >>> 2 & 4; //@line 1575
+    $73 = $69 >>> ($71 >>> 0); //@line 1577
+    $75 = $73 >>> 1 & 2; //@line 1579
+    $77 = $73 >>> ($75 >>> 0); //@line 1581
+    $79 = $77 >>> 1 & 1; //@line 1583
+    $82 = ($67 | $64 | $71 | $75 | $79) + ($77 >>> ($79 >>> 0)) | 0; //@line 1586
+    $83 = $82 << 1; //@line 1587
+    $85 = 1120 + ($83 << 2) | 0; //@line 1589
+    $86 = 1120 + ($83 + 2 << 2) | 0; //@line 1591
+    $87 = HEAP32[$86 >> 2] | 0; //@line 1592
+    $88 = $87 + 8 | 0; //@line 1593
+    $89 = HEAP32[$88 >> 2] | 0; //@line 1594
     do {
      if (($85 | 0) == ($89 | 0)) {
-      HEAP32[232] = $10 & ~(1 << $82); //@line 1585
+      HEAP32[270] = $10 & ~(1 << $82); //@line 1601
      } else {
-      if ($89 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-       _abort(); //@line 1591
-       return 0; //@line 1591
+      if ($89 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+       _abort(); //@line 1607
+       return 0; //@line 1607
       }
-      $100 = $89 + 12 | 0; //@line 1594
+      $100 = $89 + 12 | 0; //@line 1610
       if ((HEAP32[$100 >> 2] | 0) == ($87 | 0)) {
-       HEAP32[$100 >> 2] = $85; //@line 1598
-       HEAP32[$86 >> 2] = $89; //@line 1599
+       HEAP32[$100 >> 2] = $85; //@line 1614
+       HEAP32[$86 >> 2] = $89; //@line 1615
        break;
       } else {
-       _abort(); //@line 1602
-       return 0; //@line 1602
+       _abort(); //@line 1618
+       return 0; //@line 1618
       }
      }
     } while (0);
-    $105 = $82 << 3; //@line 1607
-    $106 = $105 - $8 | 0; //@line 1608
-    HEAP32[$87 + 4 >> 2] = $8 | 3; //@line 1611
-    $109 = $87; //@line 1612
-    $111 = $109 + $8 | 0; //@line 1614
-    HEAP32[$109 + ($8 | 4) >> 2] = $106 | 1; //@line 1619
-    HEAP32[$109 + $105 >> 2] = $106; //@line 1622
-    $117 = HEAP32[234] | 0; //@line 1623
+    $105 = $82 << 3; //@line 1623
+    $106 = $105 - $8 | 0; //@line 1624
+    HEAP32[$87 + 4 >> 2] = $8 | 3; //@line 1627
+    $109 = $87; //@line 1628
+    $111 = $109 + $8 | 0; //@line 1630
+    HEAP32[$109 + ($8 | 4) >> 2] = $106 | 1; //@line 1635
+    HEAP32[$109 + $105 >> 2] = $106; //@line 1638
+    $117 = HEAP32[272] | 0; //@line 1639
     if (($117 | 0) != 0) {
-     $120 = HEAP32[237] | 0; //@line 1626
-     $121 = $117 >>> 3; //@line 1627
-     $122 = $121 << 1; //@line 1628
-     $124 = 968 + ($122 << 2) | 0; //@line 1630
-     $125 = HEAP32[232] | 0; //@line 1631
-     $126 = 1 << $121; //@line 1632
+     $120 = HEAP32[275] | 0; //@line 1642
+     $121 = $117 >>> 3; //@line 1643
+     $122 = $121 << 1; //@line 1644
+     $124 = 1120 + ($122 << 2) | 0; //@line 1646
+     $125 = HEAP32[270] | 0; //@line 1647
+     $126 = 1 << $121; //@line 1648
      do {
       if (($125 & $126 | 0) == 0) {
-       HEAP32[232] = $125 | $126; //@line 1638
+       HEAP32[270] = $125 | $126; //@line 1654
        $F4_0 = $124;
-       $_pre_phi = 968 + ($122 + 2 << 2) | 0;
+       $_pre_phi = 1120 + ($122 + 2 << 2) | 0;
       } else {
-       $132 = 968 + ($122 + 2 << 2) | 0; //@line 1644
-       $133 = HEAP32[$132 >> 2] | 0; //@line 1645
-       if ($133 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+       $132 = 1120 + ($122 + 2 << 2) | 0; //@line 1660
+       $133 = HEAP32[$132 >> 2] | 0; //@line 1661
+       if ($133 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
         $F4_0 = $133;
         $_pre_phi = $132;
         break;
        }
-       _abort(); //@line 1653
-       return 0; //@line 1653
+       _abort(); //@line 1669
+       return 0; //@line 1669
       }
      } while (0);
-     HEAP32[$_pre_phi >> 2] = $120; //@line 1659
-     HEAP32[$F4_0 + 12 >> 2] = $120; //@line 1661
-     HEAP32[$120 + 8 >> 2] = $F4_0; //@line 1663
-     HEAP32[$120 + 12 >> 2] = $124; //@line 1665
+     HEAP32[$_pre_phi >> 2] = $120; //@line 1675
+     HEAP32[$F4_0 + 12 >> 2] = $120; //@line 1677
+     HEAP32[$120 + 8 >> 2] = $F4_0; //@line 1679
+     HEAP32[$120 + 12 >> 2] = $124; //@line 1681
     }
-    HEAP32[234] = $106; //@line 1667
-    HEAP32[237] = $111; //@line 1668
-    $mem_0 = $88; //@line 1670
-    return $mem_0 | 0; //@line 1673
+    HEAP32[272] = $106; //@line 1683
+    HEAP32[275] = $111; //@line 1684
+    $mem_0 = $88; //@line 1686
+    return $mem_0 | 0; //@line 1689
    }
-   $145 = HEAP32[233] | 0; //@line 1675
+   $145 = HEAP32[271] | 0; //@line 1691
    if (($145 | 0) == 0) {
-    $nb_0 = $8; //@line 1678
+    $nb_0 = $8; //@line 1694
     break;
    }
-   $150 = ($145 & -$145) - 1 | 0; //@line 1683
-   $152 = $150 >>> 12 & 16; //@line 1685
-   $153 = $150 >>> ($152 >>> 0); //@line 1686
-   $155 = $153 >>> 5 & 8; //@line 1688
-   $157 = $153 >>> ($155 >>> 0); //@line 1690
-   $159 = $157 >>> 2 & 4; //@line 1692
-   $161 = $157 >>> ($159 >>> 0); //@line 1694
-   $163 = $161 >>> 1 & 2; //@line 1696
-   $165 = $161 >>> ($163 >>> 0); //@line 1698
-   $167 = $165 >>> 1 & 1; //@line 1700
-   $172 = HEAP32[1232 + (($155 | $152 | $159 | $163 | $167) + ($165 >>> ($167 >>> 0)) << 2) >> 2] | 0; //@line 1705
+   $150 = ($145 & -$145) - 1 | 0; //@line 1699
+   $152 = $150 >>> 12 & 16; //@line 1701
+   $153 = $150 >>> ($152 >>> 0); //@line 1702
+   $155 = $153 >>> 5 & 8; //@line 1704
+   $157 = $153 >>> ($155 >>> 0); //@line 1706
+   $159 = $157 >>> 2 & 4; //@line 1708
+   $161 = $157 >>> ($159 >>> 0); //@line 1710
+   $163 = $161 >>> 1 & 2; //@line 1712
+   $165 = $161 >>> ($163 >>> 0); //@line 1714
+   $167 = $165 >>> 1 & 1; //@line 1716
+   $172 = HEAP32[1384 + (($155 | $152 | $159 | $163 | $167) + ($165 >>> ($167 >>> 0)) << 2) >> 2] | 0; //@line 1721
    $t_0_i = $172;
    $v_0_i = $172;
    $rsize_0_i = (HEAP32[$172 + 4 >> 2] & -8) - $8 | 0;
    while (1) {
-    $179 = HEAP32[$t_0_i + 16 >> 2] | 0; //@line 1716
+    $179 = HEAP32[$t_0_i + 16 >> 2] | 0; //@line 1732
     if (($179 | 0) == 0) {
-     $183 = HEAP32[$t_0_i + 20 >> 2] | 0; //@line 1720
+     $183 = HEAP32[$t_0_i + 20 >> 2] | 0; //@line 1736
      if (($183 | 0) == 0) {
       break;
      } else {
-      $185 = $183; //@line 1725
+      $185 = $183; //@line 1741
      }
     } else {
-     $185 = $179; //@line 1728
+     $185 = $179; //@line 1744
     }
-    $189 = (HEAP32[$185 + 4 >> 2] & -8) - $8 | 0; //@line 1734
-    $190 = $189 >>> 0 < $rsize_0_i >>> 0; //@line 1735
+    $189 = (HEAP32[$185 + 4 >> 2] & -8) - $8 | 0; //@line 1750
+    $190 = $189 >>> 0 < $rsize_0_i >>> 0; //@line 1751
     $t_0_i = $185;
     $v_0_i = $190 ? $185 : $v_0_i;
     $rsize_0_i = $190 ? $189 : $rsize_0_i;
    }
-   $192 = $v_0_i; //@line 1740
-   $193 = HEAP32[236] | 0; //@line 1741
+   $192 = $v_0_i; //@line 1756
+   $193 = HEAP32[274] | 0; //@line 1757
    if ($192 >>> 0 < $193 >>> 0) {
-    _abort(); //@line 1744
-    return 0; //@line 1744
+    _abort(); //@line 1760
+    return 0; //@line 1760
    }
-   $196 = $192 + $8 | 0; //@line 1747
-   $197 = $196; //@line 1748
+   $196 = $192 + $8 | 0; //@line 1763
+   $197 = $196; //@line 1764
    if ($192 >>> 0 >= $196 >>> 0) {
-    _abort(); //@line 1751
-    return 0; //@line 1751
+    _abort(); //@line 1767
+    return 0; //@line 1767
    }
-   $201 = HEAP32[$v_0_i + 24 >> 2] | 0; //@line 1755
-   $203 = HEAP32[$v_0_i + 12 >> 2] | 0; //@line 1757
+   $201 = HEAP32[$v_0_i + 24 >> 2] | 0; //@line 1771
+   $203 = HEAP32[$v_0_i + 12 >> 2] | 0; //@line 1773
    do {
     if (($203 | 0) == ($v_0_i | 0)) {
-     $220 = $v_0_i + 20 | 0; //@line 1761
-     $221 = HEAP32[$220 >> 2] | 0; //@line 1762
+     $220 = $v_0_i + 20 | 0; //@line 1777
+     $221 = HEAP32[$220 >> 2] | 0; //@line 1778
      if (($221 | 0) == 0) {
-      $224 = $v_0_i + 16 | 0; //@line 1765
-      $225 = HEAP32[$224 >> 2] | 0; //@line 1766
+      $224 = $v_0_i + 16 | 0; //@line 1781
+      $225 = HEAP32[$224 >> 2] | 0; //@line 1782
       if (($225 | 0) == 0) {
-       $R_1_i = 0; //@line 1769
+       $R_1_i = 0; //@line 1785
        break;
       } else {
        $R_0_i = $225;
@@ -5581,15 +5657,15 @@ function _malloc($bytes) {
       $RP_0_i = $220;
      }
      while (1) {
-      $227 = $R_0_i + 20 | 0; //@line 1780
-      $228 = HEAP32[$227 >> 2] | 0; //@line 1781
+      $227 = $R_0_i + 20 | 0; //@line 1796
+      $228 = HEAP32[$227 >> 2] | 0; //@line 1797
       if (($228 | 0) != 0) {
        $R_0_i = $228;
        $RP_0_i = $227;
        continue;
       }
-      $231 = $R_0_i + 16 | 0; //@line 1787
-      $232 = HEAP32[$231 >> 2] | 0; //@line 1788
+      $231 = $R_0_i + 16 | 0; //@line 1803
+      $232 = HEAP32[$231 >> 2] | 0; //@line 1804
       if (($232 | 0) == 0) {
        break;
       } else {
@@ -5598,188 +5674,188 @@ function _malloc($bytes) {
       }
      }
      if ($RP_0_i >>> 0 < $193 >>> 0) {
-      _abort(); //@line 1799
-      return 0; //@line 1799
+      _abort(); //@line 1815
+      return 0; //@line 1815
      } else {
-      HEAP32[$RP_0_i >> 2] = 0; //@line 1802
-      $R_1_i = $R_0_i; //@line 1803
+      HEAP32[$RP_0_i >> 2] = 0; //@line 1818
+      $R_1_i = $R_0_i; //@line 1819
       break;
      }
     } else {
-     $207 = HEAP32[$v_0_i + 8 >> 2] | 0; //@line 1808
+     $207 = HEAP32[$v_0_i + 8 >> 2] | 0; //@line 1824
      if ($207 >>> 0 < $193 >>> 0) {
-      _abort(); //@line 1812
-      return 0; //@line 1812
+      _abort(); //@line 1828
+      return 0; //@line 1828
      }
-     $211 = $207 + 12 | 0; //@line 1815
+     $211 = $207 + 12 | 0; //@line 1831
      if ((HEAP32[$211 >> 2] | 0) != ($v_0_i | 0)) {
-      _abort(); //@line 1819
-      return 0; //@line 1819
+      _abort(); //@line 1835
+      return 0; //@line 1835
      }
-     $215 = $203 + 8 | 0; //@line 1822
+     $215 = $203 + 8 | 0; //@line 1838
      if ((HEAP32[$215 >> 2] | 0) == ($v_0_i | 0)) {
-      HEAP32[$211 >> 2] = $203; //@line 1826
-      HEAP32[$215 >> 2] = $207; //@line 1827
-      $R_1_i = $203; //@line 1828
+      HEAP32[$211 >> 2] = $203; //@line 1842
+      HEAP32[$215 >> 2] = $207; //@line 1843
+      $R_1_i = $203; //@line 1844
       break;
      } else {
-      _abort(); //@line 1831
-      return 0; //@line 1831
+      _abort(); //@line 1847
+      return 0; //@line 1847
      }
     }
    } while (0);
-   L278 : do {
+   L280 : do {
     if (($201 | 0) != 0) {
-     $242 = $v_0_i + 28 | 0; //@line 1840
-     $244 = 1232 + (HEAP32[$242 >> 2] << 2) | 0; //@line 1842
+     $242 = $v_0_i + 28 | 0; //@line 1856
+     $244 = 1384 + (HEAP32[$242 >> 2] << 2) | 0; //@line 1858
      do {
       if (($v_0_i | 0) == (HEAP32[$244 >> 2] | 0)) {
-       HEAP32[$244 >> 2] = $R_1_i; //@line 1847
+       HEAP32[$244 >> 2] = $R_1_i; //@line 1863
        if (($R_1_i | 0) != 0) {
         break;
        }
-       HEAP32[233] = HEAP32[233] & ~(1 << HEAP32[$242 >> 2]); //@line 1857
-       break L278;
+       HEAP32[271] = HEAP32[271] & ~(1 << HEAP32[$242 >> 2]); //@line 1873
+       break L280;
       } else {
-       if ($201 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 1864
-        return 0; //@line 1864
+       if ($201 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 1880
+        return 0; //@line 1880
        }
-       $258 = $201 + 16 | 0; //@line 1867
+       $258 = $201 + 16 | 0; //@line 1883
        if ((HEAP32[$258 >> 2] | 0) == ($v_0_i | 0)) {
-        HEAP32[$258 >> 2] = $R_1_i; //@line 1871
+        HEAP32[$258 >> 2] = $R_1_i; //@line 1887
        } else {
-        HEAP32[$201 + 20 >> 2] = $R_1_i; //@line 1874
+        HEAP32[$201 + 20 >> 2] = $R_1_i; //@line 1890
        }
        if (($R_1_i | 0) == 0) {
-        break L278;
+        break L280;
        }
       }
      } while (0);
-     if ($R_1_i >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 1886
-      return 0; //@line 1886
+     if ($R_1_i >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 1902
+      return 0; //@line 1902
      }
-     HEAP32[$R_1_i + 24 >> 2] = $201; //@line 1890
-     $274 = HEAP32[$v_0_i + 16 >> 2] | 0; //@line 1892
+     HEAP32[$R_1_i + 24 >> 2] = $201; //@line 1906
+     $274 = HEAP32[$v_0_i + 16 >> 2] | 0; //@line 1908
      do {
       if (($274 | 0) != 0) {
-       if ($274 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 1900
-        return 0; //@line 1900
+       if ($274 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 1916
+        return 0; //@line 1916
        } else {
-        HEAP32[$R_1_i + 16 >> 2] = $274; //@line 1904
-        HEAP32[$274 + 24 >> 2] = $R_1_i; //@line 1906
+        HEAP32[$R_1_i + 16 >> 2] = $274; //@line 1920
+        HEAP32[$274 + 24 >> 2] = $R_1_i; //@line 1922
         break;
        }
       }
      } while (0);
-     $286 = HEAP32[$v_0_i + 20 >> 2] | 0; //@line 1912
+     $286 = HEAP32[$v_0_i + 20 >> 2] | 0; //@line 1928
      if (($286 | 0) == 0) {
       break;
      }
-     if ($286 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 1921
-      return 0; //@line 1921
+     if ($286 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 1937
+      return 0; //@line 1937
      } else {
-      HEAP32[$R_1_i + 20 >> 2] = $286; //@line 1925
-      HEAP32[$286 + 24 >> 2] = $R_1_i; //@line 1927
+      HEAP32[$R_1_i + 20 >> 2] = $286; //@line 1941
+      HEAP32[$286 + 24 >> 2] = $R_1_i; //@line 1943
       break;
      }
     }
    } while (0);
    if ($rsize_0_i >>> 0 < 16) {
-    $300 = $rsize_0_i + $8 | 0; //@line 1934
-    HEAP32[$v_0_i + 4 >> 2] = $300 | 3; //@line 1937
-    $304 = $192 + ($300 + 4) | 0; //@line 1940
-    HEAP32[$304 >> 2] = HEAP32[$304 >> 2] | 1; //@line 1943
+    $300 = $rsize_0_i + $8 | 0; //@line 1950
+    HEAP32[$v_0_i + 4 >> 2] = $300 | 3; //@line 1953
+    $304 = $192 + ($300 + 4) | 0; //@line 1956
+    HEAP32[$304 >> 2] = HEAP32[$304 >> 2] | 1; //@line 1959
    } else {
-    HEAP32[$v_0_i + 4 >> 2] = $8 | 3; //@line 1947
-    HEAP32[$192 + ($8 | 4) >> 2] = $rsize_0_i | 1; //@line 1952
-    HEAP32[$192 + ($rsize_0_i + $8) >> 2] = $rsize_0_i; //@line 1956
-    $315 = HEAP32[234] | 0; //@line 1957
+    HEAP32[$v_0_i + 4 >> 2] = $8 | 3; //@line 1963
+    HEAP32[$192 + ($8 | 4) >> 2] = $rsize_0_i | 1; //@line 1968
+    HEAP32[$192 + ($rsize_0_i + $8) >> 2] = $rsize_0_i; //@line 1972
+    $315 = HEAP32[272] | 0; //@line 1973
     if (($315 | 0) != 0) {
-     $318 = HEAP32[237] | 0; //@line 1960
-     $319 = $315 >>> 3; //@line 1961
-     $320 = $319 << 1; //@line 1962
-     $322 = 968 + ($320 << 2) | 0; //@line 1964
-     $323 = HEAP32[232] | 0; //@line 1965
-     $324 = 1 << $319; //@line 1966
+     $318 = HEAP32[275] | 0; //@line 1976
+     $319 = $315 >>> 3; //@line 1977
+     $320 = $319 << 1; //@line 1978
+     $322 = 1120 + ($320 << 2) | 0; //@line 1980
+     $323 = HEAP32[270] | 0; //@line 1981
+     $324 = 1 << $319; //@line 1982
      do {
       if (($323 & $324 | 0) == 0) {
-       HEAP32[232] = $323 | $324; //@line 1972
+       HEAP32[270] = $323 | $324; //@line 1988
        $F1_0_i = $322;
-       $_pre_phi_i = 968 + ($320 + 2 << 2) | 0;
+       $_pre_phi_i = 1120 + ($320 + 2 << 2) | 0;
       } else {
-       $330 = 968 + ($320 + 2 << 2) | 0; //@line 1978
-       $331 = HEAP32[$330 >> 2] | 0; //@line 1979
-       if ($331 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+       $330 = 1120 + ($320 + 2 << 2) | 0; //@line 1994
+       $331 = HEAP32[$330 >> 2] | 0; //@line 1995
+       if ($331 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
         $F1_0_i = $331;
         $_pre_phi_i = $330;
         break;
        }
-       _abort(); //@line 1987
-       return 0; //@line 1987
+       _abort(); //@line 2003
+       return 0; //@line 2003
       }
      } while (0);
-     HEAP32[$_pre_phi_i >> 2] = $318; //@line 1993
-     HEAP32[$F1_0_i + 12 >> 2] = $318; //@line 1995
-     HEAP32[$318 + 8 >> 2] = $F1_0_i; //@line 1997
-     HEAP32[$318 + 12 >> 2] = $322; //@line 1999
+     HEAP32[$_pre_phi_i >> 2] = $318; //@line 2009
+     HEAP32[$F1_0_i + 12 >> 2] = $318; //@line 2011
+     HEAP32[$318 + 8 >> 2] = $F1_0_i; //@line 2013
+     HEAP32[$318 + 12 >> 2] = $322; //@line 2015
     }
-    HEAP32[234] = $rsize_0_i; //@line 2001
-    HEAP32[237] = $197; //@line 2002
+    HEAP32[272] = $rsize_0_i; //@line 2017
+    HEAP32[275] = $197; //@line 2018
    }
-   $342 = $v_0_i + 8 | 0; //@line 2004
+   $342 = $v_0_i + 8 | 0; //@line 2020
    if (($342 | 0) == 0) {
-    $nb_0 = $8; //@line 2008
+    $nb_0 = $8; //@line 2024
     break;
    } else {
-    $mem_0 = $342; //@line 2011
+    $mem_0 = $342; //@line 2027
    }
-   return $mem_0 | 0; //@line 2015
+   return $mem_0 | 0; //@line 2031
   } else {
    if ($bytes >>> 0 > 4294967231) {
-    $nb_0 = -1; //@line 2019
+    $nb_0 = -1; //@line 2035
     break;
    }
-   $348 = $bytes + 11 | 0; //@line 2022
-   $349 = $348 & -8; //@line 2023
-   $350 = HEAP32[233] | 0; //@line 2024
+   $348 = $bytes + 11 | 0; //@line 2038
+   $349 = $348 & -8; //@line 2039
+   $350 = HEAP32[271] | 0; //@line 2040
    if (($350 | 0) == 0) {
-    $nb_0 = $349; //@line 2027
+    $nb_0 = $349; //@line 2043
     break;
    }
-   $353 = -$349 | 0; //@line 2030
-   $354 = $348 >>> 8; //@line 2031
+   $353 = -$349 | 0; //@line 2046
+   $354 = $348 >>> 8; //@line 2047
    do {
     if (($354 | 0) == 0) {
-     $idx_0_i = 0; //@line 2035
+     $idx_0_i = 0; //@line 2051
     } else {
      if ($349 >>> 0 > 16777215) {
-      $idx_0_i = 31; //@line 2039
+      $idx_0_i = 31; //@line 2055
       break;
      }
-     $361 = ($354 + 1048320 | 0) >>> 16 & 8; //@line 2044
-     $362 = $354 << $361; //@line 2045
-     $365 = ($362 + 520192 | 0) >>> 16 & 4; //@line 2048
-     $367 = $362 << $365; //@line 2050
-     $370 = ($367 + 245760 | 0) >>> 16 & 2; //@line 2053
-     $375 = 14 - ($365 | $361 | $370) + ($367 << $370 >>> 15) | 0; //@line 2058
-     $idx_0_i = $349 >>> (($375 + 7 | 0) >>> 0) & 1 | $375 << 1; //@line 2064
+     $361 = ($354 + 1048320 | 0) >>> 16 & 8; //@line 2060
+     $362 = $354 << $361; //@line 2061
+     $365 = ($362 + 520192 | 0) >>> 16 & 4; //@line 2064
+     $367 = $362 << $365; //@line 2066
+     $370 = ($367 + 245760 | 0) >>> 16 & 2; //@line 2069
+     $375 = 14 - ($365 | $361 | $370) + ($367 << $370 >>> 15) | 0; //@line 2074
+     $idx_0_i = $349 >>> (($375 + 7 | 0) >>> 0) & 1 | $375 << 1; //@line 2080
     }
    } while (0);
-   $383 = HEAP32[1232 + ($idx_0_i << 2) >> 2] | 0; //@line 2069
-   L326 : do {
+   $383 = HEAP32[1384 + ($idx_0_i << 2) >> 2] | 0; //@line 2085
+   L328 : do {
     if (($383 | 0) == 0) {
      $v_2_i = 0;
      $rsize_2_i = $353;
      $t_1_i = 0;
     } else {
      if (($idx_0_i | 0) == 31) {
-      $391 = 0; //@line 2077
+      $391 = 0; //@line 2093
      } else {
-      $391 = 25 - ($idx_0_i >>> 1) | 0; //@line 2081
+      $391 = 25 - ($idx_0_i >>> 1) | 0; //@line 2097
      }
      $v_0_i118 = 0;
      $rsize_0_i117 = $353;
@@ -5787,14 +5863,14 @@ function _malloc($bytes) {
      $sizebits_0_i = $349 << $391;
      $rst_0_i = 0;
      while (1) {
-      $396 = HEAP32[$t_0_i116 + 4 >> 2] & -8; //@line 2094
-      $397 = $396 - $349 | 0; //@line 2095
+      $396 = HEAP32[$t_0_i116 + 4 >> 2] & -8; //@line 2110
+      $397 = $396 - $349 | 0; //@line 2111
       if ($397 >>> 0 < $rsize_0_i117 >>> 0) {
        if (($396 | 0) == ($349 | 0)) {
         $v_2_i = $t_0_i116;
         $rsize_2_i = $397;
         $t_1_i = $t_0_i116;
-        break L326;
+        break L328;
        } else {
         $v_1_i = $t_0_i116;
         $rsize_1_i = $397;
@@ -5803,9 +5879,9 @@ function _malloc($bytes) {
        $v_1_i = $v_0_i118;
        $rsize_1_i = $rsize_0_i117;
       }
-      $403 = HEAP32[$t_0_i116 + 20 >> 2] | 0; //@line 2111
-      $406 = HEAP32[$t_0_i116 + 16 + ($sizebits_0_i >>> 31 << 2) >> 2] | 0; //@line 2114
-      $rst_1_i = ($403 | 0) == 0 | ($403 | 0) == ($406 | 0) ? $rst_0_i : $403; //@line 2118
+      $403 = HEAP32[$t_0_i116 + 20 >> 2] | 0; //@line 2127
+      $406 = HEAP32[$t_0_i116 + 16 + ($sizebits_0_i >>> 31 << 2) >> 2] | 0; //@line 2130
+      $rst_1_i = ($403 | 0) == 0 | ($403 | 0) == ($406 | 0) ? $rst_0_i : $403; //@line 2134
       if (($406 | 0) == 0) {
        $v_2_i = $v_1_i;
        $rsize_2_i = $rsize_1_i;
@@ -5822,25 +5898,25 @@ function _malloc($bytes) {
     }
    } while (0);
    if (($t_1_i | 0) == 0 & ($v_2_i | 0) == 0) {
-    $414 = 2 << $idx_0_i; //@line 2137
-    $417 = $350 & ($414 | -$414); //@line 2140
+    $414 = 2 << $idx_0_i; //@line 2153
+    $417 = $350 & ($414 | -$414); //@line 2156
     if (($417 | 0) == 0) {
-     $nb_0 = $349; //@line 2143
+     $nb_0 = $349; //@line 2159
      break;
     }
-    $422 = ($417 & -$417) - 1 | 0; //@line 2148
-    $424 = $422 >>> 12 & 16; //@line 2150
-    $425 = $422 >>> ($424 >>> 0); //@line 2151
-    $427 = $425 >>> 5 & 8; //@line 2153
-    $429 = $425 >>> ($427 >>> 0); //@line 2155
-    $431 = $429 >>> 2 & 4; //@line 2157
-    $433 = $429 >>> ($431 >>> 0); //@line 2159
-    $435 = $433 >>> 1 & 2; //@line 2161
-    $437 = $433 >>> ($435 >>> 0); //@line 2163
-    $439 = $437 >>> 1 & 1; //@line 2165
-    $t_2_ph_i = HEAP32[1232 + (($427 | $424 | $431 | $435 | $439) + ($437 >>> ($439 >>> 0)) << 2) >> 2] | 0; //@line 2171
+    $422 = ($417 & -$417) - 1 | 0; //@line 2164
+    $424 = $422 >>> 12 & 16; //@line 2166
+    $425 = $422 >>> ($424 >>> 0); //@line 2167
+    $427 = $425 >>> 5 & 8; //@line 2169
+    $429 = $425 >>> ($427 >>> 0); //@line 2171
+    $431 = $429 >>> 2 & 4; //@line 2173
+    $433 = $429 >>> ($431 >>> 0); //@line 2175
+    $435 = $433 >>> 1 & 2; //@line 2177
+    $437 = $433 >>> ($435 >>> 0); //@line 2179
+    $439 = $437 >>> 1 & 1; //@line 2181
+    $t_2_ph_i = HEAP32[1384 + (($427 | $424 | $431 | $435 | $439) + ($437 >>> ($439 >>> 0)) << 2) >> 2] | 0; //@line 2187
    } else {
-    $t_2_ph_i = $t_1_i; //@line 2173
+    $t_2_ph_i = $t_1_i; //@line 2189
    }
    if (($t_2_ph_i | 0) == 0) {
     $rsize_3_lcssa_i = $rsize_2_i;
@@ -5850,18 +5926,18 @@ function _malloc($bytes) {
     $rsize_329_i = $rsize_2_i;
     $v_330_i = $v_2_i;
     while (1) {
-     $449 = (HEAP32[$t_228_i + 4 >> 2] & -8) - $349 | 0; //@line 2188
-     $450 = $449 >>> 0 < $rsize_329_i >>> 0; //@line 2189
-     $_rsize_3_i = $450 ? $449 : $rsize_329_i; //@line 2190
-     $t_2_v_3_i = $450 ? $t_228_i : $v_330_i; //@line 2191
-     $452 = HEAP32[$t_228_i + 16 >> 2] | 0; //@line 2193
+     $449 = (HEAP32[$t_228_i + 4 >> 2] & -8) - $349 | 0; //@line 2204
+     $450 = $449 >>> 0 < $rsize_329_i >>> 0; //@line 2205
+     $_rsize_3_i = $450 ? $449 : $rsize_329_i; //@line 2206
+     $t_2_v_3_i = $450 ? $t_228_i : $v_330_i; //@line 2207
+     $452 = HEAP32[$t_228_i + 16 >> 2] | 0; //@line 2209
      if (($452 | 0) != 0) {
       $t_228_i = $452;
       $rsize_329_i = $_rsize_3_i;
       $v_330_i = $t_2_v_3_i;
       continue;
      }
-     $455 = HEAP32[$t_228_i + 20 >> 2] | 0; //@line 2200
+     $455 = HEAP32[$t_228_i + 20 >> 2] | 0; //@line 2216
      if (($455 | 0) == 0) {
       $rsize_3_lcssa_i = $_rsize_3_i;
       $v_3_lcssa_i = $t_2_v_3_i;
@@ -5874,36 +5950,36 @@ function _malloc($bytes) {
     }
    }
    if (($v_3_lcssa_i | 0) == 0) {
-    $nb_0 = $349; //@line 2214
+    $nb_0 = $349; //@line 2230
     break;
    }
-   if ($rsize_3_lcssa_i >>> 0 >= ((HEAP32[234] | 0) - $349 | 0) >>> 0) {
-    $nb_0 = $349; //@line 2221
+   if ($rsize_3_lcssa_i >>> 0 >= ((HEAP32[272] | 0) - $349 | 0) >>> 0) {
+    $nb_0 = $349; //@line 2237
     break;
    }
-   $463 = $v_3_lcssa_i; //@line 2224
-   $464 = HEAP32[236] | 0; //@line 2225
+   $463 = $v_3_lcssa_i; //@line 2240
+   $464 = HEAP32[274] | 0; //@line 2241
    if ($463 >>> 0 < $464 >>> 0) {
-    _abort(); //@line 2228
-    return 0; //@line 2228
+    _abort(); //@line 2244
+    return 0; //@line 2244
    }
-   $467 = $463 + $349 | 0; //@line 2231
-   $468 = $467; //@line 2232
+   $467 = $463 + $349 | 0; //@line 2247
+   $468 = $467; //@line 2248
    if ($463 >>> 0 >= $467 >>> 0) {
-    _abort(); //@line 2235
-    return 0; //@line 2235
+    _abort(); //@line 2251
+    return 0; //@line 2251
    }
-   $472 = HEAP32[$v_3_lcssa_i + 24 >> 2] | 0; //@line 2239
-   $474 = HEAP32[$v_3_lcssa_i + 12 >> 2] | 0; //@line 2241
+   $472 = HEAP32[$v_3_lcssa_i + 24 >> 2] | 0; //@line 2255
+   $474 = HEAP32[$v_3_lcssa_i + 12 >> 2] | 0; //@line 2257
    do {
     if (($474 | 0) == ($v_3_lcssa_i | 0)) {
-     $491 = $v_3_lcssa_i + 20 | 0; //@line 2245
-     $492 = HEAP32[$491 >> 2] | 0; //@line 2246
+     $491 = $v_3_lcssa_i + 20 | 0; //@line 2261
+     $492 = HEAP32[$491 >> 2] | 0; //@line 2262
      if (($492 | 0) == 0) {
-      $495 = $v_3_lcssa_i + 16 | 0; //@line 2249
-      $496 = HEAP32[$495 >> 2] | 0; //@line 2250
+      $495 = $v_3_lcssa_i + 16 | 0; //@line 2265
+      $496 = HEAP32[$495 >> 2] | 0; //@line 2266
       if (($496 | 0) == 0) {
-       $R_1_i122 = 0; //@line 2253
+       $R_1_i122 = 0; //@line 2269
        break;
       } else {
        $R_0_i120 = $496;
@@ -5914,15 +5990,15 @@ function _malloc($bytes) {
       $RP_0_i119 = $491;
      }
      while (1) {
-      $498 = $R_0_i120 + 20 | 0; //@line 2264
-      $499 = HEAP32[$498 >> 2] | 0; //@line 2265
+      $498 = $R_0_i120 + 20 | 0; //@line 2280
+      $499 = HEAP32[$498 >> 2] | 0; //@line 2281
       if (($499 | 0) != 0) {
        $R_0_i120 = $499;
        $RP_0_i119 = $498;
        continue;
       }
-      $502 = $R_0_i120 + 16 | 0; //@line 2271
-      $503 = HEAP32[$502 >> 2] | 0; //@line 2272
+      $502 = $R_0_i120 + 16 | 0; //@line 2287
+      $503 = HEAP32[$502 >> 2] | 0; //@line 2288
       if (($503 | 0) == 0) {
        break;
       } else {
@@ -5931,172 +6007,172 @@ function _malloc($bytes) {
       }
      }
      if ($RP_0_i119 >>> 0 < $464 >>> 0) {
-      _abort(); //@line 2283
-      return 0; //@line 2283
+      _abort(); //@line 2299
+      return 0; //@line 2299
      } else {
-      HEAP32[$RP_0_i119 >> 2] = 0; //@line 2286
-      $R_1_i122 = $R_0_i120; //@line 2287
+      HEAP32[$RP_0_i119 >> 2] = 0; //@line 2302
+      $R_1_i122 = $R_0_i120; //@line 2303
       break;
      }
     } else {
-     $478 = HEAP32[$v_3_lcssa_i + 8 >> 2] | 0; //@line 2292
+     $478 = HEAP32[$v_3_lcssa_i + 8 >> 2] | 0; //@line 2308
      if ($478 >>> 0 < $464 >>> 0) {
-      _abort(); //@line 2296
-      return 0; //@line 2296
+      _abort(); //@line 2312
+      return 0; //@line 2312
      }
-     $482 = $478 + 12 | 0; //@line 2299
+     $482 = $478 + 12 | 0; //@line 2315
      if ((HEAP32[$482 >> 2] | 0) != ($v_3_lcssa_i | 0)) {
-      _abort(); //@line 2303
-      return 0; //@line 2303
+      _abort(); //@line 2319
+      return 0; //@line 2319
      }
-     $486 = $474 + 8 | 0; //@line 2306
+     $486 = $474 + 8 | 0; //@line 2322
      if ((HEAP32[$486 >> 2] | 0) == ($v_3_lcssa_i | 0)) {
-      HEAP32[$482 >> 2] = $474; //@line 2310
-      HEAP32[$486 >> 2] = $478; //@line 2311
-      $R_1_i122 = $474; //@line 2312
+      HEAP32[$482 >> 2] = $474; //@line 2326
+      HEAP32[$486 >> 2] = $478; //@line 2327
+      $R_1_i122 = $474; //@line 2328
       break;
      } else {
-      _abort(); //@line 2315
-      return 0; //@line 2315
+      _abort(); //@line 2331
+      return 0; //@line 2331
      }
     }
    } while (0);
-   L376 : do {
+   L378 : do {
     if (($472 | 0) != 0) {
-     $513 = $v_3_lcssa_i + 28 | 0; //@line 2324
-     $515 = 1232 + (HEAP32[$513 >> 2] << 2) | 0; //@line 2326
+     $513 = $v_3_lcssa_i + 28 | 0; //@line 2340
+     $515 = 1384 + (HEAP32[$513 >> 2] << 2) | 0; //@line 2342
      do {
       if (($v_3_lcssa_i | 0) == (HEAP32[$515 >> 2] | 0)) {
-       HEAP32[$515 >> 2] = $R_1_i122; //@line 2331
+       HEAP32[$515 >> 2] = $R_1_i122; //@line 2347
        if (($R_1_i122 | 0) != 0) {
         break;
        }
-       HEAP32[233] = HEAP32[233] & ~(1 << HEAP32[$513 >> 2]); //@line 2341
-       break L376;
+       HEAP32[271] = HEAP32[271] & ~(1 << HEAP32[$513 >> 2]); //@line 2357
+       break L378;
       } else {
-       if ($472 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 2348
-        return 0; //@line 2348
+       if ($472 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 2364
+        return 0; //@line 2364
        }
-       $529 = $472 + 16 | 0; //@line 2351
+       $529 = $472 + 16 | 0; //@line 2367
        if ((HEAP32[$529 >> 2] | 0) == ($v_3_lcssa_i | 0)) {
-        HEAP32[$529 >> 2] = $R_1_i122; //@line 2355
+        HEAP32[$529 >> 2] = $R_1_i122; //@line 2371
        } else {
-        HEAP32[$472 + 20 >> 2] = $R_1_i122; //@line 2358
+        HEAP32[$472 + 20 >> 2] = $R_1_i122; //@line 2374
        }
        if (($R_1_i122 | 0) == 0) {
-        break L376;
+        break L378;
        }
       }
      } while (0);
-     if ($R_1_i122 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 2370
-      return 0; //@line 2370
+     if ($R_1_i122 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 2386
+      return 0; //@line 2386
      }
-     HEAP32[$R_1_i122 + 24 >> 2] = $472; //@line 2374
-     $545 = HEAP32[$v_3_lcssa_i + 16 >> 2] | 0; //@line 2376
+     HEAP32[$R_1_i122 + 24 >> 2] = $472; //@line 2390
+     $545 = HEAP32[$v_3_lcssa_i + 16 >> 2] | 0; //@line 2392
      do {
       if (($545 | 0) != 0) {
-       if ($545 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 2384
-        return 0; //@line 2384
+       if ($545 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 2400
+        return 0; //@line 2400
        } else {
-        HEAP32[$R_1_i122 + 16 >> 2] = $545; //@line 2388
-        HEAP32[$545 + 24 >> 2] = $R_1_i122; //@line 2390
+        HEAP32[$R_1_i122 + 16 >> 2] = $545; //@line 2404
+        HEAP32[$545 + 24 >> 2] = $R_1_i122; //@line 2406
         break;
        }
       }
      } while (0);
-     $557 = HEAP32[$v_3_lcssa_i + 20 >> 2] | 0; //@line 2396
+     $557 = HEAP32[$v_3_lcssa_i + 20 >> 2] | 0; //@line 2412
      if (($557 | 0) == 0) {
       break;
      }
-     if ($557 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 2405
-      return 0; //@line 2405
+     if ($557 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 2421
+      return 0; //@line 2421
      } else {
-      HEAP32[$R_1_i122 + 20 >> 2] = $557; //@line 2409
-      HEAP32[$557 + 24 >> 2] = $R_1_i122; //@line 2411
+      HEAP32[$R_1_i122 + 20 >> 2] = $557; //@line 2425
+      HEAP32[$557 + 24 >> 2] = $R_1_i122; //@line 2427
       break;
      }
     }
    } while (0);
    do {
     if ($rsize_3_lcssa_i >>> 0 < 16) {
-     $571 = $rsize_3_lcssa_i + $349 | 0; //@line 2419
-     HEAP32[$v_3_lcssa_i + 4 >> 2] = $571 | 3; //@line 2422
-     $575 = $463 + ($571 + 4) | 0; //@line 2425
-     HEAP32[$575 >> 2] = HEAP32[$575 >> 2] | 1; //@line 2428
+     $571 = $rsize_3_lcssa_i + $349 | 0; //@line 2435
+     HEAP32[$v_3_lcssa_i + 4 >> 2] = $571 | 3; //@line 2438
+     $575 = $463 + ($571 + 4) | 0; //@line 2441
+     HEAP32[$575 >> 2] = HEAP32[$575 >> 2] | 1; //@line 2444
     } else {
-     HEAP32[$v_3_lcssa_i + 4 >> 2] = $349 | 3; //@line 2432
-     HEAP32[$463 + ($349 | 4) >> 2] = $rsize_3_lcssa_i | 1; //@line 2437
-     HEAP32[$463 + ($rsize_3_lcssa_i + $349) >> 2] = $rsize_3_lcssa_i; //@line 2441
-     $586 = $rsize_3_lcssa_i >>> 3; //@line 2442
+     HEAP32[$v_3_lcssa_i + 4 >> 2] = $349 | 3; //@line 2448
+     HEAP32[$463 + ($349 | 4) >> 2] = $rsize_3_lcssa_i | 1; //@line 2453
+     HEAP32[$463 + ($rsize_3_lcssa_i + $349) >> 2] = $rsize_3_lcssa_i; //@line 2457
+     $586 = $rsize_3_lcssa_i >>> 3; //@line 2458
      if ($rsize_3_lcssa_i >>> 0 < 256) {
-      $589 = $586 << 1; //@line 2445
-      $591 = 968 + ($589 << 2) | 0; //@line 2447
-      $592 = HEAP32[232] | 0; //@line 2448
-      $593 = 1 << $586; //@line 2449
+      $589 = $586 << 1; //@line 2461
+      $591 = 1120 + ($589 << 2) | 0; //@line 2463
+      $592 = HEAP32[270] | 0; //@line 2464
+      $593 = 1 << $586; //@line 2465
       do {
        if (($592 & $593 | 0) == 0) {
-        HEAP32[232] = $592 | $593; //@line 2455
+        HEAP32[270] = $592 | $593; //@line 2471
         $F5_0_i = $591;
-        $_pre_phi_i128 = 968 + ($589 + 2 << 2) | 0;
+        $_pre_phi_i128 = 1120 + ($589 + 2 << 2) | 0;
        } else {
-        $599 = 968 + ($589 + 2 << 2) | 0; //@line 2461
-        $600 = HEAP32[$599 >> 2] | 0; //@line 2462
-        if ($600 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+        $599 = 1120 + ($589 + 2 << 2) | 0; //@line 2477
+        $600 = HEAP32[$599 >> 2] | 0; //@line 2478
+        if ($600 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
          $F5_0_i = $600;
          $_pre_phi_i128 = $599;
          break;
         }
-        _abort(); //@line 2470
-        return 0; //@line 2470
+        _abort(); //@line 2486
+        return 0; //@line 2486
        }
       } while (0);
-      HEAP32[$_pre_phi_i128 >> 2] = $468; //@line 2476
-      HEAP32[$F5_0_i + 12 >> 2] = $468; //@line 2478
-      HEAP32[$463 + ($349 + 8) >> 2] = $F5_0_i; //@line 2482
-      HEAP32[$463 + ($349 + 12) >> 2] = $591; //@line 2486
+      HEAP32[$_pre_phi_i128 >> 2] = $468; //@line 2492
+      HEAP32[$F5_0_i + 12 >> 2] = $468; //@line 2494
+      HEAP32[$463 + ($349 + 8) >> 2] = $F5_0_i; //@line 2498
+      HEAP32[$463 + ($349 + 12) >> 2] = $591; //@line 2502
       break;
      }
-     $612 = $467; //@line 2489
-     $613 = $rsize_3_lcssa_i >>> 8; //@line 2490
+     $612 = $467; //@line 2505
+     $613 = $rsize_3_lcssa_i >>> 8; //@line 2506
      do {
       if (($613 | 0) == 0) {
-       $I7_0_i = 0; //@line 2494
+       $I7_0_i = 0; //@line 2510
       } else {
        if ($rsize_3_lcssa_i >>> 0 > 16777215) {
-        $I7_0_i = 31; //@line 2498
+        $I7_0_i = 31; //@line 2514
         break;
        }
-       $620 = ($613 + 1048320 | 0) >>> 16 & 8; //@line 2503
-       $621 = $613 << $620; //@line 2504
-       $624 = ($621 + 520192 | 0) >>> 16 & 4; //@line 2507
-       $626 = $621 << $624; //@line 2509
-       $629 = ($626 + 245760 | 0) >>> 16 & 2; //@line 2512
-       $634 = 14 - ($624 | $620 | $629) + ($626 << $629 >>> 15) | 0; //@line 2517
-       $I7_0_i = $rsize_3_lcssa_i >>> (($634 + 7 | 0) >>> 0) & 1 | $634 << 1; //@line 2523
+       $620 = ($613 + 1048320 | 0) >>> 16 & 8; //@line 2519
+       $621 = $613 << $620; //@line 2520
+       $624 = ($621 + 520192 | 0) >>> 16 & 4; //@line 2523
+       $626 = $621 << $624; //@line 2525
+       $629 = ($626 + 245760 | 0) >>> 16 & 2; //@line 2528
+       $634 = 14 - ($624 | $620 | $629) + ($626 << $629 >>> 15) | 0; //@line 2533
+       $I7_0_i = $rsize_3_lcssa_i >>> (($634 + 7 | 0) >>> 0) & 1 | $634 << 1; //@line 2539
       }
      } while (0);
-     $641 = 1232 + ($I7_0_i << 2) | 0; //@line 2527
-     HEAP32[$463 + ($349 + 28) >> 2] = $I7_0_i; //@line 2531
-     HEAP32[$463 + ($349 + 20) >> 2] = 0; //@line 2537
-     HEAP32[$463 + ($349 + 16) >> 2] = 0; //@line 2539
-     $648 = HEAP32[233] | 0; //@line 2540
-     $649 = 1 << $I7_0_i; //@line 2541
+     $641 = 1384 + ($I7_0_i << 2) | 0; //@line 2543
+     HEAP32[$463 + ($349 + 28) >> 2] = $I7_0_i; //@line 2547
+     HEAP32[$463 + ($349 + 20) >> 2] = 0; //@line 2553
+     HEAP32[$463 + ($349 + 16) >> 2] = 0; //@line 2555
+     $648 = HEAP32[271] | 0; //@line 2556
+     $649 = 1 << $I7_0_i; //@line 2557
      if (($648 & $649 | 0) == 0) {
-      HEAP32[233] = $648 | $649; //@line 2546
-      HEAP32[$641 >> 2] = $612; //@line 2547
-      HEAP32[$463 + ($349 + 24) >> 2] = $641; //@line 2552
-      HEAP32[$463 + ($349 + 12) >> 2] = $612; //@line 2556
-      HEAP32[$463 + ($349 + 8) >> 2] = $612; //@line 2560
+      HEAP32[271] = $648 | $649; //@line 2562
+      HEAP32[$641 >> 2] = $612; //@line 2563
+      HEAP32[$463 + ($349 + 24) >> 2] = $641; //@line 2568
+      HEAP32[$463 + ($349 + 12) >> 2] = $612; //@line 2572
+      HEAP32[$463 + ($349 + 8) >> 2] = $612; //@line 2576
       break;
      }
      if (($I7_0_i | 0) == 31) {
-      $668 = 0; //@line 2566
+      $668 = 0; //@line 2582
      } else {
-      $668 = 25 - ($I7_0_i >>> 1) | 0; //@line 2570
+      $668 = 25 - ($I7_0_i >>> 1) | 0; //@line 2586
      }
      $K12_0_i = $rsize_3_lcssa_i << $668;
      $T_0_i = HEAP32[$641 >> 2] | 0;
@@ -6104,484 +6180,484 @@ function _malloc($bytes) {
       if ((HEAP32[$T_0_i + 4 >> 2] & -8 | 0) == ($rsize_3_lcssa_i | 0)) {
        break;
       }
-      $677 = $T_0_i + 16 + ($K12_0_i >>> 31 << 2) | 0; //@line 2586
-      $678 = HEAP32[$677 >> 2] | 0; //@line 2587
+      $677 = $T_0_i + 16 + ($K12_0_i >>> 31 << 2) | 0; //@line 2602
+      $678 = HEAP32[$677 >> 2] | 0; //@line 2603
       if (($678 | 0) == 0) {
-       label = 299; //@line 2591
+       label = 302; //@line 2607
        break;
       } else {
        $K12_0_i = $K12_0_i << 1;
        $T_0_i = $678;
       }
      }
-     if ((label | 0) == 299) {
-      if ($677 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-       _abort(); //@line 2602
-       return 0; //@line 2602
+     if ((label | 0) == 302) {
+      if ($677 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+       _abort(); //@line 2618
+       return 0; //@line 2618
       } else {
-       HEAP32[$677 >> 2] = $612; //@line 2605
-       HEAP32[$463 + ($349 + 24) >> 2] = $T_0_i; //@line 2609
-       HEAP32[$463 + ($349 + 12) >> 2] = $612; //@line 2613
-       HEAP32[$463 + ($349 + 8) >> 2] = $612; //@line 2617
+       HEAP32[$677 >> 2] = $612; //@line 2621
+       HEAP32[$463 + ($349 + 24) >> 2] = $T_0_i; //@line 2625
+       HEAP32[$463 + ($349 + 12) >> 2] = $612; //@line 2629
+       HEAP32[$463 + ($349 + 8) >> 2] = $612; //@line 2633
        break;
       }
      }
-     $694 = $T_0_i + 8 | 0; //@line 2621
-     $695 = HEAP32[$694 >> 2] | 0; //@line 2622
-     $697 = HEAP32[236] | 0; //@line 2624
+     $694 = $T_0_i + 8 | 0; //@line 2637
+     $695 = HEAP32[$694 >> 2] | 0; //@line 2638
+     $697 = HEAP32[274] | 0; //@line 2640
      if ($T_0_i >>> 0 < $697 >>> 0) {
-      _abort(); //@line 2627
-      return 0; //@line 2627
+      _abort(); //@line 2643
+      return 0; //@line 2643
      }
      if ($695 >>> 0 < $697 >>> 0) {
-      _abort(); //@line 2633
-      return 0; //@line 2633
+      _abort(); //@line 2649
+      return 0; //@line 2649
      } else {
-      HEAP32[$695 + 12 >> 2] = $612; //@line 2637
-      HEAP32[$694 >> 2] = $612; //@line 2638
-      HEAP32[$463 + ($349 + 8) >> 2] = $695; //@line 2642
-      HEAP32[$463 + ($349 + 12) >> 2] = $T_0_i; //@line 2646
-      HEAP32[$463 + ($349 + 24) >> 2] = 0; //@line 2650
+      HEAP32[$695 + 12 >> 2] = $612; //@line 2653
+      HEAP32[$694 >> 2] = $612; //@line 2654
+      HEAP32[$463 + ($349 + 8) >> 2] = $695; //@line 2658
+      HEAP32[$463 + ($349 + 12) >> 2] = $T_0_i; //@line 2662
+      HEAP32[$463 + ($349 + 24) >> 2] = 0; //@line 2666
       break;
      }
     }
    } while (0);
-   $711 = $v_3_lcssa_i + 8 | 0; //@line 2655
+   $711 = $v_3_lcssa_i + 8 | 0; //@line 2671
    if (($711 | 0) == 0) {
-    $nb_0 = $349; //@line 2659
+    $nb_0 = $349; //@line 2675
     break;
    } else {
-    $mem_0 = $711; //@line 2662
+    $mem_0 = $711; //@line 2678
    }
-   return $mem_0 | 0; //@line 2666
+   return $mem_0 | 0; //@line 2682
   }
  } while (0);
- $714 = HEAP32[234] | 0; //@line 2670
+ $714 = HEAP32[272] | 0; //@line 2686
  if ($nb_0 >>> 0 <= $714 >>> 0) {
-  $717 = $714 - $nb_0 | 0; //@line 2673
-  $718 = HEAP32[237] | 0; //@line 2674
+  $717 = $714 - $nb_0 | 0; //@line 2689
+  $718 = HEAP32[275] | 0; //@line 2690
   if ($717 >>> 0 > 15) {
-   $721 = $718; //@line 2677
-   HEAP32[237] = $721 + $nb_0; //@line 2680
-   HEAP32[234] = $717; //@line 2681
-   HEAP32[$721 + ($nb_0 + 4) >> 2] = $717 | 1; //@line 2686
-   HEAP32[$721 + $714 >> 2] = $717; //@line 2689
-   HEAP32[$718 + 4 >> 2] = $nb_0 | 3; //@line 2692
+   $721 = $718; //@line 2693
+   HEAP32[275] = $721 + $nb_0; //@line 2696
+   HEAP32[272] = $717; //@line 2697
+   HEAP32[$721 + ($nb_0 + 4) >> 2] = $717 | 1; //@line 2702
+   HEAP32[$721 + $714 >> 2] = $717; //@line 2705
+   HEAP32[$718 + 4 >> 2] = $nb_0 | 3; //@line 2708
   } else {
-   HEAP32[234] = 0; //@line 2694
-   HEAP32[237] = 0; //@line 2695
-   HEAP32[$718 + 4 >> 2] = $714 | 3; //@line 2698
-   $736 = $718 + ($714 + 4) | 0; //@line 2702
-   HEAP32[$736 >> 2] = HEAP32[$736 >> 2] | 1; //@line 2705
+   HEAP32[272] = 0; //@line 2710
+   HEAP32[275] = 0; //@line 2711
+   HEAP32[$718 + 4 >> 2] = $714 | 3; //@line 2714
+   $736 = $718 + ($714 + 4) | 0; //@line 2718
+   HEAP32[$736 >> 2] = HEAP32[$736 >> 2] | 1; //@line 2721
   }
-  $mem_0 = $718 + 8 | 0; //@line 2709
-  return $mem_0 | 0; //@line 2712
+  $mem_0 = $718 + 8 | 0; //@line 2725
+  return $mem_0 | 0; //@line 2728
  }
- $743 = HEAP32[235] | 0; //@line 2714
+ $743 = HEAP32[273] | 0; //@line 2730
  if ($nb_0 >>> 0 < $743 >>> 0) {
-  $746 = $743 - $nb_0 | 0; //@line 2717
-  HEAP32[235] = $746; //@line 2718
-  $747 = HEAP32[238] | 0; //@line 2719
-  $748 = $747; //@line 2720
-  HEAP32[238] = $748 + $nb_0; //@line 2723
-  HEAP32[$748 + ($nb_0 + 4) >> 2] = $746 | 1; //@line 2728
-  HEAP32[$747 + 4 >> 2] = $nb_0 | 3; //@line 2731
-  $mem_0 = $747 + 8 | 0; //@line 2734
-  return $mem_0 | 0; //@line 2737
+  $746 = $743 - $nb_0 | 0; //@line 2733
+  HEAP32[273] = $746; //@line 2734
+  $747 = HEAP32[276] | 0; //@line 2735
+  $748 = $747; //@line 2736
+  HEAP32[276] = $748 + $nb_0; //@line 2739
+  HEAP32[$748 + ($nb_0 + 4) >> 2] = $746 | 1; //@line 2744
+  HEAP32[$747 + 4 >> 2] = $nb_0 | 3; //@line 2747
+  $mem_0 = $747 + 8 | 0; //@line 2750
+  return $mem_0 | 0; //@line 2753
  }
  do {
-  if ((HEAP32[218] | 0) == 0) {
-   $762 = _sysconf(30) | 0; //@line 2743
+  if ((HEAP32[230] | 0) == 0) {
+   $762 = _sysconf(30) | 0; //@line 2759
    if (($762 - 1 & $762 | 0) == 0) {
-    HEAP32[220] = $762; //@line 2748
-    HEAP32[219] = $762; //@line 2749
-    HEAP32[221] = -1; //@line 2750
-    HEAP32[222] = -1; //@line 2751
-    HEAP32[223] = 0; //@line 2752
-    HEAP32[343] = 0; //@line 2753
-    HEAP32[218] = (_time(0) | 0) & -16 ^ 1431655768; //@line 2757
+    HEAP32[232] = $762; //@line 2764
+    HEAP32[231] = $762; //@line 2765
+    HEAP32[233] = -1; //@line 2766
+    HEAP32[234] = -1; //@line 2767
+    HEAP32[235] = 0; //@line 2768
+    HEAP32[381] = 0; //@line 2769
+    HEAP32[230] = (_time(0) | 0) & -16 ^ 1431655768; //@line 2773
     break;
    } else {
-    _abort(); //@line 2760
-    return 0; //@line 2760
+    _abort(); //@line 2776
+    return 0; //@line 2776
    }
   }
  } while (0);
- $771 = $nb_0 + 48 | 0; //@line 2765
- $772 = HEAP32[220] | 0; //@line 2766
- $773 = $nb_0 + 47 | 0; //@line 2767
- $774 = $772 + $773 | 0; //@line 2768
- $775 = -$772 | 0; //@line 2769
- $776 = $774 & $775; //@line 2770
+ $771 = $nb_0 + 48 | 0; //@line 2781
+ $772 = HEAP32[232] | 0; //@line 2782
+ $773 = $nb_0 + 47 | 0; //@line 2783
+ $774 = $772 + $773 | 0; //@line 2784
+ $775 = -$772 | 0; //@line 2785
+ $776 = $774 & $775; //@line 2786
  if ($776 >>> 0 <= $nb_0 >>> 0) {
-  $mem_0 = 0; //@line 2773
-  return $mem_0 | 0; //@line 2776
+  $mem_0 = 0; //@line 2789
+  return $mem_0 | 0; //@line 2792
  }
- $779 = HEAP32[342] | 0; //@line 2778
+ $779 = HEAP32[380] | 0; //@line 2794
  do {
   if (($779 | 0) != 0) {
-   $782 = HEAP32[340] | 0; //@line 2782
-   $783 = $782 + $776 | 0; //@line 2783
+   $782 = HEAP32[378] | 0; //@line 2798
+   $783 = $782 + $776 | 0; //@line 2799
    if ($783 >>> 0 <= $782 >>> 0 | $783 >>> 0 > $779 >>> 0) {
-    $mem_0 = 0; //@line 2788
+    $mem_0 = 0; //@line 2804
    } else {
     break;
    }
-   return $mem_0 | 0; //@line 2794
+   return $mem_0 | 0; //@line 2810
   }
  } while (0);
- L468 : do {
-  if ((HEAP32[343] & 4 | 0) == 0) {
-   $791 = HEAP32[238] | 0; //@line 2802
-   L470 : do {
+ L470 : do {
+  if ((HEAP32[381] & 4 | 0) == 0) {
+   $791 = HEAP32[276] | 0; //@line 2818
+   L472 : do {
     if (($791 | 0) == 0) {
-     label = 329; //@line 2806
+     label = 332; //@line 2822
     } else {
-     $794 = $791; //@line 2808
-     $sp_0_i_i = 1376; //@line 2809
+     $794 = $791; //@line 2824
+     $sp_0_i_i = 1528; //@line 2825
      while (1) {
-      $796 = $sp_0_i_i | 0; //@line 2812
-      $797 = HEAP32[$796 >> 2] | 0; //@line 2813
+      $796 = $sp_0_i_i | 0; //@line 2828
+      $797 = HEAP32[$796 >> 2] | 0; //@line 2829
       if ($797 >>> 0 <= $794 >>> 0) {
-       $800 = $sp_0_i_i + 4 | 0; //@line 2816
+       $800 = $sp_0_i_i + 4 | 0; //@line 2832
        if (($797 + (HEAP32[$800 >> 2] | 0) | 0) >>> 0 > $794 >>> 0) {
         break;
        }
       }
-      $806 = HEAP32[$sp_0_i_i + 8 >> 2] | 0; //@line 2825
+      $806 = HEAP32[$sp_0_i_i + 8 >> 2] | 0; //@line 2841
       if (($806 | 0) == 0) {
-       label = 329; //@line 2828
-       break L470;
+       label = 332; //@line 2844
+       break L472;
       } else {
-       $sp_0_i_i = $806; //@line 2831
+       $sp_0_i_i = $806; //@line 2847
       }
      }
      if (($sp_0_i_i | 0) == 0) {
-      label = 329; //@line 2836
+      label = 332; //@line 2852
       break;
      }
-     $840 = $774 - (HEAP32[235] | 0) & $775; //@line 2841
+     $840 = $774 - (HEAP32[273] | 0) & $775; //@line 2857
      if ($840 >>> 0 >= 2147483647) {
-      $tsize_0303639_i = 0; //@line 2844
+      $tsize_0303639_i = 0; //@line 2860
       break;
      }
-     $843 = _sbrk($840 | 0) | 0; //@line 2847
-     $847 = ($843 | 0) == ((HEAP32[$796 >> 2] | 0) + (HEAP32[$800 >> 2] | 0) | 0); //@line 2851
+     $843 = _sbrk($840 | 0) | 0; //@line 2863
+     $847 = ($843 | 0) == ((HEAP32[$796 >> 2] | 0) + (HEAP32[$800 >> 2] | 0) | 0); //@line 2867
      $tbase_0_i = $847 ? $843 : -1;
      $tsize_0_i = $847 ? $840 : 0;
      $br_0_i = $843;
      $ssize_1_i = $840;
-     label = 338; //@line 2855
+     label = 341; //@line 2871
     }
    } while (0);
    do {
-    if ((label | 0) == 329) {
-     $809 = _sbrk(0) | 0; //@line 2860
+    if ((label | 0) == 332) {
+     $809 = _sbrk(0) | 0; //@line 2876
      if (($809 | 0) == -1) {
-      $tsize_0303639_i = 0; //@line 2863
+      $tsize_0303639_i = 0; //@line 2879
       break;
      }
-     $812 = $809; //@line 2866
-     $813 = HEAP32[219] | 0; //@line 2867
-     $814 = $813 - 1 | 0; //@line 2868
+     $812 = $809; //@line 2882
+     $813 = HEAP32[231] | 0; //@line 2883
+     $814 = $813 - 1 | 0; //@line 2884
      if (($814 & $812 | 0) == 0) {
-      $ssize_0_i = $776; //@line 2872
+      $ssize_0_i = $776; //@line 2888
      } else {
-      $ssize_0_i = $776 - $812 + ($814 + $812 & -$813) | 0; //@line 2879
+      $ssize_0_i = $776 - $812 + ($814 + $812 & -$813) | 0; //@line 2895
      }
-     $824 = HEAP32[340] | 0; //@line 2882
-     $825 = $824 + $ssize_0_i | 0; //@line 2883
+     $824 = HEAP32[378] | 0; //@line 2898
+     $825 = $824 + $ssize_0_i | 0; //@line 2899
      if (!($ssize_0_i >>> 0 > $nb_0 >>> 0 & $ssize_0_i >>> 0 < 2147483647)) {
-      $tsize_0303639_i = 0; //@line 2888
+      $tsize_0303639_i = 0; //@line 2904
       break;
      }
-     $829 = HEAP32[342] | 0; //@line 2891
+     $829 = HEAP32[380] | 0; //@line 2907
      if (($829 | 0) != 0) {
       if ($825 >>> 0 <= $824 >>> 0 | $825 >>> 0 > $829 >>> 0) {
-       $tsize_0303639_i = 0; //@line 2898
+       $tsize_0303639_i = 0; //@line 2914
        break;
       }
      }
-     $835 = _sbrk($ssize_0_i | 0) | 0; //@line 2902
-     $836 = ($835 | 0) == ($809 | 0); //@line 2903
+     $835 = _sbrk($ssize_0_i | 0) | 0; //@line 2918
+     $836 = ($835 | 0) == ($809 | 0); //@line 2919
      $tbase_0_i = $836 ? $809 : -1;
      $tsize_0_i = $836 ? $ssize_0_i : 0;
      $br_0_i = $835;
      $ssize_1_i = $ssize_0_i;
-     label = 338; //@line 2907
+     label = 341; //@line 2923
     }
    } while (0);
-   L490 : do {
-    if ((label | 0) == 338) {
-     $849 = -$ssize_1_i | 0; //@line 2916
+   L492 : do {
+    if ((label | 0) == 341) {
+     $849 = -$ssize_1_i | 0; //@line 2932
      if (($tbase_0_i | 0) != -1) {
       $tsize_244_i = $tsize_0_i;
       $tbase_245_i = $tbase_0_i;
-      label = 349; //@line 2920
-      break L468;
+      label = 352; //@line 2936
+      break L470;
      }
      do {
       if (($br_0_i | 0) != -1 & $ssize_1_i >>> 0 < 2147483647 & $ssize_1_i >>> 0 < $771 >>> 0) {
-       $856 = HEAP32[220] | 0; //@line 2930
-       $860 = $773 - $ssize_1_i + $856 & -$856; //@line 2934
+       $856 = HEAP32[232] | 0; //@line 2946
+       $860 = $773 - $ssize_1_i + $856 & -$856; //@line 2950
        if ($860 >>> 0 >= 2147483647) {
-        $ssize_2_i = $ssize_1_i; //@line 2937
+        $ssize_2_i = $ssize_1_i; //@line 2953
         break;
        }
        if ((_sbrk($860 | 0) | 0) == -1) {
-        _sbrk($849 | 0) | 0; //@line 2943
-        $tsize_0303639_i = $tsize_0_i; //@line 2944
-        break L490;
+        _sbrk($849 | 0) | 0; //@line 2959
+        $tsize_0303639_i = $tsize_0_i; //@line 2960
+        break L492;
        } else {
-        $ssize_2_i = $860 + $ssize_1_i | 0; //@line 2948
+        $ssize_2_i = $860 + $ssize_1_i | 0; //@line 2964
         break;
        }
       } else {
-       $ssize_2_i = $ssize_1_i; //@line 2952
+       $ssize_2_i = $ssize_1_i; //@line 2968
       }
      } while (0);
      if (($br_0_i | 0) == -1) {
-      $tsize_0303639_i = $tsize_0_i; //@line 2958
+      $tsize_0303639_i = $tsize_0_i; //@line 2974
      } else {
       $tsize_244_i = $ssize_2_i;
       $tbase_245_i = $br_0_i;
-      label = 349; //@line 2961
-      break L468;
+      label = 352; //@line 2977
+      break L470;
      }
     }
    } while (0);
-   HEAP32[343] = HEAP32[343] | 4; //@line 2969
-   $tsize_1_i = $tsize_0303639_i; //@line 2970
-   label = 346; //@line 2971
+   HEAP32[381] = HEAP32[381] | 4; //@line 2985
+   $tsize_1_i = $tsize_0303639_i; //@line 2986
+   label = 349; //@line 2987
   } else {
-   $tsize_1_i = 0; //@line 2973
-   label = 346; //@line 2974
-  }
- } while (0);
- do {
-  if ((label | 0) == 346) {
-   if ($776 >>> 0 >= 2147483647) {
-    break;
-   }
-   $876 = _sbrk($776 | 0) | 0; //@line 2984
-   $877 = _sbrk(0) | 0; //@line 2985
-   if (!(($877 | 0) != -1 & ($876 | 0) != -1 & $876 >>> 0 < $877 >>> 0)) {
-    break;
-   }
-   $881 = $877 - $876 | 0; //@line 2996
-   $883 = $881 >>> 0 > ($nb_0 + 40 | 0) >>> 0; //@line 2998
-   $_tbase_1_i = $883 ? $876 : -1; //@line 3000
-   if (($_tbase_1_i | 0) != -1) {
-    $tsize_244_i = $883 ? $881 : $tsize_1_i;
-    $tbase_245_i = $_tbase_1_i;
-    label = 349; //@line 3004
-   }
+   $tsize_1_i = 0; //@line 2989
+   label = 349; //@line 2990
   }
  } while (0);
  do {
   if ((label | 0) == 349) {
-   $886 = (HEAP32[340] | 0) + $tsize_244_i | 0; //@line 3013
-   HEAP32[340] = $886; //@line 3014
-   if ($886 >>> 0 > (HEAP32[341] | 0) >>> 0) {
-    HEAP32[341] = $886; //@line 3018
+   if ($776 >>> 0 >= 2147483647) {
+    break;
    }
-   $890 = HEAP32[238] | 0; //@line 3020
-   L510 : do {
+   $876 = _sbrk($776 | 0) | 0; //@line 3000
+   $877 = _sbrk(0) | 0; //@line 3001
+   if (!(($877 | 0) != -1 & ($876 | 0) != -1 & $876 >>> 0 < $877 >>> 0)) {
+    break;
+   }
+   $881 = $877 - $876 | 0; //@line 3012
+   $883 = $881 >>> 0 > ($nb_0 + 40 | 0) >>> 0; //@line 3014
+   $_tbase_1_i = $883 ? $876 : -1; //@line 3016
+   if (($_tbase_1_i | 0) != -1) {
+    $tsize_244_i = $883 ? $881 : $tsize_1_i;
+    $tbase_245_i = $_tbase_1_i;
+    label = 352; //@line 3020
+   }
+  }
+ } while (0);
+ do {
+  if ((label | 0) == 352) {
+   $886 = (HEAP32[378] | 0) + $tsize_244_i | 0; //@line 3029
+   HEAP32[378] = $886; //@line 3030
+   if ($886 >>> 0 > (HEAP32[379] | 0) >>> 0) {
+    HEAP32[379] = $886; //@line 3034
+   }
+   $890 = HEAP32[276] | 0; //@line 3036
+   L512 : do {
     if (($890 | 0) == 0) {
-     $893 = HEAP32[236] | 0; //@line 3024
+     $893 = HEAP32[274] | 0; //@line 3040
      if (($893 | 0) == 0 | $tbase_245_i >>> 0 < $893 >>> 0) {
-      HEAP32[236] = $tbase_245_i; //@line 3029
+      HEAP32[274] = $tbase_245_i; //@line 3045
      }
-     HEAP32[344] = $tbase_245_i; //@line 3031
-     HEAP32[345] = $tsize_244_i; //@line 3032
-     HEAP32[347] = 0; //@line 3033
-     HEAP32[241] = HEAP32[218]; //@line 3035
-     HEAP32[240] = -1; //@line 3036
-     $i_02_i_i = 0; //@line 3037
+     HEAP32[382] = $tbase_245_i; //@line 3047
+     HEAP32[383] = $tsize_244_i; //@line 3048
+     HEAP32[385] = 0; //@line 3049
+     HEAP32[279] = HEAP32[230]; //@line 3051
+     HEAP32[278] = -1; //@line 3052
+     $i_02_i_i = 0; //@line 3053
      do {
-      $899 = $i_02_i_i << 1; //@line 3040
-      $901 = 968 + ($899 << 2) | 0; //@line 3042
-      HEAP32[968 + ($899 + 3 << 2) >> 2] = $901; //@line 3045
-      HEAP32[968 + ($899 + 2 << 2) >> 2] = $901; //@line 3048
-      $i_02_i_i = $i_02_i_i + 1 | 0; //@line 3049
+      $899 = $i_02_i_i << 1; //@line 3056
+      $901 = 1120 + ($899 << 2) | 0; //@line 3058
+      HEAP32[1120 + ($899 + 3 << 2) >> 2] = $901; //@line 3061
+      HEAP32[1120 + ($899 + 2 << 2) >> 2] = $901; //@line 3064
+      $i_02_i_i = $i_02_i_i + 1 | 0; //@line 3065
      } while ($i_02_i_i >>> 0 < 32);
-     $908 = $tbase_245_i + 8 | 0; //@line 3059
+     $908 = $tbase_245_i + 8 | 0; //@line 3075
      if (($908 & 7 | 0) == 0) {
-      $914 = 0; //@line 3063
+      $914 = 0; //@line 3079
      } else {
-      $914 = -$908 & 7; //@line 3067
+      $914 = -$908 & 7; //@line 3083
      }
-     $917 = $tsize_244_i - 40 - $914 | 0; //@line 3072
-     HEAP32[238] = $tbase_245_i + $914; //@line 3073
-     HEAP32[235] = $917; //@line 3074
-     HEAP32[$tbase_245_i + ($914 + 4) >> 2] = $917 | 1; //@line 3079
-     HEAP32[$tbase_245_i + ($tsize_244_i - 36) >> 2] = 40; //@line 3083
-     HEAP32[239] = HEAP32[222]; //@line 3085
+     $917 = $tsize_244_i - 40 - $914 | 0; //@line 3088
+     HEAP32[276] = $tbase_245_i + $914; //@line 3089
+     HEAP32[273] = $917; //@line 3090
+     HEAP32[$tbase_245_i + ($914 + 4) >> 2] = $917 | 1; //@line 3095
+     HEAP32[$tbase_245_i + ($tsize_244_i - 36) >> 2] = 40; //@line 3099
+     HEAP32[277] = HEAP32[234]; //@line 3101
     } else {
-     $sp_067_i = 1376; //@line 3087
+     $sp_067_i = 1528; //@line 3103
      while (1) {
-      $925 = HEAP32[$sp_067_i >> 2] | 0; //@line 3091
-      $926 = $sp_067_i + 4 | 0; //@line 3092
-      $927 = HEAP32[$926 >> 2] | 0; //@line 3093
+      $925 = HEAP32[$sp_067_i >> 2] | 0; //@line 3107
+      $926 = $sp_067_i + 4 | 0; //@line 3108
+      $927 = HEAP32[$926 >> 2] | 0; //@line 3109
       if (($tbase_245_i | 0) == ($925 + $927 | 0)) {
-       label = 361; //@line 3097
+       label = 364; //@line 3113
        break;
       }
-      $932 = HEAP32[$sp_067_i + 8 >> 2] | 0; //@line 3101
+      $932 = HEAP32[$sp_067_i + 8 >> 2] | 0; //@line 3117
       if (($932 | 0) == 0) {
        break;
       } else {
-       $sp_067_i = $932; //@line 3106
+       $sp_067_i = $932; //@line 3122
       }
      }
      do {
-      if ((label | 0) == 361) {
+      if ((label | 0) == 364) {
        if ((HEAP32[$sp_067_i + 12 >> 2] & 8 | 0) != 0) {
         break;
        }
-       $939 = $890; //@line 3118
+       $939 = $890; //@line 3134
        if (!($939 >>> 0 >= $925 >>> 0 & $939 >>> 0 < $tbase_245_i >>> 0)) {
         break;
        }
-       HEAP32[$926 >> 2] = $927 + $tsize_244_i; //@line 3126
-       $944 = HEAP32[238] | 0; //@line 3127
-       $946 = (HEAP32[235] | 0) + $tsize_244_i | 0; //@line 3129
-       $947 = $944; //@line 3130
-       $949 = $944 + 8 | 0; //@line 3132
+       HEAP32[$926 >> 2] = $927 + $tsize_244_i; //@line 3142
+       $944 = HEAP32[276] | 0; //@line 3143
+       $946 = (HEAP32[273] | 0) + $tsize_244_i | 0; //@line 3145
+       $947 = $944; //@line 3146
+       $949 = $944 + 8 | 0; //@line 3148
        if (($949 & 7 | 0) == 0) {
-        $955 = 0; //@line 3136
+        $955 = 0; //@line 3152
        } else {
-        $955 = -$949 & 7; //@line 3140
+        $955 = -$949 & 7; //@line 3156
        }
-       $958 = $946 - $955 | 0; //@line 3145
-       HEAP32[238] = $947 + $955; //@line 3146
-       HEAP32[235] = $958; //@line 3147
-       HEAP32[$947 + ($955 + 4) >> 2] = $958 | 1; //@line 3152
-       HEAP32[$947 + ($946 + 4) >> 2] = 40; //@line 3156
-       HEAP32[239] = HEAP32[222]; //@line 3158
-       break L510;
+       $958 = $946 - $955 | 0; //@line 3161
+       HEAP32[276] = $947 + $955; //@line 3162
+       HEAP32[273] = $958; //@line 3163
+       HEAP32[$947 + ($955 + 4) >> 2] = $958 | 1; //@line 3168
+       HEAP32[$947 + ($946 + 4) >> 2] = 40; //@line 3172
+       HEAP32[277] = HEAP32[234]; //@line 3174
+       break L512;
       }
      } while (0);
-     if ($tbase_245_i >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      HEAP32[236] = $tbase_245_i; //@line 3165
+     if ($tbase_245_i >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      HEAP32[274] = $tbase_245_i; //@line 3181
      }
-     $968 = $tbase_245_i + $tsize_244_i | 0; //@line 3167
-     $sp_160_i = 1376; //@line 3168
+     $968 = $tbase_245_i + $tsize_244_i | 0; //@line 3183
+     $sp_160_i = 1528; //@line 3184
      while (1) {
-      $970 = $sp_160_i | 0; //@line 3171
+      $970 = $sp_160_i | 0; //@line 3187
       if ((HEAP32[$970 >> 2] | 0) == ($968 | 0)) {
-       label = 371; //@line 3175
+       label = 374; //@line 3191
        break;
       }
-      $975 = HEAP32[$sp_160_i + 8 >> 2] | 0; //@line 3179
+      $975 = HEAP32[$sp_160_i + 8 >> 2] | 0; //@line 3195
       if (($975 | 0) == 0) {
        break;
       } else {
-       $sp_160_i = $975; //@line 3184
+       $sp_160_i = $975; //@line 3200
       }
      }
      do {
-      if ((label | 0) == 371) {
+      if ((label | 0) == 374) {
        if ((HEAP32[$sp_160_i + 12 >> 2] & 8 | 0) != 0) {
         break;
        }
-       HEAP32[$970 >> 2] = $tbase_245_i; //@line 3196
-       $982 = $sp_160_i + 4 | 0; //@line 3197
-       HEAP32[$982 >> 2] = (HEAP32[$982 >> 2] | 0) + $tsize_244_i; //@line 3200
-       $986 = $tbase_245_i + 8 | 0; //@line 3202
+       HEAP32[$970 >> 2] = $tbase_245_i; //@line 3212
+       $982 = $sp_160_i + 4 | 0; //@line 3213
+       HEAP32[$982 >> 2] = (HEAP32[$982 >> 2] | 0) + $tsize_244_i; //@line 3216
+       $986 = $tbase_245_i + 8 | 0; //@line 3218
        if (($986 & 7 | 0) == 0) {
-        $993 = 0; //@line 3206
+        $993 = 0; //@line 3222
        } else {
-        $993 = -$986 & 7; //@line 3210
+        $993 = -$986 & 7; //@line 3226
        }
-       $996 = $tbase_245_i + ($tsize_244_i + 8) | 0; //@line 3216
+       $996 = $tbase_245_i + ($tsize_244_i + 8) | 0; //@line 3232
        if (($996 & 7 | 0) == 0) {
-        $1003 = 0; //@line 3220
+        $1003 = 0; //@line 3236
        } else {
-        $1003 = -$996 & 7; //@line 3224
+        $1003 = -$996 & 7; //@line 3240
        }
-       $1004 = $tbase_245_i + ($1003 + $tsize_244_i) | 0; //@line 3228
-       $1005 = $1004; //@line 3229
-       $_sum_i21_i = $993 + $nb_0 | 0; //@line 3233
-       $1009 = $tbase_245_i + $_sum_i21_i | 0; //@line 3234
-       $1010 = $1009; //@line 3235
-       $1011 = $1004 - ($tbase_245_i + $993) - $nb_0 | 0; //@line 3236
-       HEAP32[$tbase_245_i + ($993 + 4) >> 2] = $nb_0 | 3; //@line 3241
+       $1004 = $tbase_245_i + ($1003 + $tsize_244_i) | 0; //@line 3244
+       $1005 = $1004; //@line 3245
+       $_sum_i21_i = $993 + $nb_0 | 0; //@line 3249
+       $1009 = $tbase_245_i + $_sum_i21_i | 0; //@line 3250
+       $1010 = $1009; //@line 3251
+       $1011 = $1004 - ($tbase_245_i + $993) - $nb_0 | 0; //@line 3252
+       HEAP32[$tbase_245_i + ($993 + 4) >> 2] = $nb_0 | 3; //@line 3257
        do {
-        if (($1005 | 0) == (HEAP32[238] | 0)) {
-         $1019 = (HEAP32[235] | 0) + $1011 | 0; //@line 3247
-         HEAP32[235] = $1019; //@line 3248
-         HEAP32[238] = $1010; //@line 3249
-         HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $1019 | 1; //@line 3254
+        if (($1005 | 0) == (HEAP32[276] | 0)) {
+         $1019 = (HEAP32[273] | 0) + $1011 | 0; //@line 3263
+         HEAP32[273] = $1019; //@line 3264
+         HEAP32[276] = $1010; //@line 3265
+         HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $1019 | 1; //@line 3270
         } else {
-         if (($1005 | 0) == (HEAP32[237] | 0)) {
-          $1028 = (HEAP32[234] | 0) + $1011 | 0; //@line 3260
-          HEAP32[234] = $1028; //@line 3261
-          HEAP32[237] = $1010; //@line 3262
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $1028 | 1; //@line 3267
-          HEAP32[$tbase_245_i + ($1028 + $_sum_i21_i) >> 2] = $1028; //@line 3271
+         if (($1005 | 0) == (HEAP32[275] | 0)) {
+          $1028 = (HEAP32[272] | 0) + $1011 | 0; //@line 3276
+          HEAP32[272] = $1028; //@line 3277
+          HEAP32[275] = $1010; //@line 3278
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $1028 | 1; //@line 3283
+          HEAP32[$tbase_245_i + ($1028 + $_sum_i21_i) >> 2] = $1028; //@line 3287
           break;
          }
-         $_sum2_i23_i = $tsize_244_i + 4 | 0; //@line 3274
-         $1037 = HEAP32[$tbase_245_i + ($_sum2_i23_i + $1003) >> 2] | 0; //@line 3278
+         $_sum2_i23_i = $tsize_244_i + 4 | 0; //@line 3290
+         $1037 = HEAP32[$tbase_245_i + ($_sum2_i23_i + $1003) >> 2] | 0; //@line 3294
          if (($1037 & 3 | 0) == 1) {
-          $1041 = $1037 & -8; //@line 3282
-          $1042 = $1037 >>> 3; //@line 3283
-          L555 : do {
+          $1041 = $1037 & -8; //@line 3298
+          $1042 = $1037 >>> 3; //@line 3299
+          L557 : do {
            if ($1037 >>> 0 < 256) {
-            $1047 = HEAP32[$tbase_245_i + (($1003 | 8) + $tsize_244_i) >> 2] | 0; //@line 3291
-            $1050 = HEAP32[$tbase_245_i + ($tsize_244_i + 12 + $1003) >> 2] | 0; //@line 3296
-            $1053 = 968 + ($1042 << 1 << 2) | 0; //@line 3299
+            $1047 = HEAP32[$tbase_245_i + (($1003 | 8) + $tsize_244_i) >> 2] | 0; //@line 3307
+            $1050 = HEAP32[$tbase_245_i + ($tsize_244_i + 12 + $1003) >> 2] | 0; //@line 3312
+            $1053 = 1120 + ($1042 << 1 << 2) | 0; //@line 3315
             do {
              if (($1047 | 0) != ($1053 | 0)) {
-              if ($1047 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3307
-               return 0; //@line 3307
+              if ($1047 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3323
+               return 0; //@line 3323
               }
               if ((HEAP32[$1047 + 12 >> 2] | 0) == ($1005 | 0)) {
                break;
               }
-              _abort(); //@line 3316
-              return 0; //@line 3316
+              _abort(); //@line 3332
+              return 0; //@line 3332
              }
             } while (0);
             if (($1050 | 0) == ($1047 | 0)) {
-             HEAP32[232] = HEAP32[232] & ~(1 << $1042); //@line 3326
+             HEAP32[270] = HEAP32[270] & ~(1 << $1042); //@line 3342
              break;
             }
             do {
              if (($1050 | 0) == ($1053 | 0)) {
-              $_pre_phi57_i_i = $1050 + 8 | 0; //@line 3333
+              $_pre_phi57_i_i = $1050 + 8 | 0; //@line 3349
              } else {
-              if ($1050 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3339
-               return 0; //@line 3339
+              if ($1050 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3355
+               return 0; //@line 3355
               }
-              $1076 = $1050 + 8 | 0; //@line 3342
+              $1076 = $1050 + 8 | 0; //@line 3358
               if ((HEAP32[$1076 >> 2] | 0) == ($1005 | 0)) {
-               $_pre_phi57_i_i = $1076; //@line 3346
+               $_pre_phi57_i_i = $1076; //@line 3362
                break;
               }
-              _abort(); //@line 3349
-              return 0; //@line 3349
+              _abort(); //@line 3365
+              return 0; //@line 3365
              }
             } while (0);
-            HEAP32[$1047 + 12 >> 2] = $1050; //@line 3355
-            HEAP32[$_pre_phi57_i_i >> 2] = $1047; //@line 3356
+            HEAP32[$1047 + 12 >> 2] = $1050; //@line 3371
+            HEAP32[$_pre_phi57_i_i >> 2] = $1047; //@line 3372
            } else {
-            $1081 = $1004; //@line 3358
-            $1084 = HEAP32[$tbase_245_i + (($1003 | 24) + $tsize_244_i) >> 2] | 0; //@line 3363
-            $1087 = HEAP32[$tbase_245_i + ($tsize_244_i + 12 + $1003) >> 2] | 0; //@line 3368
+            $1081 = $1004; //@line 3374
+            $1084 = HEAP32[$tbase_245_i + (($1003 | 24) + $tsize_244_i) >> 2] | 0; //@line 3379
+            $1087 = HEAP32[$tbase_245_i + ($tsize_244_i + 12 + $1003) >> 2] | 0; //@line 3384
             do {
              if (($1087 | 0) == ($1081 | 0)) {
-              $_sum67_i_i = $1003 | 16; //@line 3372
-              $1107 = $tbase_245_i + ($_sum2_i23_i + $_sum67_i_i) | 0; //@line 3375
-              $1108 = HEAP32[$1107 >> 2] | 0; //@line 3376
+              $_sum67_i_i = $1003 | 16; //@line 3388
+              $1107 = $tbase_245_i + ($_sum2_i23_i + $_sum67_i_i) | 0; //@line 3391
+              $1108 = HEAP32[$1107 >> 2] | 0; //@line 3392
               if (($1108 | 0) == 0) {
-               $1112 = $tbase_245_i + ($_sum67_i_i + $tsize_244_i) | 0; //@line 3381
-               $1113 = HEAP32[$1112 >> 2] | 0; //@line 3382
+               $1112 = $tbase_245_i + ($_sum67_i_i + $tsize_244_i) | 0; //@line 3397
+               $1113 = HEAP32[$1112 >> 2] | 0; //@line 3398
                if (($1113 | 0) == 0) {
-                $R_1_i_i = 0; //@line 3385
+                $R_1_i_i = 0; //@line 3401
                 break;
                } else {
                 $R_0_i_i = $1113;
@@ -6592,15 +6668,15 @@ function _malloc($bytes) {
                $RP_0_i_i = $1107;
               }
               while (1) {
-               $1115 = $R_0_i_i + 20 | 0; //@line 3396
-               $1116 = HEAP32[$1115 >> 2] | 0; //@line 3397
+               $1115 = $R_0_i_i + 20 | 0; //@line 3412
+               $1116 = HEAP32[$1115 >> 2] | 0; //@line 3413
                if (($1116 | 0) != 0) {
                 $R_0_i_i = $1116;
                 $RP_0_i_i = $1115;
                 continue;
                }
-               $1119 = $R_0_i_i + 16 | 0; //@line 3403
-               $1120 = HEAP32[$1119 >> 2] | 0; //@line 3404
+               $1119 = $R_0_i_i + 16 | 0; //@line 3419
+               $1120 = HEAP32[$1119 >> 2] | 0; //@line 3420
                if (($1120 | 0) == 0) {
                 break;
                } else {
@@ -6608,95 +6684,95 @@ function _malloc($bytes) {
                 $RP_0_i_i = $1119;
                }
               }
-              if ($RP_0_i_i >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3416
-               return 0; //@line 3416
+              if ($RP_0_i_i >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3432
+               return 0; //@line 3432
               } else {
-               HEAP32[$RP_0_i_i >> 2] = 0; //@line 3419
-               $R_1_i_i = $R_0_i_i; //@line 3420
+               HEAP32[$RP_0_i_i >> 2] = 0; //@line 3435
+               $R_1_i_i = $R_0_i_i; //@line 3436
                break;
               }
              } else {
-              $1092 = HEAP32[$tbase_245_i + (($1003 | 8) + $tsize_244_i) >> 2] | 0; //@line 3428
-              if ($1092 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3433
-               return 0; //@line 3433
+              $1092 = HEAP32[$tbase_245_i + (($1003 | 8) + $tsize_244_i) >> 2] | 0; //@line 3444
+              if ($1092 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3449
+               return 0; //@line 3449
               }
-              $1097 = $1092 + 12 | 0; //@line 3436
+              $1097 = $1092 + 12 | 0; //@line 3452
               if ((HEAP32[$1097 >> 2] | 0) != ($1081 | 0)) {
-               _abort(); //@line 3440
-               return 0; //@line 3440
+               _abort(); //@line 3456
+               return 0; //@line 3456
               }
-              $1101 = $1087 + 8 | 0; //@line 3443
+              $1101 = $1087 + 8 | 0; //@line 3459
               if ((HEAP32[$1101 >> 2] | 0) == ($1081 | 0)) {
-               HEAP32[$1097 >> 2] = $1087; //@line 3447
-               HEAP32[$1101 >> 2] = $1092; //@line 3448
-               $R_1_i_i = $1087; //@line 3449
+               HEAP32[$1097 >> 2] = $1087; //@line 3463
+               HEAP32[$1101 >> 2] = $1092; //@line 3464
+               $R_1_i_i = $1087; //@line 3465
                break;
               } else {
-               _abort(); //@line 3452
-               return 0; //@line 3452
+               _abort(); //@line 3468
+               return 0; //@line 3468
               }
              }
             } while (0);
             if (($1084 | 0) == 0) {
              break;
             }
-            $1132 = $tbase_245_i + ($tsize_244_i + 28 + $1003) | 0; //@line 3465
-            $1134 = 1232 + (HEAP32[$1132 >> 2] << 2) | 0; //@line 3467
+            $1132 = $tbase_245_i + ($tsize_244_i + 28 + $1003) | 0; //@line 3481
+            $1134 = 1384 + (HEAP32[$1132 >> 2] << 2) | 0; //@line 3483
             do {
              if (($1081 | 0) == (HEAP32[$1134 >> 2] | 0)) {
-              HEAP32[$1134 >> 2] = $R_1_i_i; //@line 3472
+              HEAP32[$1134 >> 2] = $R_1_i_i; //@line 3488
               if (($R_1_i_i | 0) != 0) {
                break;
               }
-              HEAP32[233] = HEAP32[233] & ~(1 << HEAP32[$1132 >> 2]); //@line 3482
-              break L555;
+              HEAP32[271] = HEAP32[271] & ~(1 << HEAP32[$1132 >> 2]); //@line 3498
+              break L557;
              } else {
-              if ($1084 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3489
-               return 0; //@line 3489
+              if ($1084 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3505
+               return 0; //@line 3505
               }
-              $1148 = $1084 + 16 | 0; //@line 3492
+              $1148 = $1084 + 16 | 0; //@line 3508
               if ((HEAP32[$1148 >> 2] | 0) == ($1081 | 0)) {
-               HEAP32[$1148 >> 2] = $R_1_i_i; //@line 3496
+               HEAP32[$1148 >> 2] = $R_1_i_i; //@line 3512
               } else {
-               HEAP32[$1084 + 20 >> 2] = $R_1_i_i; //@line 3499
+               HEAP32[$1084 + 20 >> 2] = $R_1_i_i; //@line 3515
               }
               if (($R_1_i_i | 0) == 0) {
-               break L555;
+               break L557;
               }
              }
             } while (0);
-            if ($R_1_i_i >>> 0 < (HEAP32[236] | 0) >>> 0) {
-             _abort(); //@line 3511
-             return 0; //@line 3511
+            if ($R_1_i_i >>> 0 < (HEAP32[274] | 0) >>> 0) {
+             _abort(); //@line 3527
+             return 0; //@line 3527
             }
-            HEAP32[$R_1_i_i + 24 >> 2] = $1084; //@line 3515
-            $_sum3233_i_i = $1003 | 16; //@line 3516
-            $1165 = HEAP32[$tbase_245_i + ($_sum3233_i_i + $tsize_244_i) >> 2] | 0; //@line 3520
+            HEAP32[$R_1_i_i + 24 >> 2] = $1084; //@line 3531
+            $_sum3233_i_i = $1003 | 16; //@line 3532
+            $1165 = HEAP32[$tbase_245_i + ($_sum3233_i_i + $tsize_244_i) >> 2] | 0; //@line 3536
             do {
              if (($1165 | 0) != 0) {
-              if ($1165 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-               _abort(); //@line 3528
-               return 0; //@line 3528
+              if ($1165 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+               _abort(); //@line 3544
+               return 0; //@line 3544
               } else {
-               HEAP32[$R_1_i_i + 16 >> 2] = $1165; //@line 3532
-               HEAP32[$1165 + 24 >> 2] = $R_1_i_i; //@line 3534
+               HEAP32[$R_1_i_i + 16 >> 2] = $1165; //@line 3548
+               HEAP32[$1165 + 24 >> 2] = $R_1_i_i; //@line 3550
                break;
               }
              }
             } while (0);
-            $1178 = HEAP32[$tbase_245_i + ($_sum2_i23_i + $_sum3233_i_i) >> 2] | 0; //@line 3542
+            $1178 = HEAP32[$tbase_245_i + ($_sum2_i23_i + $_sum3233_i_i) >> 2] | 0; //@line 3558
             if (($1178 | 0) == 0) {
              break;
             }
-            if ($1178 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-             _abort(); //@line 3551
-             return 0; //@line 3551
+            if ($1178 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+             _abort(); //@line 3567
+             return 0; //@line 3567
             } else {
-             HEAP32[$R_1_i_i + 20 >> 2] = $1178; //@line 3555
-             HEAP32[$1178 + 24 >> 2] = $R_1_i_i; //@line 3557
+             HEAP32[$R_1_i_i + 20 >> 2] = $1178; //@line 3571
+             HEAP32[$1178 + 24 >> 2] = $R_1_i_i; //@line 3573
              break;
             }
            }
@@ -6707,76 +6783,76 @@ function _malloc($bytes) {
           $oldfirst_0_i_i = $1005;
           $qsize_0_i_i = $1011;
          }
-         $1194 = $oldfirst_0_i_i + 4 | 0; //@line 3573
-         HEAP32[$1194 >> 2] = HEAP32[$1194 >> 2] & -2; //@line 3576
-         HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $qsize_0_i_i | 1; //@line 3581
-         HEAP32[$tbase_245_i + ($qsize_0_i_i + $_sum_i21_i) >> 2] = $qsize_0_i_i; //@line 3585
-         $1202 = $qsize_0_i_i >>> 3; //@line 3586
+         $1194 = $oldfirst_0_i_i + 4 | 0; //@line 3589
+         HEAP32[$1194 >> 2] = HEAP32[$1194 >> 2] & -2; //@line 3592
+         HEAP32[$tbase_245_i + ($_sum_i21_i + 4) >> 2] = $qsize_0_i_i | 1; //@line 3597
+         HEAP32[$tbase_245_i + ($qsize_0_i_i + $_sum_i21_i) >> 2] = $qsize_0_i_i; //@line 3601
+         $1202 = $qsize_0_i_i >>> 3; //@line 3602
          if ($qsize_0_i_i >>> 0 < 256) {
-          $1205 = $1202 << 1; //@line 3589
-          $1207 = 968 + ($1205 << 2) | 0; //@line 3591
-          $1208 = HEAP32[232] | 0; //@line 3592
-          $1209 = 1 << $1202; //@line 3593
+          $1205 = $1202 << 1; //@line 3605
+          $1207 = 1120 + ($1205 << 2) | 0; //@line 3607
+          $1208 = HEAP32[270] | 0; //@line 3608
+          $1209 = 1 << $1202; //@line 3609
           do {
            if (($1208 & $1209 | 0) == 0) {
-            HEAP32[232] = $1208 | $1209; //@line 3599
+            HEAP32[270] = $1208 | $1209; //@line 3615
             $F4_0_i_i = $1207;
-            $_pre_phi_i25_i = 968 + ($1205 + 2 << 2) | 0;
+            $_pre_phi_i25_i = 1120 + ($1205 + 2 << 2) | 0;
            } else {
-            $1215 = 968 + ($1205 + 2 << 2) | 0; //@line 3605
-            $1216 = HEAP32[$1215 >> 2] | 0; //@line 3606
-            if ($1216 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+            $1215 = 1120 + ($1205 + 2 << 2) | 0; //@line 3621
+            $1216 = HEAP32[$1215 >> 2] | 0; //@line 3622
+            if ($1216 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
              $F4_0_i_i = $1216;
              $_pre_phi_i25_i = $1215;
              break;
             }
-            _abort(); //@line 3614
-            return 0; //@line 3614
+            _abort(); //@line 3630
+            return 0; //@line 3630
            }
           } while (0);
-          HEAP32[$_pre_phi_i25_i >> 2] = $1010; //@line 3620
-          HEAP32[$F4_0_i_i + 12 >> 2] = $1010; //@line 3622
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $F4_0_i_i; //@line 3626
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1207; //@line 3630
+          HEAP32[$_pre_phi_i25_i >> 2] = $1010; //@line 3636
+          HEAP32[$F4_0_i_i + 12 >> 2] = $1010; //@line 3638
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $F4_0_i_i; //@line 3642
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1207; //@line 3646
           break;
          }
-         $1228 = $1009; //@line 3633
-         $1229 = $qsize_0_i_i >>> 8; //@line 3634
+         $1228 = $1009; //@line 3649
+         $1229 = $qsize_0_i_i >>> 8; //@line 3650
          do {
           if (($1229 | 0) == 0) {
-           $I7_0_i_i = 0; //@line 3638
+           $I7_0_i_i = 0; //@line 3654
           } else {
            if ($qsize_0_i_i >>> 0 > 16777215) {
-            $I7_0_i_i = 31; //@line 3642
+            $I7_0_i_i = 31; //@line 3658
             break;
            }
-           $1236 = ($1229 + 1048320 | 0) >>> 16 & 8; //@line 3647
-           $1237 = $1229 << $1236; //@line 3648
-           $1240 = ($1237 + 520192 | 0) >>> 16 & 4; //@line 3651
-           $1242 = $1237 << $1240; //@line 3653
-           $1245 = ($1242 + 245760 | 0) >>> 16 & 2; //@line 3656
-           $1250 = 14 - ($1240 | $1236 | $1245) + ($1242 << $1245 >>> 15) | 0; //@line 3661
-           $I7_0_i_i = $qsize_0_i_i >>> (($1250 + 7 | 0) >>> 0) & 1 | $1250 << 1; //@line 3667
+           $1236 = ($1229 + 1048320 | 0) >>> 16 & 8; //@line 3663
+           $1237 = $1229 << $1236; //@line 3664
+           $1240 = ($1237 + 520192 | 0) >>> 16 & 4; //@line 3667
+           $1242 = $1237 << $1240; //@line 3669
+           $1245 = ($1242 + 245760 | 0) >>> 16 & 2; //@line 3672
+           $1250 = 14 - ($1240 | $1236 | $1245) + ($1242 << $1245 >>> 15) | 0; //@line 3677
+           $I7_0_i_i = $qsize_0_i_i >>> (($1250 + 7 | 0) >>> 0) & 1 | $1250 << 1; //@line 3683
           }
          } while (0);
-         $1257 = 1232 + ($I7_0_i_i << 2) | 0; //@line 3671
-         HEAP32[$tbase_245_i + ($_sum_i21_i + 28) >> 2] = $I7_0_i_i; //@line 3675
-         HEAP32[$tbase_245_i + ($_sum_i21_i + 20) >> 2] = 0; //@line 3681
-         HEAP32[$tbase_245_i + ($_sum_i21_i + 16) >> 2] = 0; //@line 3683
-         $1264 = HEAP32[233] | 0; //@line 3684
-         $1265 = 1 << $I7_0_i_i; //@line 3685
+         $1257 = 1384 + ($I7_0_i_i << 2) | 0; //@line 3687
+         HEAP32[$tbase_245_i + ($_sum_i21_i + 28) >> 2] = $I7_0_i_i; //@line 3691
+         HEAP32[$tbase_245_i + ($_sum_i21_i + 20) >> 2] = 0; //@line 3697
+         HEAP32[$tbase_245_i + ($_sum_i21_i + 16) >> 2] = 0; //@line 3699
+         $1264 = HEAP32[271] | 0; //@line 3700
+         $1265 = 1 << $I7_0_i_i; //@line 3701
          if (($1264 & $1265 | 0) == 0) {
-          HEAP32[233] = $1264 | $1265; //@line 3690
-          HEAP32[$1257 >> 2] = $1228; //@line 3691
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = $1257; //@line 3696
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1228; //@line 3700
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1228; //@line 3704
+          HEAP32[271] = $1264 | $1265; //@line 3706
+          HEAP32[$1257 >> 2] = $1228; //@line 3707
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = $1257; //@line 3712
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1228; //@line 3716
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1228; //@line 3720
           break;
          }
          if (($I7_0_i_i | 0) == 31) {
-          $1284 = 0; //@line 3710
+          $1284 = 0; //@line 3726
          } else {
-          $1284 = 25 - ($I7_0_i_i >>> 1) | 0; //@line 3714
+          $1284 = 25 - ($I7_0_i_i >>> 1) | 0; //@line 3730
          }
          $K8_0_i_i = $qsize_0_i_i << $1284;
          $T_0_i27_i = HEAP32[$1257 >> 2] | 0;
@@ -6784,104 +6860,104 @@ function _malloc($bytes) {
           if ((HEAP32[$T_0_i27_i + 4 >> 2] & -8 | 0) == ($qsize_0_i_i | 0)) {
            break;
           }
-          $1293 = $T_0_i27_i + 16 + ($K8_0_i_i >>> 31 << 2) | 0; //@line 3730
-          $1294 = HEAP32[$1293 >> 2] | 0; //@line 3731
+          $1293 = $T_0_i27_i + 16 + ($K8_0_i_i >>> 31 << 2) | 0; //@line 3746
+          $1294 = HEAP32[$1293 >> 2] | 0; //@line 3747
           if (($1294 | 0) == 0) {
-           label = 444; //@line 3735
+           label = 447; //@line 3751
            break;
           } else {
            $K8_0_i_i = $K8_0_i_i << 1;
            $T_0_i27_i = $1294;
           }
          }
-         if ((label | 0) == 444) {
-          if ($1293 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-           _abort(); //@line 3746
-           return 0; //@line 3746
+         if ((label | 0) == 447) {
+          if ($1293 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+           _abort(); //@line 3762
+           return 0; //@line 3762
           } else {
-           HEAP32[$1293 >> 2] = $1228; //@line 3749
-           HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = $T_0_i27_i; //@line 3753
-           HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1228; //@line 3757
-           HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1228; //@line 3761
+           HEAP32[$1293 >> 2] = $1228; //@line 3765
+           HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = $T_0_i27_i; //@line 3769
+           HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $1228; //@line 3773
+           HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1228; //@line 3777
            break;
           }
          }
-         $1310 = $T_0_i27_i + 8 | 0; //@line 3765
-         $1311 = HEAP32[$1310 >> 2] | 0; //@line 3766
-         $1313 = HEAP32[236] | 0; //@line 3768
+         $1310 = $T_0_i27_i + 8 | 0; //@line 3781
+         $1311 = HEAP32[$1310 >> 2] | 0; //@line 3782
+         $1313 = HEAP32[274] | 0; //@line 3784
          if ($T_0_i27_i >>> 0 < $1313 >>> 0) {
-          _abort(); //@line 3771
-          return 0; //@line 3771
+          _abort(); //@line 3787
+          return 0; //@line 3787
          }
          if ($1311 >>> 0 < $1313 >>> 0) {
-          _abort(); //@line 3777
-          return 0; //@line 3777
+          _abort(); //@line 3793
+          return 0; //@line 3793
          } else {
-          HEAP32[$1311 + 12 >> 2] = $1228; //@line 3781
-          HEAP32[$1310 >> 2] = $1228; //@line 3782
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1311; //@line 3786
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $T_0_i27_i; //@line 3790
-          HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = 0; //@line 3794
+          HEAP32[$1311 + 12 >> 2] = $1228; //@line 3797
+          HEAP32[$1310 >> 2] = $1228; //@line 3798
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 8) >> 2] = $1311; //@line 3802
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 12) >> 2] = $T_0_i27_i; //@line 3806
+          HEAP32[$tbase_245_i + ($_sum_i21_i + 24) >> 2] = 0; //@line 3810
           break;
          }
         }
        } while (0);
-       $mem_0 = $tbase_245_i + ($993 | 8) | 0; //@line 3801
-       return $mem_0 | 0; //@line 3804
+       $mem_0 = $tbase_245_i + ($993 | 8) | 0; //@line 3817
+       return $mem_0 | 0; //@line 3820
       }
      } while (0);
-     $1327 = $890; //@line 3807
-     $sp_0_i_i_i = 1376; //@line 3808
+     $1327 = $890; //@line 3823
+     $sp_0_i_i_i = 1528; //@line 3824
      while (1) {
-      $1330 = HEAP32[$sp_0_i_i_i >> 2] | 0; //@line 3812
+      $1330 = HEAP32[$sp_0_i_i_i >> 2] | 0; //@line 3828
       if ($1330 >>> 0 <= $1327 >>> 0) {
-       $1334 = HEAP32[$sp_0_i_i_i + 4 >> 2] | 0; //@line 3816
-       $1335 = $1330 + $1334 | 0; //@line 3817
+       $1334 = HEAP32[$sp_0_i_i_i + 4 >> 2] | 0; //@line 3832
+       $1335 = $1330 + $1334 | 0; //@line 3833
        if ($1335 >>> 0 > $1327 >>> 0) {
         break;
        }
       }
-      $sp_0_i_i_i = HEAP32[$sp_0_i_i_i + 8 >> 2] | 0; //@line 3825
+      $sp_0_i_i_i = HEAP32[$sp_0_i_i_i + 8 >> 2] | 0; //@line 3841
      }
-     $1341 = $1330 + ($1334 - 39) | 0; //@line 3830
+     $1341 = $1330 + ($1334 - 39) | 0; //@line 3846
      if (($1341 & 7 | 0) == 0) {
-      $1348 = 0; //@line 3834
+      $1348 = 0; //@line 3850
      } else {
-      $1348 = -$1341 & 7; //@line 3838
+      $1348 = -$1341 & 7; //@line 3854
      }
-     $1349 = $1330 + ($1334 - 47 + $1348) | 0; //@line 3842
-     $1353 = $1349 >>> 0 < ($890 + 16 | 0) >>> 0 ? $1327 : $1349; //@line 3846
-     $1354 = $1353 + 8 | 0; //@line 3847
-     $1358 = $tbase_245_i + 8 | 0; //@line 3851
+     $1349 = $1330 + ($1334 - 47 + $1348) | 0; //@line 3858
+     $1353 = $1349 >>> 0 < ($890 + 16 | 0) >>> 0 ? $1327 : $1349; //@line 3862
+     $1354 = $1353 + 8 | 0; //@line 3863
+     $1358 = $tbase_245_i + 8 | 0; //@line 3867
      if (($1358 & 7 | 0) == 0) {
-      $1364 = 0; //@line 3855
+      $1364 = 0; //@line 3871
      } else {
-      $1364 = -$1358 & 7; //@line 3859
+      $1364 = -$1358 & 7; //@line 3875
      }
-     $1367 = $tsize_244_i - 40 - $1364 | 0; //@line 3864
-     HEAP32[238] = $tbase_245_i + $1364; //@line 3865
-     HEAP32[235] = $1367; //@line 3866
-     HEAP32[$tbase_245_i + ($1364 + 4) >> 2] = $1367 | 1; //@line 3871
-     HEAP32[$tbase_245_i + ($tsize_244_i - 36) >> 2] = 40; //@line 3875
-     HEAP32[239] = HEAP32[222]; //@line 3877
-     HEAP32[$1353 + 4 >> 2] = 27; //@line 3880
-     HEAP32[$1354 >> 2] = HEAP32[344]; //@line 3881
-     HEAP32[$1354 + 4 >> 2] = HEAP32[1380 >> 2]; //@line 3881
-     HEAP32[$1354 + 8 >> 2] = HEAP32[1384 >> 2]; //@line 3881
-     HEAP32[$1354 + 12 >> 2] = HEAP32[1388 >> 2]; //@line 3881
-     HEAP32[344] = $tbase_245_i; //@line 3882
-     HEAP32[345] = $tsize_244_i; //@line 3883
-     HEAP32[347] = 0; //@line 3884
-     HEAP32[346] = $1354; //@line 3885
-     $1377 = $1353 + 28 | 0; //@line 3887
-     HEAP32[$1377 >> 2] = 7; //@line 3888
+     $1367 = $tsize_244_i - 40 - $1364 | 0; //@line 3880
+     HEAP32[276] = $tbase_245_i + $1364; //@line 3881
+     HEAP32[273] = $1367; //@line 3882
+     HEAP32[$tbase_245_i + ($1364 + 4) >> 2] = $1367 | 1; //@line 3887
+     HEAP32[$tbase_245_i + ($tsize_244_i - 36) >> 2] = 40; //@line 3891
+     HEAP32[277] = HEAP32[234]; //@line 3893
+     HEAP32[$1353 + 4 >> 2] = 27; //@line 3896
+     HEAP32[$1354 >> 2] = HEAP32[382]; //@line 3897
+     HEAP32[$1354 + 4 >> 2] = HEAP32[1532 >> 2]; //@line 3897
+     HEAP32[$1354 + 8 >> 2] = HEAP32[1536 >> 2]; //@line 3897
+     HEAP32[$1354 + 12 >> 2] = HEAP32[1540 >> 2]; //@line 3897
+     HEAP32[382] = $tbase_245_i; //@line 3898
+     HEAP32[383] = $tsize_244_i; //@line 3899
+     HEAP32[385] = 0; //@line 3900
+     HEAP32[384] = $1354; //@line 3901
+     $1377 = $1353 + 28 | 0; //@line 3903
+     HEAP32[$1377 >> 2] = 7; //@line 3904
      if (($1353 + 32 | 0) >>> 0 < $1335 >>> 0) {
-      $1380 = $1377; //@line 3892
+      $1380 = $1377; //@line 3908
       while (1) {
-       $1381 = $1380 + 4 | 0; //@line 3895
-       HEAP32[$1381 >> 2] = 7; //@line 3896
+       $1381 = $1380 + 4 | 0; //@line 3911
+       HEAP32[$1381 >> 2] = 7; //@line 3912
        if (($1380 + 8 | 0) >>> 0 < $1335 >>> 0) {
-        $1380 = $1381; //@line 3901
+        $1380 = $1381; //@line 3917
        } else {
         break;
        }
@@ -6890,77 +6966,77 @@ function _malloc($bytes) {
      if (($1353 | 0) == ($1327 | 0)) {
       break;
      }
-     $1389 = $1353 - $890 | 0; //@line 3913
-     $1392 = $1327 + ($1389 + 4) | 0; //@line 3917
-     HEAP32[$1392 >> 2] = HEAP32[$1392 >> 2] & -2; //@line 3920
-     HEAP32[$890 + 4 >> 2] = $1389 | 1; //@line 3923
-     HEAP32[$1327 + $1389 >> 2] = $1389; //@line 3925
-     $1398 = $1389 >>> 3; //@line 3926
+     $1389 = $1353 - $890 | 0; //@line 3929
+     $1392 = $1327 + ($1389 + 4) | 0; //@line 3933
+     HEAP32[$1392 >> 2] = HEAP32[$1392 >> 2] & -2; //@line 3936
+     HEAP32[$890 + 4 >> 2] = $1389 | 1; //@line 3939
+     HEAP32[$1327 + $1389 >> 2] = $1389; //@line 3941
+     $1398 = $1389 >>> 3; //@line 3942
      if ($1389 >>> 0 < 256) {
-      $1401 = $1398 << 1; //@line 3929
-      $1403 = 968 + ($1401 << 2) | 0; //@line 3931
-      $1404 = HEAP32[232] | 0; //@line 3932
-      $1405 = 1 << $1398; //@line 3933
+      $1401 = $1398 << 1; //@line 3945
+      $1403 = 1120 + ($1401 << 2) | 0; //@line 3947
+      $1404 = HEAP32[270] | 0; //@line 3948
+      $1405 = 1 << $1398; //@line 3949
       do {
        if (($1404 & $1405 | 0) == 0) {
-        HEAP32[232] = $1404 | $1405; //@line 3939
+        HEAP32[270] = $1404 | $1405; //@line 3955
         $F_0_i_i = $1403;
-        $_pre_phi_i_i = 968 + ($1401 + 2 << 2) | 0;
+        $_pre_phi_i_i = 1120 + ($1401 + 2 << 2) | 0;
        } else {
-        $1411 = 968 + ($1401 + 2 << 2) | 0; //@line 3945
-        $1412 = HEAP32[$1411 >> 2] | 0; //@line 3946
-        if ($1412 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+        $1411 = 1120 + ($1401 + 2 << 2) | 0; //@line 3961
+        $1412 = HEAP32[$1411 >> 2] | 0; //@line 3962
+        if ($1412 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
          $F_0_i_i = $1412;
          $_pre_phi_i_i = $1411;
          break;
         }
-        _abort(); //@line 3954
-        return 0; //@line 3954
+        _abort(); //@line 3970
+        return 0; //@line 3970
        }
       } while (0);
-      HEAP32[$_pre_phi_i_i >> 2] = $890; //@line 3960
-      HEAP32[$F_0_i_i + 12 >> 2] = $890; //@line 3962
-      HEAP32[$890 + 8 >> 2] = $F_0_i_i; //@line 3964
-      HEAP32[$890 + 12 >> 2] = $1403; //@line 3966
+      HEAP32[$_pre_phi_i_i >> 2] = $890; //@line 3976
+      HEAP32[$F_0_i_i + 12 >> 2] = $890; //@line 3978
+      HEAP32[$890 + 8 >> 2] = $F_0_i_i; //@line 3980
+      HEAP32[$890 + 12 >> 2] = $1403; //@line 3982
       break;
      }
-     $1422 = $890; //@line 3969
-     $1423 = $1389 >>> 8; //@line 3970
+     $1422 = $890; //@line 3985
+     $1423 = $1389 >>> 8; //@line 3986
      do {
       if (($1423 | 0) == 0) {
-       $I1_0_i_i = 0; //@line 3974
+       $I1_0_i_i = 0; //@line 3990
       } else {
        if ($1389 >>> 0 > 16777215) {
-        $I1_0_i_i = 31; //@line 3978
+        $I1_0_i_i = 31; //@line 3994
         break;
        }
-       $1430 = ($1423 + 1048320 | 0) >>> 16 & 8; //@line 3983
-       $1431 = $1423 << $1430; //@line 3984
-       $1434 = ($1431 + 520192 | 0) >>> 16 & 4; //@line 3987
-       $1436 = $1431 << $1434; //@line 3989
-       $1439 = ($1436 + 245760 | 0) >>> 16 & 2; //@line 3992
-       $1444 = 14 - ($1434 | $1430 | $1439) + ($1436 << $1439 >>> 15) | 0; //@line 3997
-       $I1_0_i_i = $1389 >>> (($1444 + 7 | 0) >>> 0) & 1 | $1444 << 1; //@line 4003
+       $1430 = ($1423 + 1048320 | 0) >>> 16 & 8; //@line 3999
+       $1431 = $1423 << $1430; //@line 4000
+       $1434 = ($1431 + 520192 | 0) >>> 16 & 4; //@line 4003
+       $1436 = $1431 << $1434; //@line 4005
+       $1439 = ($1436 + 245760 | 0) >>> 16 & 2; //@line 4008
+       $1444 = 14 - ($1434 | $1430 | $1439) + ($1436 << $1439 >>> 15) | 0; //@line 4013
+       $I1_0_i_i = $1389 >>> (($1444 + 7 | 0) >>> 0) & 1 | $1444 << 1; //@line 4019
       }
      } while (0);
-     $1451 = 1232 + ($I1_0_i_i << 2) | 0; //@line 4007
-     HEAP32[$890 + 28 >> 2] = $I1_0_i_i; //@line 4010
-     HEAP32[$890 + 20 >> 2] = 0; //@line 4012
-     HEAP32[$890 + 16 >> 2] = 0; //@line 4014
-     $1455 = HEAP32[233] | 0; //@line 4015
-     $1456 = 1 << $I1_0_i_i; //@line 4016
+     $1451 = 1384 + ($I1_0_i_i << 2) | 0; //@line 4023
+     HEAP32[$890 + 28 >> 2] = $I1_0_i_i; //@line 4026
+     HEAP32[$890 + 20 >> 2] = 0; //@line 4028
+     HEAP32[$890 + 16 >> 2] = 0; //@line 4030
+     $1455 = HEAP32[271] | 0; //@line 4031
+     $1456 = 1 << $I1_0_i_i; //@line 4032
      if (($1455 & $1456 | 0) == 0) {
-      HEAP32[233] = $1455 | $1456; //@line 4021
-      HEAP32[$1451 >> 2] = $1422; //@line 4022
-      HEAP32[$890 + 24 >> 2] = $1451; //@line 4025
-      HEAP32[$890 + 12 >> 2] = $890; //@line 4027
-      HEAP32[$890 + 8 >> 2] = $890; //@line 4029
+      HEAP32[271] = $1455 | $1456; //@line 4037
+      HEAP32[$1451 >> 2] = $1422; //@line 4038
+      HEAP32[$890 + 24 >> 2] = $1451; //@line 4041
+      HEAP32[$890 + 12 >> 2] = $890; //@line 4043
+      HEAP32[$890 + 8 >> 2] = $890; //@line 4045
       break;
      }
      if (($I1_0_i_i | 0) == 31) {
-      $1471 = 0; //@line 4035
+      $1471 = 0; //@line 4051
      } else {
-      $1471 = 25 - ($I1_0_i_i >>> 1) | 0; //@line 4039
+      $1471 = 25 - ($I1_0_i_i >>> 1) | 0; //@line 4055
      }
      $K2_0_i_i = $1389 << $1471;
      $T_0_i_i = HEAP32[$1451 >> 2] | 0;
@@ -6968,66 +7044,66 @@ function _malloc($bytes) {
       if ((HEAP32[$T_0_i_i + 4 >> 2] & -8 | 0) == ($1389 | 0)) {
        break;
       }
-      $1480 = $T_0_i_i + 16 + ($K2_0_i_i >>> 31 << 2) | 0; //@line 4055
-      $1481 = HEAP32[$1480 >> 2] | 0; //@line 4056
+      $1480 = $T_0_i_i + 16 + ($K2_0_i_i >>> 31 << 2) | 0; //@line 4071
+      $1481 = HEAP32[$1480 >> 2] | 0; //@line 4072
       if (($1481 | 0) == 0) {
-       label = 479; //@line 4060
+       label = 482; //@line 4076
        break;
       } else {
        $K2_0_i_i = $K2_0_i_i << 1;
        $T_0_i_i = $1481;
       }
      }
-     if ((label | 0) == 479) {
-      if ($1480 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-       _abort(); //@line 4071
-       return 0; //@line 4071
+     if ((label | 0) == 482) {
+      if ($1480 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+       _abort(); //@line 4087
+       return 0; //@line 4087
       } else {
-       HEAP32[$1480 >> 2] = $1422; //@line 4074
-       HEAP32[$890 + 24 >> 2] = $T_0_i_i; //@line 4077
-       HEAP32[$890 + 12 >> 2] = $890; //@line 4079
-       HEAP32[$890 + 8 >> 2] = $890; //@line 4081
+       HEAP32[$1480 >> 2] = $1422; //@line 4090
+       HEAP32[$890 + 24 >> 2] = $T_0_i_i; //@line 4093
+       HEAP32[$890 + 12 >> 2] = $890; //@line 4095
+       HEAP32[$890 + 8 >> 2] = $890; //@line 4097
        break;
       }
      }
-     $1494 = $T_0_i_i + 8 | 0; //@line 4085
-     $1495 = HEAP32[$1494 >> 2] | 0; //@line 4086
-     $1497 = HEAP32[236] | 0; //@line 4088
+     $1494 = $T_0_i_i + 8 | 0; //@line 4101
+     $1495 = HEAP32[$1494 >> 2] | 0; //@line 4102
+     $1497 = HEAP32[274] | 0; //@line 4104
      if ($T_0_i_i >>> 0 < $1497 >>> 0) {
-      _abort(); //@line 4091
-      return 0; //@line 4091
+      _abort(); //@line 4107
+      return 0; //@line 4107
      }
      if ($1495 >>> 0 < $1497 >>> 0) {
-      _abort(); //@line 4097
-      return 0; //@line 4097
+      _abort(); //@line 4113
+      return 0; //@line 4113
      } else {
-      HEAP32[$1495 + 12 >> 2] = $1422; //@line 4101
-      HEAP32[$1494 >> 2] = $1422; //@line 4102
-      HEAP32[$890 + 8 >> 2] = $1495; //@line 4105
-      HEAP32[$890 + 12 >> 2] = $T_0_i_i; //@line 4108
-      HEAP32[$890 + 24 >> 2] = 0; //@line 4110
+      HEAP32[$1495 + 12 >> 2] = $1422; //@line 4117
+      HEAP32[$1494 >> 2] = $1422; //@line 4118
+      HEAP32[$890 + 8 >> 2] = $1495; //@line 4121
+      HEAP32[$890 + 12 >> 2] = $T_0_i_i; //@line 4124
+      HEAP32[$890 + 24 >> 2] = 0; //@line 4126
       break;
      }
     }
    } while (0);
-   $1507 = HEAP32[235] | 0; //@line 4115
+   $1507 = HEAP32[273] | 0; //@line 4131
    if ($1507 >>> 0 <= $nb_0 >>> 0) {
     break;
    }
-   $1510 = $1507 - $nb_0 | 0; //@line 4120
-   HEAP32[235] = $1510; //@line 4121
-   $1511 = HEAP32[238] | 0; //@line 4122
-   $1512 = $1511; //@line 4123
-   HEAP32[238] = $1512 + $nb_0; //@line 4126
-   HEAP32[$1512 + ($nb_0 + 4) >> 2] = $1510 | 1; //@line 4131
-   HEAP32[$1511 + 4 >> 2] = $nb_0 | 3; //@line 4134
-   $mem_0 = $1511 + 8 | 0; //@line 4137
-   return $mem_0 | 0; //@line 4140
+   $1510 = $1507 - $nb_0 | 0; //@line 4136
+   HEAP32[273] = $1510; //@line 4137
+   $1511 = HEAP32[276] | 0; //@line 4138
+   $1512 = $1511; //@line 4139
+   HEAP32[276] = $1512 + $nb_0; //@line 4142
+   HEAP32[$1512 + ($nb_0 + 4) >> 2] = $1510 | 1; //@line 4147
+   HEAP32[$1511 + 4 >> 2] = $nb_0 | 3; //@line 4150
+   $mem_0 = $1511 + 8 | 0; //@line 4153
+   return $mem_0 | 0; //@line 4156
   }
  } while (0);
- HEAP32[(___errno_location() | 0) >> 2] = 12; //@line 4144
- $mem_0 = 0; //@line 4145
- return $mem_0 | 0; //@line 4148
+ HEAP32[(___errno_location() | 0) >> 2] = 12; //@line 4160
+ $mem_0 = 0; //@line 4161
+ return $mem_0 | 0; //@line 4164
 }
 function _free($mem) {
  $mem = $mem | 0;
@@ -7035,101 +7111,101 @@ function _free($mem) {
  if (($mem | 0) == 0) {
   return;
  }
- $3 = $mem - 8 | 0; //@line 4216
- $4 = $3; //@line 4217
- $5 = HEAP32[236] | 0; //@line 4218
+ $3 = $mem - 8 | 0; //@line 4232
+ $4 = $3; //@line 4233
+ $5 = HEAP32[274] | 0; //@line 4234
  if ($3 >>> 0 < $5 >>> 0) {
-  _abort(); //@line 4221
+  _abort(); //@line 4237
  }
- $10 = HEAP32[$mem - 4 >> 2] | 0; //@line 4226
- $11 = $10 & 3; //@line 4227
+ $10 = HEAP32[$mem - 4 >> 2] | 0; //@line 4242
+ $11 = $10 & 3; //@line 4243
  if (($11 | 0) == 1) {
-  _abort(); //@line 4230
+  _abort(); //@line 4246
  }
- $14 = $10 & -8; //@line 4233
- $15 = $mem + ($14 - 8) | 0; //@line 4235
- $16 = $15; //@line 4236
- L727 : do {
+ $14 = $10 & -8; //@line 4249
+ $15 = $mem + ($14 - 8) | 0; //@line 4251
+ $16 = $15; //@line 4252
+ L729 : do {
   if (($10 & 1 | 0) == 0) {
-   $21 = HEAP32[$3 >> 2] | 0; //@line 4242
+   $21 = HEAP32[$3 >> 2] | 0; //@line 4258
    if (($11 | 0) == 0) {
     return;
    }
-   $_sum232 = -8 - $21 | 0; //@line 4248
-   $24 = $mem + $_sum232 | 0; //@line 4249
-   $25 = $24; //@line 4250
-   $26 = $21 + $14 | 0; //@line 4251
+   $_sum232 = -8 - $21 | 0; //@line 4264
+   $24 = $mem + $_sum232 | 0; //@line 4265
+   $25 = $24; //@line 4266
+   $26 = $21 + $14 | 0; //@line 4267
    if ($24 >>> 0 < $5 >>> 0) {
-    _abort(); //@line 4254
+    _abort(); //@line 4270
    }
-   if (($25 | 0) == (HEAP32[237] | 0)) {
-    $177 = $mem + ($14 - 4) | 0; //@line 4262
+   if (($25 | 0) == (HEAP32[275] | 0)) {
+    $177 = $mem + ($14 - 4) | 0; //@line 4278
     if ((HEAP32[$177 >> 2] & 3 | 0) != 3) {
      $p_0 = $25;
      $psize_0 = $26;
      break;
     }
-    HEAP32[234] = $26; //@line 4270
-    HEAP32[$177 >> 2] = HEAP32[$177 >> 2] & -2; //@line 4273
-    HEAP32[$mem + ($_sum232 + 4) >> 2] = $26 | 1; //@line 4278
-    HEAP32[$15 >> 2] = $26; //@line 4280
+    HEAP32[272] = $26; //@line 4286
+    HEAP32[$177 >> 2] = HEAP32[$177 >> 2] & -2; //@line 4289
+    HEAP32[$mem + ($_sum232 + 4) >> 2] = $26 | 1; //@line 4294
+    HEAP32[$15 >> 2] = $26; //@line 4296
     return;
    }
-   $32 = $21 >>> 3; //@line 4284
+   $32 = $21 >>> 3; //@line 4300
    if ($21 >>> 0 < 256) {
-    $37 = HEAP32[$mem + ($_sum232 + 8) >> 2] | 0; //@line 4290
-    $40 = HEAP32[$mem + ($_sum232 + 12) >> 2] | 0; //@line 4294
-    $43 = 968 + ($32 << 1 << 2) | 0; //@line 4297
+    $37 = HEAP32[$mem + ($_sum232 + 8) >> 2] | 0; //@line 4306
+    $40 = HEAP32[$mem + ($_sum232 + 12) >> 2] | 0; //@line 4310
+    $43 = 1120 + ($32 << 1 << 2) | 0; //@line 4313
     do {
      if (($37 | 0) != ($43 | 0)) {
       if ($37 >>> 0 < $5 >>> 0) {
-       _abort(); //@line 4304
+       _abort(); //@line 4320
       }
       if ((HEAP32[$37 + 12 >> 2] | 0) == ($25 | 0)) {
        break;
       }
-      _abort(); //@line 4313
+      _abort(); //@line 4329
      }
     } while (0);
     if (($40 | 0) == ($37 | 0)) {
-     HEAP32[232] = HEAP32[232] & ~(1 << $32); //@line 4323
+     HEAP32[270] = HEAP32[270] & ~(1 << $32); //@line 4339
      $p_0 = $25;
      $psize_0 = $26;
      break;
     }
     do {
      if (($40 | 0) == ($43 | 0)) {
-      $_pre_phi306 = $40 + 8 | 0; //@line 4331
+      $_pre_phi306 = $40 + 8 | 0; //@line 4347
      } else {
       if ($40 >>> 0 < $5 >>> 0) {
-       _abort(); //@line 4336
+       _abort(); //@line 4352
       }
-      $64 = $40 + 8 | 0; //@line 4339
+      $64 = $40 + 8 | 0; //@line 4355
       if ((HEAP32[$64 >> 2] | 0) == ($25 | 0)) {
-       $_pre_phi306 = $64; //@line 4343
+       $_pre_phi306 = $64; //@line 4359
        break;
       }
-      _abort(); //@line 4346
+      _abort(); //@line 4362
      }
     } while (0);
-    HEAP32[$37 + 12 >> 2] = $40; //@line 4352
-    HEAP32[$_pre_phi306 >> 2] = $37; //@line 4353
+    HEAP32[$37 + 12 >> 2] = $40; //@line 4368
+    HEAP32[$_pre_phi306 >> 2] = $37; //@line 4369
     $p_0 = $25;
     $psize_0 = $26;
     break;
    }
-   $69 = $24; //@line 4357
-   $72 = HEAP32[$mem + ($_sum232 + 24) >> 2] | 0; //@line 4361
-   $75 = HEAP32[$mem + ($_sum232 + 12) >> 2] | 0; //@line 4365
+   $69 = $24; //@line 4373
+   $72 = HEAP32[$mem + ($_sum232 + 24) >> 2] | 0; //@line 4377
+   $75 = HEAP32[$mem + ($_sum232 + 12) >> 2] | 0; //@line 4381
    do {
     if (($75 | 0) == ($69 | 0)) {
-     $94 = $mem + ($_sum232 + 20) | 0; //@line 4371
-     $95 = HEAP32[$94 >> 2] | 0; //@line 4372
+     $94 = $mem + ($_sum232 + 20) | 0; //@line 4387
+     $95 = HEAP32[$94 >> 2] | 0; //@line 4388
      if (($95 | 0) == 0) {
-      $99 = $mem + ($_sum232 + 16) | 0; //@line 4377
-      $100 = HEAP32[$99 >> 2] | 0; //@line 4378
+      $99 = $mem + ($_sum232 + 16) | 0; //@line 4393
+      $100 = HEAP32[$99 >> 2] | 0; //@line 4394
       if (($100 | 0) == 0) {
-       $R_1 = 0; //@line 4381
+       $R_1 = 0; //@line 4397
        break;
       } else {
        $R_0 = $100;
@@ -7140,15 +7216,15 @@ function _free($mem) {
       $RP_0 = $94;
      }
      while (1) {
-      $102 = $R_0 + 20 | 0; //@line 4392
-      $103 = HEAP32[$102 >> 2] | 0; //@line 4393
+      $102 = $R_0 + 20 | 0; //@line 4408
+      $103 = HEAP32[$102 >> 2] | 0; //@line 4409
       if (($103 | 0) != 0) {
        $R_0 = $103;
        $RP_0 = $102;
        continue;
       }
-      $106 = $R_0 + 16 | 0; //@line 4399
-      $107 = HEAP32[$106 >> 2] | 0; //@line 4400
+      $106 = $R_0 + 16 | 0; //@line 4415
+      $107 = HEAP32[$106 >> 2] | 0; //@line 4416
       if (($107 | 0) == 0) {
        break;
       } else {
@@ -7157,29 +7233,29 @@ function _free($mem) {
       }
      }
      if ($RP_0 >>> 0 < $5 >>> 0) {
-      _abort(); //@line 4411
+      _abort(); //@line 4427
      } else {
-      HEAP32[$RP_0 >> 2] = 0; //@line 4414
-      $R_1 = $R_0; //@line 4415
+      HEAP32[$RP_0 >> 2] = 0; //@line 4430
+      $R_1 = $R_0; //@line 4431
       break;
      }
     } else {
-     $80 = HEAP32[$mem + ($_sum232 + 8) >> 2] | 0; //@line 4422
+     $80 = HEAP32[$mem + ($_sum232 + 8) >> 2] | 0; //@line 4438
      if ($80 >>> 0 < $5 >>> 0) {
-      _abort(); //@line 4426
+      _abort(); //@line 4442
      }
-     $84 = $80 + 12 | 0; //@line 4429
+     $84 = $80 + 12 | 0; //@line 4445
      if ((HEAP32[$84 >> 2] | 0) != ($69 | 0)) {
-      _abort(); //@line 4433
+      _abort(); //@line 4449
      }
-     $88 = $75 + 8 | 0; //@line 4436
+     $88 = $75 + 8 | 0; //@line 4452
      if ((HEAP32[$88 >> 2] | 0) == ($69 | 0)) {
-      HEAP32[$84 >> 2] = $75; //@line 4440
-      HEAP32[$88 >> 2] = $80; //@line 4441
-      $R_1 = $75; //@line 4442
+      HEAP32[$84 >> 2] = $75; //@line 4456
+      HEAP32[$88 >> 2] = $80; //@line 4457
+      $R_1 = $75; //@line 4458
       break;
      } else {
-      _abort(); //@line 4445
+      _abort(); //@line 4461
      }
     }
    } while (0);
@@ -7188,62 +7264,62 @@ function _free($mem) {
     $psize_0 = $26;
     break;
    }
-   $118 = $mem + ($_sum232 + 28) | 0; //@line 4458
-   $120 = 1232 + (HEAP32[$118 >> 2] << 2) | 0; //@line 4460
+   $118 = $mem + ($_sum232 + 28) | 0; //@line 4474
+   $120 = 1384 + (HEAP32[$118 >> 2] << 2) | 0; //@line 4476
    do {
     if (($69 | 0) == (HEAP32[$120 >> 2] | 0)) {
-     HEAP32[$120 >> 2] = $R_1; //@line 4465
+     HEAP32[$120 >> 2] = $R_1; //@line 4481
      if (($R_1 | 0) != 0) {
       break;
      }
-     HEAP32[233] = HEAP32[233] & ~(1 << HEAP32[$118 >> 2]); //@line 4475
+     HEAP32[271] = HEAP32[271] & ~(1 << HEAP32[$118 >> 2]); //@line 4491
      $p_0 = $25;
      $psize_0 = $26;
-     break L727;
+     break L729;
     } else {
-     if ($72 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 4483
+     if ($72 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 4499
      }
-     $134 = $72 + 16 | 0; //@line 4486
+     $134 = $72 + 16 | 0; //@line 4502
      if ((HEAP32[$134 >> 2] | 0) == ($69 | 0)) {
-      HEAP32[$134 >> 2] = $R_1; //@line 4490
+      HEAP32[$134 >> 2] = $R_1; //@line 4506
      } else {
-      HEAP32[$72 + 20 >> 2] = $R_1; //@line 4493
+      HEAP32[$72 + 20 >> 2] = $R_1; //@line 4509
      }
      if (($R_1 | 0) == 0) {
       $p_0 = $25;
       $psize_0 = $26;
-      break L727;
+      break L729;
      }
     }
    } while (0);
-   if ($R_1 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-    _abort(); //@line 4506
+   if ($R_1 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+    _abort(); //@line 4522
    }
-   HEAP32[$R_1 + 24 >> 2] = $72; //@line 4510
-   $151 = HEAP32[$mem + ($_sum232 + 16) >> 2] | 0; //@line 4514
+   HEAP32[$R_1 + 24 >> 2] = $72; //@line 4526
+   $151 = HEAP32[$mem + ($_sum232 + 16) >> 2] | 0; //@line 4530
    do {
     if (($151 | 0) != 0) {
-     if ($151 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 4522
+     if ($151 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 4538
      } else {
-      HEAP32[$R_1 + 16 >> 2] = $151; //@line 4526
-      HEAP32[$151 + 24 >> 2] = $R_1; //@line 4528
+      HEAP32[$R_1 + 16 >> 2] = $151; //@line 4542
+      HEAP32[$151 + 24 >> 2] = $R_1; //@line 4544
       break;
      }
     }
    } while (0);
-   $164 = HEAP32[$mem + ($_sum232 + 20) >> 2] | 0; //@line 4536
+   $164 = HEAP32[$mem + ($_sum232 + 20) >> 2] | 0; //@line 4552
    if (($164 | 0) == 0) {
     $p_0 = $25;
     $psize_0 = $26;
     break;
    }
-   if ($164 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-    _abort(); //@line 4546
+   if ($164 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+    _abort(); //@line 4562
    } else {
-    HEAP32[$R_1 + 20 >> 2] = $164; //@line 4550
-    HEAP32[$164 + 24 >> 2] = $R_1; //@line 4552
+    HEAP32[$R_1 + 20 >> 2] = $164; //@line 4566
+    HEAP32[$164 + 24 >> 2] = $R_1; //@line 4568
     $p_0 = $25;
     $psize_0 = $26;
     break;
@@ -7253,89 +7329,89 @@ function _free($mem) {
    $psize_0 = $14;
   }
  } while (0);
- $189 = $p_0; //@line 4562
+ $189 = $p_0; //@line 4578
  if ($189 >>> 0 >= $15 >>> 0) {
-  _abort(); //@line 4565
+  _abort(); //@line 4581
  }
- $193 = $mem + ($14 - 4) | 0; //@line 4570
- $194 = HEAP32[$193 >> 2] | 0; //@line 4571
+ $193 = $mem + ($14 - 4) | 0; //@line 4586
+ $194 = HEAP32[$193 >> 2] | 0; //@line 4587
  if (($194 & 1 | 0) == 0) {
-  _abort(); //@line 4575
+  _abort(); //@line 4591
  }
  do {
   if (($194 & 2 | 0) == 0) {
-   if (($16 | 0) == (HEAP32[238] | 0)) {
-    $204 = (HEAP32[235] | 0) + $psize_0 | 0; //@line 4586
-    HEAP32[235] = $204; //@line 4587
-    HEAP32[238] = $p_0; //@line 4588
-    HEAP32[$p_0 + 4 >> 2] = $204 | 1; //@line 4591
-    if (($p_0 | 0) != (HEAP32[237] | 0)) {
+   if (($16 | 0) == (HEAP32[276] | 0)) {
+    $204 = (HEAP32[273] | 0) + $psize_0 | 0; //@line 4602
+    HEAP32[273] = $204; //@line 4603
+    HEAP32[276] = $p_0; //@line 4604
+    HEAP32[$p_0 + 4 >> 2] = $204 | 1; //@line 4607
+    if (($p_0 | 0) != (HEAP32[275] | 0)) {
      return;
     }
-    HEAP32[237] = 0; //@line 4598
-    HEAP32[234] = 0; //@line 4599
+    HEAP32[275] = 0; //@line 4614
+    HEAP32[272] = 0; //@line 4615
     return;
    }
-   if (($16 | 0) == (HEAP32[237] | 0)) {
-    $215 = (HEAP32[234] | 0) + $psize_0 | 0; //@line 4607
-    HEAP32[234] = $215; //@line 4608
-    HEAP32[237] = $p_0; //@line 4609
-    HEAP32[$p_0 + 4 >> 2] = $215 | 1; //@line 4612
-    HEAP32[$189 + $215 >> 2] = $215; //@line 4615
+   if (($16 | 0) == (HEAP32[275] | 0)) {
+    $215 = (HEAP32[272] | 0) + $psize_0 | 0; //@line 4623
+    HEAP32[272] = $215; //@line 4624
+    HEAP32[275] = $p_0; //@line 4625
+    HEAP32[$p_0 + 4 >> 2] = $215 | 1; //@line 4628
+    HEAP32[$189 + $215 >> 2] = $215; //@line 4631
     return;
    }
-   $222 = ($194 & -8) + $psize_0 | 0; //@line 4620
-   $223 = $194 >>> 3; //@line 4621
-   L829 : do {
+   $222 = ($194 & -8) + $psize_0 | 0; //@line 4636
+   $223 = $194 >>> 3; //@line 4637
+   L831 : do {
     if ($194 >>> 0 < 256) {
-     $228 = HEAP32[$mem + $14 >> 2] | 0; //@line 4627
-     $231 = HEAP32[$mem + ($14 | 4) >> 2] | 0; //@line 4631
-     $234 = 968 + ($223 << 1 << 2) | 0; //@line 4634
+     $228 = HEAP32[$mem + $14 >> 2] | 0; //@line 4643
+     $231 = HEAP32[$mem + ($14 | 4) >> 2] | 0; //@line 4647
+     $234 = 1120 + ($223 << 1 << 2) | 0; //@line 4650
      do {
       if (($228 | 0) != ($234 | 0)) {
-       if ($228 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4642
+       if ($228 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4658
        }
        if ((HEAP32[$228 + 12 >> 2] | 0) == ($16 | 0)) {
         break;
        }
-       _abort(); //@line 4651
+       _abort(); //@line 4667
       }
      } while (0);
      if (($231 | 0) == ($228 | 0)) {
-      HEAP32[232] = HEAP32[232] & ~(1 << $223); //@line 4661
+      HEAP32[270] = HEAP32[270] & ~(1 << $223); //@line 4677
       break;
      }
      do {
       if (($231 | 0) == ($234 | 0)) {
-       $_pre_phi304 = $231 + 8 | 0; //@line 4668
+       $_pre_phi304 = $231 + 8 | 0; //@line 4684
       } else {
-       if ($231 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4674
+       if ($231 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4690
        }
-       $257 = $231 + 8 | 0; //@line 4677
+       $257 = $231 + 8 | 0; //@line 4693
        if ((HEAP32[$257 >> 2] | 0) == ($16 | 0)) {
-        $_pre_phi304 = $257; //@line 4681
+        $_pre_phi304 = $257; //@line 4697
         break;
        }
-       _abort(); //@line 4684
+       _abort(); //@line 4700
       }
      } while (0);
-     HEAP32[$228 + 12 >> 2] = $231; //@line 4690
-     HEAP32[$_pre_phi304 >> 2] = $228; //@line 4691
+     HEAP32[$228 + 12 >> 2] = $231; //@line 4706
+     HEAP32[$_pre_phi304 >> 2] = $228; //@line 4707
     } else {
-     $262 = $15; //@line 4693
-     $265 = HEAP32[$mem + ($14 + 16) >> 2] | 0; //@line 4697
-     $268 = HEAP32[$mem + ($14 | 4) >> 2] | 0; //@line 4701
+     $262 = $15; //@line 4709
+     $265 = HEAP32[$mem + ($14 + 16) >> 2] | 0; //@line 4713
+     $268 = HEAP32[$mem + ($14 | 4) >> 2] | 0; //@line 4717
      do {
       if (($268 | 0) == ($262 | 0)) {
-       $288 = $mem + ($14 + 12) | 0; //@line 4707
-       $289 = HEAP32[$288 >> 2] | 0; //@line 4708
+       $288 = $mem + ($14 + 12) | 0; //@line 4723
+       $289 = HEAP32[$288 >> 2] | 0; //@line 4724
        if (($289 | 0) == 0) {
-        $293 = $mem + ($14 + 8) | 0; //@line 4713
-        $294 = HEAP32[$293 >> 2] | 0; //@line 4714
+        $293 = $mem + ($14 + 8) | 0; //@line 4729
+        $294 = HEAP32[$293 >> 2] | 0; //@line 4730
         if (($294 | 0) == 0) {
-         $R7_1 = 0; //@line 4717
+         $R7_1 = 0; //@line 4733
          break;
         } else {
          $R7_0 = $294;
@@ -7346,15 +7422,15 @@ function _free($mem) {
         $RP9_0 = $288;
        }
        while (1) {
-        $296 = $R7_0 + 20 | 0; //@line 4728
-        $297 = HEAP32[$296 >> 2] | 0; //@line 4729
+        $296 = $R7_0 + 20 | 0; //@line 4744
+        $297 = HEAP32[$296 >> 2] | 0; //@line 4745
         if (($297 | 0) != 0) {
          $R7_0 = $297;
          $RP9_0 = $296;
          continue;
         }
-        $300 = $R7_0 + 16 | 0; //@line 4735
-        $301 = HEAP32[$300 >> 2] | 0; //@line 4736
+        $300 = $R7_0 + 16 | 0; //@line 4751
+        $301 = HEAP32[$300 >> 2] | 0; //@line 4752
         if (($301 | 0) == 0) {
          break;
         } else {
@@ -7362,170 +7438,170 @@ function _free($mem) {
          $RP9_0 = $300;
         }
        }
-       if ($RP9_0 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4748
+       if ($RP9_0 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4764
        } else {
-        HEAP32[$RP9_0 >> 2] = 0; //@line 4751
-        $R7_1 = $R7_0; //@line 4752
+        HEAP32[$RP9_0 >> 2] = 0; //@line 4767
+        $R7_1 = $R7_0; //@line 4768
         break;
        }
       } else {
-       $273 = HEAP32[$mem + $14 >> 2] | 0; //@line 4758
-       if ($273 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4763
+       $273 = HEAP32[$mem + $14 >> 2] | 0; //@line 4774
+       if ($273 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4779
        }
-       $278 = $273 + 12 | 0; //@line 4766
+       $278 = $273 + 12 | 0; //@line 4782
        if ((HEAP32[$278 >> 2] | 0) != ($262 | 0)) {
-        _abort(); //@line 4770
+        _abort(); //@line 4786
        }
-       $282 = $268 + 8 | 0; //@line 4773
+       $282 = $268 + 8 | 0; //@line 4789
        if ((HEAP32[$282 >> 2] | 0) == ($262 | 0)) {
-        HEAP32[$278 >> 2] = $268; //@line 4777
-        HEAP32[$282 >> 2] = $273; //@line 4778
-        $R7_1 = $268; //@line 4779
+        HEAP32[$278 >> 2] = $268; //@line 4793
+        HEAP32[$282 >> 2] = $273; //@line 4794
+        $R7_1 = $268; //@line 4795
         break;
        } else {
-        _abort(); //@line 4782
+        _abort(); //@line 4798
        }
       }
      } while (0);
      if (($265 | 0) == 0) {
       break;
      }
-     $313 = $mem + ($14 + 20) | 0; //@line 4794
-     $315 = 1232 + (HEAP32[$313 >> 2] << 2) | 0; //@line 4796
+     $313 = $mem + ($14 + 20) | 0; //@line 4810
+     $315 = 1384 + (HEAP32[$313 >> 2] << 2) | 0; //@line 4812
      do {
       if (($262 | 0) == (HEAP32[$315 >> 2] | 0)) {
-       HEAP32[$315 >> 2] = $R7_1; //@line 4801
+       HEAP32[$315 >> 2] = $R7_1; //@line 4817
        if (($R7_1 | 0) != 0) {
         break;
        }
-       HEAP32[233] = HEAP32[233] & ~(1 << HEAP32[$313 >> 2]); //@line 4811
-       break L829;
+       HEAP32[271] = HEAP32[271] & ~(1 << HEAP32[$313 >> 2]); //@line 4827
+       break L831;
       } else {
-       if ($265 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4818
+       if ($265 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4834
        }
-       $329 = $265 + 16 | 0; //@line 4821
+       $329 = $265 + 16 | 0; //@line 4837
        if ((HEAP32[$329 >> 2] | 0) == ($262 | 0)) {
-        HEAP32[$329 >> 2] = $R7_1; //@line 4825
+        HEAP32[$329 >> 2] = $R7_1; //@line 4841
        } else {
-        HEAP32[$265 + 20 >> 2] = $R7_1; //@line 4828
+        HEAP32[$265 + 20 >> 2] = $R7_1; //@line 4844
        }
        if (($R7_1 | 0) == 0) {
-        break L829;
+        break L831;
        }
       }
      } while (0);
-     if ($R7_1 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 4840
+     if ($R7_1 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 4856
      }
-     HEAP32[$R7_1 + 24 >> 2] = $265; //@line 4844
-     $346 = HEAP32[$mem + ($14 + 8) >> 2] | 0; //@line 4848
+     HEAP32[$R7_1 + 24 >> 2] = $265; //@line 4860
+     $346 = HEAP32[$mem + ($14 + 8) >> 2] | 0; //@line 4864
      do {
       if (($346 | 0) != 0) {
-       if ($346 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-        _abort(); //@line 4856
+       if ($346 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+        _abort(); //@line 4872
        } else {
-        HEAP32[$R7_1 + 16 >> 2] = $346; //@line 4860
-        HEAP32[$346 + 24 >> 2] = $R7_1; //@line 4862
+        HEAP32[$R7_1 + 16 >> 2] = $346; //@line 4876
+        HEAP32[$346 + 24 >> 2] = $R7_1; //@line 4878
         break;
        }
       }
      } while (0);
-     $359 = HEAP32[$mem + ($14 + 12) >> 2] | 0; //@line 4870
+     $359 = HEAP32[$mem + ($14 + 12) >> 2] | 0; //@line 4886
      if (($359 | 0) == 0) {
       break;
      }
-     if ($359 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-      _abort(); //@line 4879
+     if ($359 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+      _abort(); //@line 4895
      } else {
-      HEAP32[$R7_1 + 20 >> 2] = $359; //@line 4883
-      HEAP32[$359 + 24 >> 2] = $R7_1; //@line 4885
+      HEAP32[$R7_1 + 20 >> 2] = $359; //@line 4899
+      HEAP32[$359 + 24 >> 2] = $R7_1; //@line 4901
       break;
      }
     }
    } while (0);
-   HEAP32[$p_0 + 4 >> 2] = $222 | 1; //@line 4892
-   HEAP32[$189 + $222 >> 2] = $222; //@line 4895
-   if (($p_0 | 0) != (HEAP32[237] | 0)) {
-    $psize_1 = $222; //@line 4899
+   HEAP32[$p_0 + 4 >> 2] = $222 | 1; //@line 4908
+   HEAP32[$189 + $222 >> 2] = $222; //@line 4911
+   if (($p_0 | 0) != (HEAP32[275] | 0)) {
+    $psize_1 = $222; //@line 4915
     break;
    }
-   HEAP32[234] = $222; //@line 4902
+   HEAP32[272] = $222; //@line 4918
    return;
   } else {
-   HEAP32[$193 >> 2] = $194 & -2; //@line 4907
-   HEAP32[$p_0 + 4 >> 2] = $psize_0 | 1; //@line 4910
-   HEAP32[$189 + $psize_0 >> 2] = $psize_0; //@line 4913
-   $psize_1 = $psize_0; //@line 4914
+   HEAP32[$193 >> 2] = $194 & -2; //@line 4923
+   HEAP32[$p_0 + 4 >> 2] = $psize_0 | 1; //@line 4926
+   HEAP32[$189 + $psize_0 >> 2] = $psize_0; //@line 4929
+   $psize_1 = $psize_0; //@line 4930
   }
  } while (0);
- $385 = $psize_1 >>> 3; //@line 4918
+ $385 = $psize_1 >>> 3; //@line 4934
  if ($psize_1 >>> 0 < 256) {
-  $388 = $385 << 1; //@line 4921
-  $390 = 968 + ($388 << 2) | 0; //@line 4923
-  $391 = HEAP32[232] | 0; //@line 4924
-  $392 = 1 << $385; //@line 4925
+  $388 = $385 << 1; //@line 4937
+  $390 = 1120 + ($388 << 2) | 0; //@line 4939
+  $391 = HEAP32[270] | 0; //@line 4940
+  $392 = 1 << $385; //@line 4941
   do {
    if (($391 & $392 | 0) == 0) {
-    HEAP32[232] = $391 | $392; //@line 4931
+    HEAP32[270] = $391 | $392; //@line 4947
     $F16_0 = $390;
-    $_pre_phi = 968 + ($388 + 2 << 2) | 0;
+    $_pre_phi = 1120 + ($388 + 2 << 2) | 0;
    } else {
-    $398 = 968 + ($388 + 2 << 2) | 0; //@line 4937
-    $399 = HEAP32[$398 >> 2] | 0; //@line 4938
-    if ($399 >>> 0 >= (HEAP32[236] | 0) >>> 0) {
+    $398 = 1120 + ($388 + 2 << 2) | 0; //@line 4953
+    $399 = HEAP32[$398 >> 2] | 0; //@line 4954
+    if ($399 >>> 0 >= (HEAP32[274] | 0) >>> 0) {
      $F16_0 = $399;
      $_pre_phi = $398;
      break;
     }
-    _abort(); //@line 4946
+    _abort(); //@line 4962
    }
   } while (0);
-  HEAP32[$_pre_phi >> 2] = $p_0; //@line 4952
-  HEAP32[$F16_0 + 12 >> 2] = $p_0; //@line 4954
-  HEAP32[$p_0 + 8 >> 2] = $F16_0; //@line 4956
-  HEAP32[$p_0 + 12 >> 2] = $390; //@line 4958
+  HEAP32[$_pre_phi >> 2] = $p_0; //@line 4968
+  HEAP32[$F16_0 + 12 >> 2] = $p_0; //@line 4970
+  HEAP32[$p_0 + 8 >> 2] = $F16_0; //@line 4972
+  HEAP32[$p_0 + 12 >> 2] = $390; //@line 4974
   return;
  }
- $409 = $p_0; //@line 4962
- $410 = $psize_1 >>> 8; //@line 4963
+ $409 = $p_0; //@line 4978
+ $410 = $psize_1 >>> 8; //@line 4979
  do {
   if (($410 | 0) == 0) {
-   $I18_0 = 0; //@line 4967
+   $I18_0 = 0; //@line 4983
   } else {
    if ($psize_1 >>> 0 > 16777215) {
-    $I18_0 = 31; //@line 4971
+    $I18_0 = 31; //@line 4987
     break;
    }
-   $417 = ($410 + 1048320 | 0) >>> 16 & 8; //@line 4976
-   $418 = $410 << $417; //@line 4977
-   $421 = ($418 + 520192 | 0) >>> 16 & 4; //@line 4980
-   $423 = $418 << $421; //@line 4982
-   $426 = ($423 + 245760 | 0) >>> 16 & 2; //@line 4985
-   $431 = 14 - ($421 | $417 | $426) + ($423 << $426 >>> 15) | 0; //@line 4990
-   $I18_0 = $psize_1 >>> (($431 + 7 | 0) >>> 0) & 1 | $431 << 1; //@line 4996
+   $417 = ($410 + 1048320 | 0) >>> 16 & 8; //@line 4992
+   $418 = $410 << $417; //@line 4993
+   $421 = ($418 + 520192 | 0) >>> 16 & 4; //@line 4996
+   $423 = $418 << $421; //@line 4998
+   $426 = ($423 + 245760 | 0) >>> 16 & 2; //@line 5001
+   $431 = 14 - ($421 | $417 | $426) + ($423 << $426 >>> 15) | 0; //@line 5006
+   $I18_0 = $psize_1 >>> (($431 + 7 | 0) >>> 0) & 1 | $431 << 1; //@line 5012
   }
  } while (0);
- $438 = 1232 + ($I18_0 << 2) | 0; //@line 5000
- HEAP32[$p_0 + 28 >> 2] = $I18_0; //@line 5003
- HEAP32[$p_0 + 20 >> 2] = 0; //@line 5005
- HEAP32[$p_0 + 16 >> 2] = 0; //@line 5007
- $442 = HEAP32[233] | 0; //@line 5008
- $443 = 1 << $I18_0; //@line 5009
+ $438 = 1384 + ($I18_0 << 2) | 0; //@line 5016
+ HEAP32[$p_0 + 28 >> 2] = $I18_0; //@line 5019
+ HEAP32[$p_0 + 20 >> 2] = 0; //@line 5021
+ HEAP32[$p_0 + 16 >> 2] = 0; //@line 5023
+ $442 = HEAP32[271] | 0; //@line 5024
+ $443 = 1 << $I18_0; //@line 5025
  do {
   if (($442 & $443 | 0) == 0) {
-   HEAP32[233] = $442 | $443; //@line 5015
-   HEAP32[$438 >> 2] = $409; //@line 5016
-   HEAP32[$p_0 + 24 >> 2] = $438; //@line 5019
-   HEAP32[$p_0 + 12 >> 2] = $p_0; //@line 5021
-   HEAP32[$p_0 + 8 >> 2] = $p_0; //@line 5023
+   HEAP32[271] = $442 | $443; //@line 5031
+   HEAP32[$438 >> 2] = $409; //@line 5032
+   HEAP32[$p_0 + 24 >> 2] = $438; //@line 5035
+   HEAP32[$p_0 + 12 >> 2] = $p_0; //@line 5037
+   HEAP32[$p_0 + 8 >> 2] = $p_0; //@line 5039
   } else {
    if (($I18_0 | 0) == 31) {
-    $458 = 0; //@line 5028
+    $458 = 0; //@line 5044
    } else {
-    $458 = 25 - ($I18_0 >>> 1) | 0; //@line 5032
+    $458 = 25 - ($I18_0 >>> 1) | 0; //@line 5048
    }
    $K19_0 = $psize_1 << $458;
    $T_0 = HEAP32[$438 >> 2] | 0;
@@ -7533,442 +7609,253 @@ function _free($mem) {
     if ((HEAP32[$T_0 + 4 >> 2] & -8 | 0) == ($psize_1 | 0)) {
      break;
     }
-    $467 = $T_0 + 16 + ($K19_0 >>> 31 << 2) | 0; //@line 5048
-    $468 = HEAP32[$467 >> 2] | 0; //@line 5049
+    $467 = $T_0 + 16 + ($K19_0 >>> 31 << 2) | 0; //@line 5064
+    $468 = HEAP32[$467 >> 2] | 0; //@line 5065
     if (($468 | 0) == 0) {
-     label = 656; //@line 5053
+     label = 659; //@line 5069
      break;
     } else {
      $K19_0 = $K19_0 << 1;
      $T_0 = $468;
     }
    }
-   if ((label | 0) == 656) {
-    if ($467 >>> 0 < (HEAP32[236] | 0) >>> 0) {
-     _abort(); //@line 5064
+   if ((label | 0) == 659) {
+    if ($467 >>> 0 < (HEAP32[274] | 0) >>> 0) {
+     _abort(); //@line 5080
     } else {
-     HEAP32[$467 >> 2] = $409; //@line 5067
-     HEAP32[$p_0 + 24 >> 2] = $T_0; //@line 5070
-     HEAP32[$p_0 + 12 >> 2] = $p_0; //@line 5072
-     HEAP32[$p_0 + 8 >> 2] = $p_0; //@line 5074
+     HEAP32[$467 >> 2] = $409; //@line 5083
+     HEAP32[$p_0 + 24 >> 2] = $T_0; //@line 5086
+     HEAP32[$p_0 + 12 >> 2] = $p_0; //@line 5088
+     HEAP32[$p_0 + 8 >> 2] = $p_0; //@line 5090
      break;
     }
    }
-   $481 = $T_0 + 8 | 0; //@line 5078
-   $482 = HEAP32[$481 >> 2] | 0; //@line 5079
-   $484 = HEAP32[236] | 0; //@line 5081
+   $481 = $T_0 + 8 | 0; //@line 5094
+   $482 = HEAP32[$481 >> 2] | 0; //@line 5095
+   $484 = HEAP32[274] | 0; //@line 5097
    if ($T_0 >>> 0 < $484 >>> 0) {
-    _abort(); //@line 5084
+    _abort(); //@line 5100
    }
    if ($482 >>> 0 < $484 >>> 0) {
-    _abort(); //@line 5090
+    _abort(); //@line 5106
    } else {
-    HEAP32[$482 + 12 >> 2] = $409; //@line 5094
-    HEAP32[$481 >> 2] = $409; //@line 5095
-    HEAP32[$p_0 + 8 >> 2] = $482; //@line 5098
-    HEAP32[$p_0 + 12 >> 2] = $T_0; //@line 5101
-    HEAP32[$p_0 + 24 >> 2] = 0; //@line 5103
+    HEAP32[$482 + 12 >> 2] = $409; //@line 5110
+    HEAP32[$481 >> 2] = $409; //@line 5111
+    HEAP32[$p_0 + 8 >> 2] = $482; //@line 5114
+    HEAP32[$p_0 + 12 >> 2] = $T_0; //@line 5117
+    HEAP32[$p_0 + 24 >> 2] = 0; //@line 5119
     break;
    }
   }
  } while (0);
- $496 = (HEAP32[240] | 0) - 1 | 0; //@line 5109
- HEAP32[240] = $496; //@line 5110
+ $496 = (HEAP32[278] | 0) - 1 | 0; //@line 5125
+ HEAP32[278] = $496; //@line 5126
  if (($496 | 0) == 0) {
-  $sp_0_in_i = 1384; //@line 5113
+  $sp_0_in_i = 1536; //@line 5129
  } else {
   return;
  }
  while (1) {
-  $sp_0_i = HEAP32[$sp_0_in_i >> 2] | 0; //@line 5120
+  $sp_0_i = HEAP32[$sp_0_in_i >> 2] | 0; //@line 5136
   if (($sp_0_i | 0) == 0) {
    break;
   } else {
-   $sp_0_in_i = $sp_0_i + 8 | 0; //@line 5126
+   $sp_0_in_i = $sp_0_i + 8 | 0; //@line 5142
   }
  }
- HEAP32[240] = -1; //@line 5129
+ HEAP32[278] = -1; //@line 5145
  return;
 }
 function _main($argc, $argv) {
  $argc = $argc | 0;
  $argv = $argv | 0;
- var $event = 0, $clip = 0, $area = 0, $4 = 0, $5 = 0, $12 = 0, $15 = 0, $video_bpp_1_ph = 0, $18 = 0, $20 = 0, $22 = 0, $i_098 = 0, $videoflags_097 = 0, $video_bpp_196 = 0, $h_095 = 0, $w_094 = 0, $26 = 0, $29 = 0, $49 = 0, $51 = 0, $59 = 0, $61 = 0, $w_1 = 0, $h_1 = 0, $video_bpp_2 = 0, $videoflags_1 = 0, $i_1 = 0, $84 = 0, $86 = 0, $videoflags_0_lcssa = 0, $video_bpp_1_lcssa = 0, $h_0_lcssa = 0, $w_0_lcssa = 0, $88 = 0, $89 = 0, $92 = 0, $93 = 0, $96 = 0, $110 = 0, $150 = 0, $151 = 0, $152 = 0, $153 = 0, $154 = 0, $156 = 0, $158 = 0, $160 = 0, $161 = 0, $162 = 0, $163 = 0, $164 = 0, $lastticks_088 = 0, $mouse_pressed_087 = 0, $screen_086 = 0, $videoflags_284 = 0, $170 = 0, $171 = 0, $mouse_pressed_280 = 0, $screen_179 = 0, $done_178 = 0, $videoflags_377 = 0, $177 = 0, $videoflags_3_be = 0, $done_1_be = 0, $screen_1_be = 0, $mouse_pressed_2_be = 0, $183 = 0, $191 = 0, $203 = 0, $205 = 0, $220 = 0, $225 = 0, $226 = 0, $229 = 0, $230 = 0, $237 = 0, $244 = 0.0, $_0 = 0, label = 0, tempVarArgs = 0, sp = 0;
- sp = STACKTOP; //@line 631
- STACKTOP = STACKTOP + 80 | 0; //@line 631
- $event = sp | 0; //@line 632
- $clip = sp + 48 | 0; //@line 633
- $area = sp + 64 | 0; //@line 634
+ var $clip = 0, $4 = 0, $5 = 0, $8 = 0, $12 = 0, $16 = 0, $20 = 0, $22 = 0, $24 = 0, $25 = 0, $29 = 0, $32 = 0, $54 = 0, $55 = 0, $65 = 0, $66 = 0, $91 = 0, $94 = 0, $95 = 0, $97 = 0, $99 = 0, $104 = 0, $107 = 0, $108 = 0, $109 = 0, $111 = 0, $112 = 0, $115 = 0, $166 = 0, $_0 = 0, label = 0, tempVarArgs = 0, sp = 0;
+ sp = STACKTOP; //@line 621
+ STACKTOP = STACKTOP + 16 | 0; //@line 621
+ $clip = sp | 0; //@line 622
  if ((_SDL_Init(32) | 0) < 0) {
-  $4 = HEAP32[_stderr >> 2] | 0; //@line 639
-  $5 = _SDL_GetError() | 0; //@line 640
-  _fprintf($4 | 0, 336, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $5, tempVarArgs) | 0) | 0; //@line 641
-  STACKTOP = tempVarArgs; //@line 641
-  $_0 = 1; //@line 643
-  STACKTOP = sp; //@line 645
-  return $_0 | 0; //@line 646
+  $4 = HEAP32[_stderr >> 2] | 0; //@line 627
+  $5 = _SDL_GetError() | 0; //@line 628
+  _fprintf($4 | 0, 336, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $5, tempVarArgs) | 0) | 0; //@line 629
+  STACKTOP = tempVarArgs; //@line 629
+  $_0 = 1; //@line 631
+  STACKTOP = sp; //@line 633
+  return $_0 | 0; //@line 634
  }
- $12 = HEAP8[(HEAP32[(_SDL_GetVideoInfo() | 0) + 8 >> 2] | 0) + 8 | 0] | 0; //@line 652
+ HEAP32[216] = 640; //@line 636
+ HEAP32[246] = 480; //@line 637
+ $8 = _SDL_GetVideoInfo() | 0; //@line 638
+ HEAP32[242] = $8; //@line 639
+ $12 = HEAP8[(HEAP32[$8 + 8 >> 2] | 0) + 8 | 0] | 0; //@line 643
  if (($12 & 255) > 8) {
-  $video_bpp_1_ph = $12; //@line 656
+  HEAP8[880] = $12; //@line 647
  } else {
-  $15 = HEAP32[_stderr >> 2] | 0; //@line 658
-  _fwrite(312, 19, 1, $15 | 0) | 0; //@line 659
-  $video_bpp_1_ph = 16; //@line 660
+  HEAP8[880] = 16; //@line 650
+  $16 = HEAP32[_stderr >> 2] | 0; //@line 651
+  _fwrite(312, 19, 1, $16 | 0) | 0; //@line 652
  }
- $18 = HEAP32[$argv + 4 >> 2] | 0; //@line 664
- L81 : do {
-  if (($18 | 0) == 0) {
-   $w_0_lcssa = 640;
-   $h_0_lcssa = 480;
-   $video_bpp_1_lcssa = $video_bpp_1_ph;
-   $videoflags_0_lcssa = 0;
+ HEAP32[218] = 0; //@line 654
+ HEAP32[244] = 1; //@line 655
+ $20 = HEAP32[$argv + 4 >> 2] | 0; //@line 657
+ do {
+  if (($20 | 0) == 0) {
+   $99 = 0; //@line 662
   } else {
-   $20 = HEAP32[_stderr >> 2] | 0; //@line 671
-   $w_094 = 640;
-   $h_095 = 480;
-   $video_bpp_196 = $video_bpp_1_ph;
-   $videoflags_097 = 0;
-   $i_098 = 1;
-   $22 = $18;
-   L83 : while (1) {
-    L85 : do {
-     if ((_strcmp($22 | 0, 304) | 0) == 0) {
-      $26 = $i_098 + 1 | 0; //@line 686
-      $29 = _atoi(HEAP32[$argv + ($26 << 2) >> 2] | 0) | 0; //@line 689
-      if (($29 & 255) >>> 0 < 9) {
-       _fwrite(312, 19, 1, $20 | 0) | 0; //@line 694
-       $i_1 = $26;
-       $videoflags_1 = $videoflags_097;
-       $video_bpp_2 = 16;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
-       break;
-      } else {
-       $i_1 = $26;
-       $videoflags_1 = $videoflags_097;
-       $video_bpp_2 = $29 & 255;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
+   $22 = HEAP32[_stderr >> 2] | 0; //@line 664
+   $25 = 1;
+   $24 = $20;
+   L84 : while (1) {
+    L86 : do {
+     if ((_strcmp($24 | 0, 304) | 0) == 0) {
+      $29 = $25 + 1 | 0; //@line 675
+      HEAP32[244] = $29; //@line 676
+      $32 = _atoi(HEAP32[$argv + ($29 << 2) >> 2] | 0) | 0; //@line 679
+      HEAP8[880] = $32 & 255; //@line 681
+      if (($32 & 255) >>> 0 >= 9) {
+       $94 = $29; //@line 686
        break;
       }
+      HEAP8[880] = 16; //@line 689
+      _fwrite(312, 19, 1, $22 | 0) | 0; //@line 690
+      $94 = HEAP32[244] | 0; //@line 693
      } else {
-      if ((_strcmp($22 | 0, 296) | 0) == 0) {
-       $i_1 = $i_098;
-       $videoflags_1 = $videoflags_097 | 134217729;
-       $video_bpp_2 = $video_bpp_196;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
+      if ((_strcmp($24 | 0, 296) | 0) == 0) {
+       HEAP32[218] = HEAP32[218] | 134217729; //@line 701
+       $94 = $25; //@line 703
        break;
       }
-      if ((_strcmp($22 | 0, 288) | 0) == 0) {
-       $i_1 = $i_098;
-       $videoflags_1 = $videoflags_097 | 2097152;
-       $video_bpp_2 = $video_bpp_196;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
+      if ((_strcmp($24 | 0, 288) | 0) == 0) {
+       HEAP32[218] = HEAP32[218] | 2097152; //@line 712
+       $94 = $25; //@line 714
        break;
       }
       do {
-       if ((_strcmp($22 | 0, 784) | 0) == 0) {
-        $49 = $i_098 + 1 | 0; //@line 728
-        $51 = HEAP32[$argv + ($49 << 2) >> 2] | 0; //@line 730
-        if (($51 | 0) == 0) {
+       if ((_strcmp($24 | 0, 800) | 0) == 0) {
+        $54 = $25 + 1 | 0; //@line 722
+        $55 = $argv + ($54 << 2) | 0; //@line 723
+        if ((HEAP32[$55 >> 2] | 0) == 0) {
          break;
         }
-        $i_1 = $49;
-        $videoflags_1 = $videoflags_097;
-        $video_bpp_2 = $video_bpp_196;
-        $h_1 = $h_095;
-        $w_1 = _atoi($51 | 0) | 0;
-        break L85;
+        HEAP32[244] = $54; //@line 730
+        HEAP32[216] = _atoi(HEAP32[$55 >> 2] | 0) | 0; //@line 733
+        $94 = $54; //@line 735
+        break L86;
        }
       } while (0);
       do {
-       if ((_strcmp($22 | 0, 776) | 0) == 0) {
-        $59 = $i_098 + 1 | 0; //@line 747
-        $61 = HEAP32[$argv + ($59 << 2) >> 2] | 0; //@line 749
-        if (($61 | 0) == 0) {
+       if ((_strcmp($24 | 0, 792) | 0) == 0) {
+        $65 = $25 + 1 | 0; //@line 744
+        $66 = $argv + ($65 << 2) | 0; //@line 745
+        if ((HEAP32[$66 >> 2] | 0) == 0) {
          break;
         }
-        $i_1 = $59;
-        $videoflags_1 = $videoflags_097;
-        $video_bpp_2 = $video_bpp_196;
-        $h_1 = _atoi($61 | 0) | 0;
-        $w_1 = $w_094;
-        break L85;
+        HEAP32[244] = $65; //@line 752
+        HEAP32[246] = _atoi(HEAP32[$66 >> 2] | 0) | 0; //@line 755
+        $94 = $65; //@line 757
+        break L86;
        }
       } while (0);
-      if ((_strcmp($22 | 0, 768) | 0) == 0) {
-       $i_1 = $i_098;
-       $videoflags_1 = $videoflags_097 | 16777216;
-       $video_bpp_2 = $video_bpp_196;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
+      if ((_strcmp($24 | 0, 784) | 0) == 0) {
+       HEAP32[218] = HEAP32[218] | 16777216; //@line 767
+       $94 = $25; //@line 769
        break;
       }
-      if ((_strcmp($22 | 0, 752) | 0) == 0) {
-       $i_1 = $i_098;
-       $videoflags_1 = $videoflags_097 | 33554432;
-       $video_bpp_2 = $video_bpp_196;
-       $h_1 = $h_095;
-       $w_1 = $w_094;
+      if ((_strcmp($24 | 0, 768) | 0) == 0) {
+       HEAP32[218] = HEAP32[218] | 33554432; //@line 778
+       $94 = $25; //@line 780
        break;
       }
-      if ((_strcmp($22 | 0, 736) | 0) != 0) {
-       break L83;
+      if ((_strcmp($24 | 0, 752) | 0) != 0) {
+       label = 81; //@line 787
+       break L84;
       }
-      $i_1 = $i_098;
-      $videoflags_1 = $videoflags_097 | 8388608;
-      $video_bpp_2 = $video_bpp_196;
-      $h_1 = $h_095;
-      $w_1 = $w_094;
+      HEAP32[218] = HEAP32[218] | 8388608; //@line 792
+      $94 = $25; //@line 794
      }
     } while (0);
-    $84 = $i_1 + 1 | 0; //@line 795
-    $86 = HEAP32[$argv + ($84 << 2) >> 2] | 0; //@line 797
-    if (($86 | 0) == 0) {
-     $w_0_lcssa = $w_1;
-     $h_0_lcssa = $h_1;
-     $video_bpp_1_lcssa = $video_bpp_2;
-     $videoflags_0_lcssa = $videoflags_1;
-     break L81;
+    $95 = $94 + 1 | 0; //@line 798
+    HEAP32[244] = $95; //@line 799
+    $97 = HEAP32[$argv + ($95 << 2) >> 2] | 0; //@line 801
+    if (($97 | 0) == 0) {
+     label = 83; //@line 805
+     break;
     } else {
-     $w_094 = $w_1;
-     $h_095 = $h_1;
-     $video_bpp_196 = $video_bpp_2;
-     $videoflags_097 = $videoflags_1;
-     $i_098 = $84;
-     $22 = $86;
+     $25 = $95;
+     $24 = $97;
     }
    }
-   _fprintf($20 | 0, 664, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = HEAP32[$argv >> 2], tempVarArgs) | 0) | 0; //@line 808
-   STACKTOP = tempVarArgs; //@line 808
-   _quit(1); //@line 809
-   return 0; //@line 810
+   if ((label | 0) == 81) {
+    $91 = HEAP32[$argv >> 2] | 0; //@line 812
+    _fprintf($22 | 0, 680, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $91, tempVarArgs) | 0) | 0; //@line 813
+    STACKTOP = tempVarArgs; //@line 813
+    _quit(1); //@line 814
+    return 0; //@line 815
+   } else if ((label | 0) == 83) {
+    $99 = HEAP32[218] | 0; //@line 820
+    break;
+   }
   }
  } while (0);
- $88 = $video_bpp_1_lcssa & 255; //@line 817
- $89 = _SDL_SetVideoMode($w_0_lcssa | 0, $h_0_lcssa | 0, $88 | 0, $videoflags_0_lcssa | 0) | 0; //@line 818
- if (($89 | 0) == 0) {
-  $92 = HEAP32[_stderr >> 2] | 0; //@line 822
-  $93 = _SDL_GetError() | 0; //@line 823
-  _fprintf($92 | 0, 624, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 32 | 0, HEAP32[tempVarArgs >> 2] = $w_0_lcssa, HEAP32[tempVarArgs + 8 >> 2] = $h_0_lcssa, HEAP32[tempVarArgs + 16 >> 2] = $88, HEAP32[tempVarArgs + 24 >> 2] = $93, tempVarArgs) | 0) | 0; //@line 824
-  STACKTOP = tempVarArgs; //@line 824
-  _quit(2); //@line 825
-  return 0; //@line 826
+ $104 = _SDL_SetVideoMode(HEAP32[216] | 0, HEAP32[246] | 0, HEAPU8[880] | 0 | 0, $99 | 0) | 0; //@line 830
+ HEAP32[224] = $104; //@line 831
+ if (($104 | 0) == 0) {
+  $107 = HEAP32[_stderr >> 2] | 0; //@line 835
+  $108 = HEAP32[216] | 0; //@line 836
+  $109 = HEAP32[246] | 0; //@line 837
+  $111 = HEAPU8[880] | 0; //@line 839
+  $112 = _SDL_GetError() | 0; //@line 840
+  _fprintf($107 | 0, 640, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 32 | 0, HEAP32[tempVarArgs >> 2] = $108, HEAP32[tempVarArgs + 8 >> 2] = $109, HEAP32[tempVarArgs + 16 >> 2] = $111, HEAP32[tempVarArgs + 24 >> 2] = $112, tempVarArgs) | 0) | 0; //@line 841
+  STACKTOP = tempVarArgs; //@line 841
+  _quit(2); //@line 842
+  return 0; //@line 843
  }
- _FillBackground($89); //@line 828
- $96 = _CreateLight(82) | 0; //@line 829
- if (($96 | 0) == 0) {
-  _quit(1); //@line 833
-  return 0; //@line 834
+ _FillBackground($104); //@line 845
+ $115 = _CreateLight(82) | 0; //@line 846
+ HEAP32[238] = $115; //@line 847
+ if (($115 | 0) == 0) {
+  _quit(1); //@line 851
+  return 0; //@line 852
  }
- if ((_LoadSprite($89, 608) | 0) < 0) {
-  _SDL_FreeSurface($96 | 0); //@line 840
-  _quit(1); //@line 841
-  return 0; //@line 842
+ if ((_LoadSprite(HEAP32[224] | 0, 624) | 0) < 0) {
+  _SDL_FreeSurface(HEAP32[238] | 0); //@line 860
+  _quit(1); //@line 861
+  return 0; //@line 862
  }
- _printf(576, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = HEAPU8[(HEAP32[$89 + 4 >> 2] | 0) + 8 | 0] | 0, tempVarArgs) | 0) | 0; //@line 849
- STACKTOP = tempVarArgs; //@line 849
- $110 = $89 | 0; //@line 850
- if ((HEAP32[$110 >> 2] & 134217729 | 0) == 134217729) {
-  _puts(248) | 0; //@line 856
+ _printf(592, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = HEAPU8[(HEAP32[(HEAP32[224] | 0) + 4 >> 2] | 0) + 8 | 0] | 0, tempVarArgs) | 0) | 0; //@line 870
+ STACKTOP = tempVarArgs; //@line 870
+ if ((HEAP32[HEAP32[224] >> 2] & 134217729 | 0) == 134217729) {
+  _puts(248) | 0; //@line 878
  } else {
-  _puts(216) | 0; //@line 859
+  _puts(216) | 0; //@line 881
  }
- if ((HEAP32[$110 >> 2] & 4194304 | 0) != 0) {
-  _puts(176) | 0; //@line 866
+ if ((HEAP32[HEAP32[224] >> 2] & 4194304 | 0) != 0) {
+  _puts(176) | 0; //@line 890
  }
- if ((HEAP32[HEAP32[212] >> 2] & 134217729 | 0) == 134217729) {
-  _puts(144) | 0; //@line 876
+ if ((HEAP32[HEAP32[222] >> 2] & 134217729 | 0) == 134217729) {
+  _puts(144) | 0; //@line 900
  } else {
-  _puts(112) | 0; //@line 879
+  _puts(112) | 0; //@line 903
  }
- _MoveSprite($89, 0); //@line 881
- if ((HEAP32[HEAP32[212] >> 2] & 134217728 | 0) == 0) {
-  _puts(8) | 0; //@line 889
+ _MoveSprite(HEAP32[224] | 0, 0); //@line 906
+ if ((HEAP32[HEAP32[222] >> 2] & 134217728 | 0) == 0) {
+  _puts(8) | 0; //@line 914
  } else {
-  _puts(64) | 0; //@line 891
+  _puts(64) | 0; //@line 916
  }
- HEAP32[$clip >> 2] = 32; //@line 895
- HEAP32[$clip + 4 >> 2] = 32; //@line 897
- HEAP32[$clip + 8 >> 2] = (HEAP32[$89 + 8 >> 2] | 0) - 64; //@line 902
- HEAP32[$clip + 12 >> 2] = (HEAP32[$89 + 12 >> 2] | 0) - 64; //@line 907
- _SDL_SetClipRect($89 | 0, $clip | 0) | 0; //@line 908
- $150 = $event | 0; //@line 910
- $151 = $event + 4 | 0; //@line 911
- $152 = $event + 8 | 0; //@line 912
- $153 = $152; //@line 913
- $154 = $152; //@line 914
- $156 = $event + 12 | 0; //@line 916
- $158 = $event + 16 | 0; //@line 918
- $160 = $event + 12 | 0; //@line 920
- $161 = $area | 0; //@line 921
- $162 = $area + 4 | 0; //@line 922
- $163 = $area + 8 | 0; //@line 923
- $164 = $area + 12 | 0; //@line 924
- $videoflags_284 = $videoflags_0_lcssa;
- $screen_086 = $89;
- $mouse_pressed_087 = 0;
- $lastticks_088 = _SDL_GetTicks() | 0;
- L139 : while (1) {
-  if (($mouse_pressed_087 | 0) == 0) {
-   _MoveSprite($screen_086, 0); //@line 935
-  } else {
-   _MoveSprite($screen_086, $96); //@line 937
-  }
-  $170 = _SDL_GetTicks() | 0; //@line 940
-  $171 = $170 - $lastticks_088 | 0; //@line 941
-  if ($171 >>> 0 < 33) {
-   _SDL_Delay(33 - $171 | 0); //@line 946
-  }
-  if ((_SDL_PollEvent($event | 0) | 0) == 0) {
-   $videoflags_284 = $videoflags_284;
-   $screen_086 = $screen_086;
-   $mouse_pressed_087 = 0;
-   $lastticks_088 = $170;
-   continue;
-  } else {
-   $videoflags_377 = $videoflags_284;
-   $done_178 = 0;
-   $screen_179 = $screen_086;
-   $mouse_pressed_280 = 0;
-  }
-  while (1) {
-   $177 = HEAP32[$150 >> 2] | 0; //@line 963
-   do {
-    if (($177 | 0) == 28673) {
-     $183 = _SDL_SetVideoMode(HEAP32[$151 >> 2] | 0, HEAP32[$153 >> 2] | 0, $88 | 0, $videoflags_377 | 0) | 0; //@line 968
-     if (($183 | 0) == 0) {
-      $mouse_pressed_2_be = $mouse_pressed_280;
-      $screen_1_be = 0;
-      $done_1_be = $done_178;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     }
-     _FillBackground($183); //@line 975
-     $mouse_pressed_2_be = $mouse_pressed_280;
-     $screen_1_be = $183;
-     $done_1_be = $done_178;
-     $videoflags_3_be = $videoflags_377;
-    } else if (($177 | 0) == 1024) {
-     if ((HEAP8[$154] | 0) == 0) {
-      $mouse_pressed_2_be = $mouse_pressed_280;
-      $screen_1_be = $screen_179;
-      $done_1_be = $done_178;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     }
-     $191 = HEAP32[$158 >> 2] | 0; //@line 987
-     HEAP32[210] = ((HEAP32[$156 >> 2] & 65535) - (HEAP32[214] | 0) | 0) / 10 | 0; //@line 992
-     HEAP32[208] = (($191 & 65535) - (HEAP32[215] | 0) | 0) / 10 | 0; //@line 997
-     $mouse_pressed_2_be = 1;
-     $screen_1_be = $screen_179;
-     $done_1_be = $done_178;
-     $videoflags_3_be = $videoflags_377;
-    } else if (($177 | 0) == 1025) {
-     $203 = HEAP32[$160 >> 2] | 0; //@line 1003
-     if ((HEAP8[$154] | 0) == 1) {
-      $205 = HEAP32[$158 >> 2] | 0; //@line 1006
-      HEAP32[210] = (($203 & 65535) - (HEAP32[214] | 0) | 0) / 10 | 0; //@line 1011
-      HEAP32[208] = (($205 & 65535) - (HEAP32[215] | 0) | 0) / 10 | 0; //@line 1016
-      $mouse_pressed_2_be = 1;
-      $screen_1_be = $screen_179;
-      $done_1_be = $done_178;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     } else {
-      HEAP32[$161 >> 2] = $203 - 16; //@line 1022
-      HEAP32[$162 >> 2] = (HEAP32[$158 >> 2] | 0) - 16; //@line 1025
-      HEAP32[$163 >> 2] = 32; //@line 1026
-      HEAP32[$164 >> 2] = 32; //@line 1027
-      _SDL_FillRect($screen_179 | 0, $area | 0, 0) | 0; //@line 1028
-      _SDL_UpdateRects($screen_179 | 0, 1, $area | 0); //@line 1029
-      $mouse_pressed_2_be = $mouse_pressed_280;
-      $screen_1_be = $screen_179;
-      $done_1_be = $done_178;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     }
-    } else if (($177 | 0) == 768) {
-     $220 = HEAP32[$158 >> 2] | 0; //@line 1034
-     if (($220 | 0) == 27) {
-      $mouse_pressed_2_be = $mouse_pressed_280;
-      $screen_1_be = $screen_179;
-      $done_1_be = 1;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     }
-     if (($220 | 0) != 116) {
-      $mouse_pressed_2_be = $mouse_pressed_280;
-      $screen_1_be = $screen_179;
-      $done_1_be = $done_178;
-      $videoflags_3_be = $videoflags_377;
-      break;
-     }
-     $225 = $videoflags_377 ^ 8388608; //@line 1047
-     $226 = _SDL_SetVideoMode($w_0_lcssa | 0, $h_0_lcssa | 0, $88 | 0, $225 | 0) | 0; //@line 1048
-     if (($226 | 0) == 0) {
-      label = 120; //@line 1052
-      break L139;
-     }
-     _FillBackground($226); //@line 1055
-     $mouse_pressed_2_be = $mouse_pressed_280;
-     $screen_1_be = $226;
-     $done_1_be = $done_178;
-     $videoflags_3_be = $225;
-    } else if (($177 | 0) == 256) {
-     $mouse_pressed_2_be = $mouse_pressed_280;
-     $screen_1_be = $screen_179;
-     $done_1_be = 1;
-     $videoflags_3_be = $videoflags_377;
-    } else {
-     $mouse_pressed_2_be = $mouse_pressed_280;
-     $screen_1_be = $screen_179;
-     $done_1_be = $done_178;
-     $videoflags_3_be = $videoflags_377;
-    }
-   } while (0);
-   if ((_SDL_PollEvent($event | 0) | 0) == 0) {
-    break;
-   } else {
-    $videoflags_377 = $videoflags_3_be;
-    $done_178 = $done_1_be;
-    $screen_179 = $screen_1_be;
-    $mouse_pressed_280 = $mouse_pressed_2_be;
-   }
-  }
-  if (($done_1_be | 0) == 0) {
-   $videoflags_284 = $videoflags_3_be;
-   $screen_086 = $screen_1_be;
-   $mouse_pressed_087 = $mouse_pressed_2_be;
-   $lastticks_088 = $170;
-  } else {
-   break;
-  }
- }
- if ((label | 0) == 120) {
-  $229 = HEAP32[_stderr >> 2] | 0; //@line 1087
-  $230 = _SDL_GetError() | 0; //@line 1088
-  _fprintf($229 | 0, 520, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $230, tempVarArgs) | 0) | 0; //@line 1089
-  STACKTOP = tempVarArgs; //@line 1089
-  _quit(2); //@line 1090
-  return 0; //@line 1091
- }
- _SDL_FreeSurface($96 | 0); //@line 1093
- _SDL_FreeSurface(HEAP32[212] | 0); //@line 1095
- _SDL_FreeSurface(HEAP32[228] | 0); //@line 1097
- $237 = HEAP32[226] | 0; //@line 1098
- if (($237 | 0) != 0) {
-  $244 = +((HEAP32[224] | 0) >>> 0 >>> 0) / +($237 >>> 0 >>> 0); //@line 1106
-  _printf(480, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 16 | 0, HEAP32[tempVarArgs >> 2] = $237, HEAPF64[tempVarArgs + 8 >> 3] = $244, tempVarArgs) | 0) | 0; //@line 1107
-  STACKTOP = tempVarArgs; //@line 1107
- }
- _SDL_Quit(); //@line 1110
- $_0 = 0; //@line 1112
- STACKTOP = sp; //@line 1114
- return $_0 | 0; //@line 1115
+ HEAP32[$clip >> 2] = 32; //@line 920
+ HEAP32[$clip + 4 >> 2] = 32; //@line 922
+ $166 = HEAP32[224] | 0; //@line 923
+ HEAP32[$clip + 8 >> 2] = (HEAP32[$166 + 8 >> 2] | 0) - 64; //@line 928
+ HEAP32[$clip + 12 >> 2] = (HEAP32[$166 + 12 >> 2] | 0) - 64; //@line 933
+ _SDL_SetClipRect($166 | 0, $clip | 0) | 0; //@line 934
+ HEAP32[240] = _SDL_GetTicks() | 0; //@line 936
+ HEAP32[264] = 0; //@line 937
+ HEAP32[236] = 0; //@line 938
+ _emscripten_run_script(552); //@line 939
+ _emscripten_set_main_loop(2, 30, 1); //@line 940
+ $_0 = 0; //@line 942
+ STACKTOP = sp; //@line 944
+ return $_0 | 0; //@line 945
 }
 function _CreateLight($radius) {
  $radius = $radius | 0;
@@ -7979,7 +7866,7 @@ function _CreateLight($radius) {
  if (($2 | 0) == 0) {
   $5 = HEAP32[_stderr >> 2] | 0; //@line 119
   $6 = _SDL_GetError() | 0; //@line 120
-  _fprintf($5 | 0, 800, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $6, tempVarArgs) | 0) | 0; //@line 121
+  _fprintf($5 | 0, 816, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $6, tempVarArgs) | 0) | 0; //@line 121
   STACKTOP = tempVarArgs; //@line 121
   $_0 = 0; //@line 123
   STACKTOP = sp; //@line 125
@@ -8111,6 +7998,108 @@ function _CreateLight($radius) {
  STACKTOP = sp; //@line 300
  return $_0 | 0; //@line 301
 }
+function _main_loop() {
+ var $area = 0, $3 = 0, $9 = 0, $10 = 0, $11 = 0, $12 = 0, $14 = 0, $23 = 0, $31 = 0, $43 = 0, $45 = 0, $58 = 0, $62 = 0, $66 = 0, $71 = 0, $74 = 0, $75 = 0, $85 = 0, $92 = 0.0, tempVarArgs = 0, sp = 0;
+ sp = STACKTOP; //@line 1120
+ STACKTOP = STACKTOP + 16 | 0; //@line 1120
+ $area = sp | 0; //@line 1121
+ $3 = HEAP32[224] | 0; //@line 1124
+ if ((HEAP32[236] | 0) == 0) {
+  _MoveSprite($3, 0); //@line 1127
+ } else {
+  _MoveSprite($3, HEAP32[238] | 0); //@line 1130
+  HEAP32[236] = 0; //@line 1131
+ }
+ L173 : do {
+  if ((_SDL_PollEvent(1008) | 0) != 0) {
+   $9 = $area | 0; //@line 1139
+   $10 = $area + 4 | 0; //@line 1140
+   $11 = $area + 8 | 0; //@line 1141
+   $12 = $area + 12 | 0; //@line 1142
+   L175 : while (1) {
+    $14 = HEAP32[252] | 0; //@line 1145
+    do {
+     if (($14 | 0) == 28673) {
+      $23 = _SDL_SetVideoMode(HEAP32[253] | 0, HEAP32[254] | 0, HEAPU8[880] | 0, HEAP32[218] | 0) | 0; //@line 1153
+      HEAP32[224] = $23; //@line 1154
+      if (($23 | 0) == 0) {
+       break;
+      }
+      _FillBackground($23); //@line 1160
+     } else if (($14 | 0) == 1024) {
+      if ((HEAP8[1016] | 0) == 0) {
+       break;
+      }
+      $31 = HEAP32[256] | 0; //@line 1170
+      HEAP32[214] = ((HEAP32[255] & 65535) - (HEAP32[226] | 0) | 0) / 10 | 0; //@line 1175
+      HEAP32[212] = (($31 & 65535) - (HEAP32[227] | 0) | 0) / 10 | 0; //@line 1180
+      HEAP32[236] = 1; //@line 1181
+     } else if (($14 | 0) == 1025) {
+      $43 = HEAP32[255] | 0; //@line 1186
+      if ((HEAP8[1016] | 0) == 1) {
+       $45 = HEAP32[256] | 0; //@line 1189
+       HEAP32[214] = (($43 & 65535) - (HEAP32[226] | 0) | 0) / 10 | 0; //@line 1194
+       HEAP32[212] = (($45 & 65535) - (HEAP32[227] | 0) | 0) / 10 | 0; //@line 1199
+       HEAP32[236] = 1; //@line 1200
+       break;
+      } else {
+       HEAP32[$9 >> 2] = $43 - 16; //@line 1205
+       HEAP32[$10 >> 2] = (HEAP32[256] | 0) - 16; //@line 1208
+       HEAP32[$11 >> 2] = 32; //@line 1209
+       HEAP32[$12 >> 2] = 32; //@line 1210
+       $58 = HEAP32[224] | 0; //@line 1211
+       _SDL_FillRect($58 | 0, $area | 0, 0) | 0; //@line 1212
+       _SDL_UpdateRects(HEAP32[224] | 0, 1, $area | 0); //@line 1214
+       break;
+      }
+     } else if (($14 | 0) == 768) {
+      $62 = HEAP32[256] | 0; //@line 1218
+      if (($62 | 0) == 27) {
+       HEAP32[264] = 1; //@line 1220
+       break;
+      } else if (($62 | 0) != 116) {
+       break;
+      }
+      $66 = HEAP32[218] ^ 8388608; //@line 1227
+      HEAP32[218] = $66; //@line 1228
+      $71 = _SDL_SetVideoMode(HEAP32[216] | 0, HEAP32[246] | 0, HEAPU8[880] | 0, $66 | 0) | 0; //@line 1233
+      HEAP32[224] = $71; //@line 1234
+      if (($71 | 0) == 0) {
+       break L175;
+      }
+      _FillBackground($71); //@line 1240
+     } else if (($14 | 0) == 256) {
+      HEAP32[264] = 1; //@line 1243
+     }
+    } while (0);
+    if ((_SDL_PollEvent(1008) | 0) == 0) {
+     break L173;
+    }
+   }
+   $74 = HEAP32[_stderr >> 2] | 0; //@line 1254
+   $75 = _SDL_GetError() | 0; //@line 1255
+   _fprintf($74 | 0, 520, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $75, tempVarArgs) | 0) | 0; //@line 1256
+   STACKTOP = tempVarArgs; //@line 1256
+   _quit(2); //@line 1257
+  }
+ } while (0);
+ if ((HEAP32[264] | 0) == 0) {
+  STACKTOP = sp; //@line 1265
+  return;
+ }
+ _SDL_FreeSurface(HEAP32[238] | 0); //@line 1269
+ _SDL_FreeSurface(HEAP32[222] | 0); //@line 1271
+ _SDL_FreeSurface(HEAP32[266] | 0); //@line 1273
+ $85 = HEAP32[250] | 0; //@line 1274
+ if (($85 | 0) != 0) {
+  $92 = +((HEAP32[248] | 0) >>> 0 >>> 0) / +($85 >>> 0 >>> 0); //@line 1282
+  _printf(480, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 16 | 0, HEAP32[tempVarArgs >> 2] = $85, HEAPF64[tempVarArgs + 8 >> 3] = $92, tempVarArgs) | 0) | 0; //@line 1283
+  STACKTOP = tempVarArgs; //@line 1283
+ }
+ _SDL_Quit(); //@line 1286
+ STACKTOP = sp; //@line 1288
+ return;
+}
 function _MoveSprite($screen, $light) {
  $screen = $screen | 0;
  $light = $light | 0;
@@ -8124,11 +8113,11 @@ function _MoveSprite($screen, $light) {
  $1 = $updates | 0; //@line 457
  $2 = $updates; //@line 458
  if (HEAP8[280] | 0) {
-  HEAP32[$2 >> 2] = HEAP32[214]; //@line 461
-  HEAP32[$2 + 4 >> 2] = HEAP32[215]; //@line 461
-  HEAP32[$2 + 8 >> 2] = HEAP32[216]; //@line 461
-  HEAP32[$2 + 12 >> 2] = HEAP32[217]; //@line 461
-  $4 = HEAP32[228] | 0; //@line 462
+  HEAP32[$2 >> 2] = HEAP32[226]; //@line 461
+  HEAP32[$2 + 4 >> 2] = HEAP32[227]; //@line 461
+  HEAP32[$2 + 8 >> 2] = HEAP32[228]; //@line 461
+  HEAP32[$2 + 12 >> 2] = HEAP32[229]; //@line 461
+  $4 = HEAP32[266] | 0; //@line 462
   _SDL_UpperBlit($4 | 0, 0, $screen | 0, $1 | 0) | 0; //@line 463
  } else {
   _memset($2 | 0, 0, 16); //@line 466
@@ -8147,13 +8136,13 @@ function _MoveSprite($screen, $light) {
   _SDL_UpperBlit($light | 0, 0, $screen | 0, $position_i | 0) | 0; //@line 493
   $28 = _SDL_GetTicks() | 0; //@line 494
   _SDL_UpdateRects($screen | 0, 1, $position_i | 0); //@line 495
-  HEAP32[226] = (HEAP32[226] | 0) + 1; //@line 498
-  HEAP32[224] = $28 - $26 + (HEAP32[224] | 0); //@line 502
+  HEAP32[250] = (HEAP32[250] | 0) + 1; //@line 498
+  HEAP32[248] = $28 - $26 + (HEAP32[248] | 0); //@line 502
  }
- $35 = HEAP32[210] | 0; //@line 505
- $36 = HEAP32[214] | 0; //@line 506
+ $35 = HEAP32[214] | 0; //@line 505
+ $36 = HEAP32[226] | 0; //@line 506
  $37 = $36 + $35 | 0; //@line 507
- HEAP32[214] = $37; //@line 508
+ HEAP32[226] = $37; //@line 508
  if (($37 | 0) < 0) {
   label = 46; //@line 512
  } else {
@@ -8162,13 +8151,13 @@ function _MoveSprite($screen, $light) {
   }
  }
  if ((label | 0) == 46) {
-  HEAP32[210] = -$35; //@line 524
-  HEAP32[214] = $36; //@line 525
+  HEAP32[214] = -$35; //@line 524
+  HEAP32[226] = $36; //@line 525
  }
- $46 = HEAP32[208] | 0; //@line 528
- $47 = HEAP32[215] | 0; //@line 529
+ $46 = HEAP32[212] | 0; //@line 528
+ $47 = HEAP32[227] | 0; //@line 529
  $48 = $47 + $46 | 0; //@line 530
- HEAP32[215] = $48; //@line 531
+ HEAP32[227] = $48; //@line 531
  if (($48 | 0) < 0) {
   label = 49; //@line 535
  } else {
@@ -8177,17 +8166,17 @@ function _MoveSprite($screen, $light) {
   }
  }
  if ((label | 0) == 49) {
-  HEAP32[208] = -$46; //@line 547
-  HEAP32[215] = $47; //@line 548
+  HEAP32[212] = -$46; //@line 547
+  HEAP32[227] = $47; //@line 548
  }
- $57 = HEAP32[212] | 0; //@line 551
+ $57 = HEAP32[222] | 0; //@line 551
  $62 = HEAPU8[(HEAP32[$57 + 4 >> 2] | 0) + 36 | 0] | 0; //@line 556
- $63 = HEAP32[230] | 0; //@line 557
+ $63 = HEAP32[268] | 0; //@line 557
  $64 = $62 + $63 | 0; //@line 558
  do {
   if (($64 | 0) < 0) {
    $67 = -$63 | 0; //@line 563
-   HEAP32[230] = $67; //@line 564
+   HEAP32[268] = $67; //@line 564
    $73 = $67; //@line 566
   } else {
    if (($64 | 0) <= 255) {
@@ -8195,23 +8184,23 @@ function _MoveSprite($screen, $light) {
     break;
    }
    $71 = -$63 | 0; //@line 574
-   HEAP32[230] = $71; //@line 575
+   HEAP32[268] = $71; //@line 575
    $73 = $71; //@line 577
   }
  } while (0);
  _SDL_SetAlpha($57 | 0, 65536, $73 + $62 & 255 | 0) | 0; //@line 583
  $77 = $updates + 16 | 0; //@line 584
  $78 = $77; //@line 585
- HEAP32[$78 >> 2] = HEAP32[214]; //@line 586
- HEAP32[$78 + 4 >> 2] = HEAP32[215]; //@line 586
- HEAP32[$78 + 8 >> 2] = HEAP32[216]; //@line 586
- HEAP32[$78 + 12 >> 2] = HEAP32[217]; //@line 586
- _SDL_UpperBlit($screen | 0, $77 | 0, HEAP32[228] | 0, 0) | 0; //@line 588
- HEAP32[$78 >> 2] = HEAP32[214]; //@line 589
- HEAP32[$78 + 4 >> 2] = HEAP32[215]; //@line 589
- HEAP32[$78 + 8 >> 2] = HEAP32[216]; //@line 589
- HEAP32[$78 + 12 >> 2] = HEAP32[217]; //@line 589
- _SDL_UpperBlit(HEAP32[212] | 0, 0, $screen | 0, $77 | 0) | 0; //@line 591
+ HEAP32[$78 >> 2] = HEAP32[226]; //@line 586
+ HEAP32[$78 + 4 >> 2] = HEAP32[227]; //@line 586
+ HEAP32[$78 + 8 >> 2] = HEAP32[228]; //@line 586
+ HEAP32[$78 + 12 >> 2] = HEAP32[229]; //@line 586
+ _SDL_UpperBlit($screen | 0, $77 | 0, HEAP32[266] | 0, 0) | 0; //@line 588
+ HEAP32[$78 >> 2] = HEAP32[226]; //@line 589
+ HEAP32[$78 + 4 >> 2] = HEAP32[227]; //@line 589
+ HEAP32[$78 + 8 >> 2] = HEAP32[228]; //@line 589
+ HEAP32[$78 + 12 >> 2] = HEAP32[229]; //@line 589
+ _SDL_UpperBlit(HEAP32[222] | 0, 0, $screen | 0, $77 | 0) | 0; //@line 591
  _SDL_UpdateRects($screen | 0, 2, $1 | 0); //@line 592
  STACKTOP = sp; //@line 593
  return;
@@ -8221,12 +8210,12 @@ function _LoadSprite($screen, $file) {
  $file = $file | 0;
  var $2 = 0, $5 = 0, $6 = 0, $18 = 0, $21 = 0, $22 = 0, $26 = 0, $27 = 0, $34 = 0, $37 = 0, $38 = 0, $42 = 0, $46 = 0, $47 = 0, $53 = 0, $54 = 0, $60 = 0, $_0 = 0, tempVarArgs = 0, sp = 0;
  sp = STACKTOP; //@line 318
- $2 = _IMG_Load_RW(_SDL_RWFromFile($file | 0, 792) | 0, 1) | 0; //@line 320
- HEAP32[212] = $2; //@line 321
+ $2 = _IMG_Load_RW(_SDL_RWFromFile($file | 0, 808) | 0, 1) | 0; //@line 320
+ HEAP32[222] = $2; //@line 321
  if (($2 | 0) == 0) {
   $5 = HEAP32[_stderr >> 2] | 0; //@line 325
   $6 = _SDL_GetError() | 0; //@line 326
-  _fprintf($5 | 0, 552, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 16 | 0, HEAP32[tempVarArgs >> 2] = $file, HEAP32[tempVarArgs + 8 >> 2] = $6, tempVarArgs) | 0) | 0; //@line 327
+  _fprintf($5 | 0, 568, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 16 | 0, HEAP32[tempVarArgs >> 2] = $file, HEAP32[tempVarArgs + 8 >> 2] = $6, tempVarArgs) | 0) | 0; //@line 327
   STACKTOP = tempVarArgs; //@line 327
   $_0 = -1; //@line 329
   STACKTOP = sp; //@line 331
@@ -8237,10 +8226,10 @@ function _LoadSprite($screen, $file) {
  } else {
   $18 = HEAPU8[HEAP32[$2 + 20 >> 2] | 0] | 0; //@line 346
   _SDL_SetColorKey($2 | 0, 131072, $18 | 0) | 0; //@line 347
-  $21 = HEAP32[212] | 0; //@line 350
+  $21 = HEAP32[222] | 0; //@line 350
  }
- $22 = _SDL_DisplayFormat($21 | 0) | 0; //@line 353
- _SDL_FreeSurface(HEAP32[212] | 0); //@line 355
+ $22 = _SDL_DisplayFormatAlpha($21 | 0) | 0; //@line 353
+ _SDL_FreeSurface(HEAP32[222] | 0); //@line 355
  if (($22 | 0) == 0) {
   $26 = HEAP32[_stderr >> 2] | 0; //@line 359
   $27 = _SDL_GetError() | 0; //@line 360
@@ -8250,42 +8239,42 @@ function _LoadSprite($screen, $file) {
   STACKTOP = sp; //@line 365
   return $_0 | 0; //@line 366
  }
- HEAP32[212] = $22; //@line 368
+ HEAP32[222] = $22; //@line 368
  $34 = _SDL_CreateRGBSurface(0, HEAP32[$22 + 8 >> 2] | 0, HEAP32[$22 + 12 >> 2] | 0, 8, 0, 0, 0, 0) | 0; //@line 373
- HEAP32[228] = $34; //@line 374
+ HEAP32[266] = $34; //@line 374
  if (($34 | 0) == 0) {
   $37 = HEAP32[_stderr >> 2] | 0; //@line 378
   $38 = _SDL_GetError() | 0; //@line 379
   _fprintf($37 | 0, 368, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $38, tempVarArgs) | 0) | 0; //@line 380
   STACKTOP = tempVarArgs; //@line 380
-  _SDL_FreeSurface(HEAP32[212] | 0); //@line 382
+  _SDL_FreeSurface(HEAP32[222] | 0); //@line 382
   $_0 = -1; //@line 384
   STACKTOP = sp; //@line 386
   return $_0 | 0; //@line 387
  }
- $42 = _SDL_DisplayFormat($34 | 0) | 0; //@line 389
- _SDL_FreeSurface(HEAP32[228] | 0); //@line 391
+ $42 = _SDL_DisplayFormatAlpha($34 | 0) | 0; //@line 389
+ _SDL_FreeSurface(HEAP32[266] | 0); //@line 391
  if (($42 | 0) == 0) {
   $46 = HEAP32[_stderr >> 2] | 0; //@line 395
   $47 = _SDL_GetError() | 0; //@line 396
   _fprintf($46 | 0, 400, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $47, tempVarArgs) | 0) | 0; //@line 397
   STACKTOP = tempVarArgs; //@line 397
-  _SDL_FreeSurface(HEAP32[212] | 0); //@line 399
+  _SDL_FreeSurface(HEAP32[222] | 0); //@line 399
   $_0 = -1; //@line 401
   STACKTOP = sp; //@line 403
   return $_0 | 0; //@line 404
  } else {
-  HEAP32[228] = $42; //@line 406
-  $53 = HEAP32[212] | 0; //@line 409
+  HEAP32[266] = $42; //@line 406
+  $53 = HEAP32[222] | 0; //@line 409
   $54 = $53 + 8 | 0; //@line 410
-  HEAP32[214] = ((HEAP32[$screen + 8 >> 2] | 0) - (HEAP32[$54 >> 2] | 0) | 0) / 2 | 0; //@line 414
+  HEAP32[226] = ((HEAP32[$screen + 8 >> 2] | 0) - (HEAP32[$54 >> 2] | 0) | 0) / 2 | 0; //@line 414
   $60 = $53 + 12 | 0; //@line 417
-  HEAP32[215] = ((HEAP32[$screen + 12 >> 2] | 0) - (HEAP32[$60 >> 2] | 0) | 0) / 2 | 0; //@line 421
-  HEAP32[216] = HEAP32[$54 >> 2]; //@line 423
-  HEAP32[217] = HEAP32[$60 >> 2]; //@line 425
-  HEAP32[210] = 0; //@line 426
-  HEAP32[208] = 0; //@line 427
-  HEAP32[230] = 1; //@line 428
+  HEAP32[227] = ((HEAP32[$screen + 12 >> 2] | 0) - (HEAP32[$60 >> 2] | 0) | 0) / 2 | 0; //@line 421
+  HEAP32[228] = HEAP32[$54 >> 2]; //@line 423
+  HEAP32[229] = HEAP32[$60 >> 2]; //@line 425
+  HEAP32[214] = 0; //@line 426
+  HEAP32[212] = 0; //@line 427
+  HEAP32[268] = 1; //@line 428
   $_0 = 0; //@line 430
   STACKTOP = sp; //@line 432
   return $_0 | 0; //@line 433
@@ -8295,38 +8284,38 @@ function _LoadSprite($screen, $file) {
 function _FillBackground($screen) {
  $screen = $screen | 0;
  var $4 = 0, $5 = 0, $9 = 0, $10 = 0, $11 = 0, $13 = 0, $15 = 0, $16 = 0, $17 = 0, $18 = 0, $19 = 0, $20 = 0, $21 = 0, $23 = 0, $24 = 0, $i_034 = 0, $buffer_033 = 0, $31 = 0, $32 = 0, $37 = 0, $38 = 0, $i_129 = 0, $buffer_128 = 0, $41 = 0, $43 = 0, $44 = 0, $k_027 = 0, $51 = 0, $52 = 0, tempVarArgs = 0, sp = 0;
- sp = STACKTOP; //@line 1149
+ sp = STACKTOP; //@line 971
  if ((_SDL_LockSurface($screen | 0) | 0) < 0) {
-  $4 = HEAP32[_stderr >> 2] | 0; //@line 1154
-  $5 = _SDL_GetError() | 0; //@line 1155
-  _fprintf($4 | 0, 440, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $5, tempVarArgs) | 0) | 0; //@line 1156
-  STACKTOP = tempVarArgs; //@line 1156
-  _quit(2); //@line 1157
+  $4 = HEAP32[_stderr >> 2] | 0; //@line 976
+  $5 = _SDL_GetError() | 0; //@line 977
+  _fprintf($4 | 0, 440, (tempVarArgs = STACKTOP, STACKTOP = STACKTOP + 8 | 0, HEAP32[tempVarArgs >> 2] = $5, tempVarArgs) | 0) | 0; //@line 978
+  STACKTOP = tempVarArgs; //@line 978
+  _quit(2); //@line 979
  }
- $9 = HEAP32[$screen + 20 >> 2] | 0; //@line 1161
- $10 = $screen + 4 | 0; //@line 1162
- $11 = HEAP32[$10 >> 2] | 0; //@line 1163
- $13 = HEAP8[$11 + 9 | 0] | 0; //@line 1165
- $15 = $screen + 12 | 0; //@line 1167
- $16 = HEAP32[$15 >> 2] | 0; //@line 1168
- $17 = ($16 | 0) > 0; //@line 1169
+ $9 = HEAP32[$screen + 20 >> 2] | 0; //@line 983
+ $10 = $screen + 4 | 0; //@line 984
+ $11 = HEAP32[$10 >> 2] | 0; //@line 985
+ $13 = HEAP8[$11 + 9 | 0] | 0; //@line 987
+ $15 = $screen + 12 | 0; //@line 989
+ $16 = HEAP32[$15 >> 2] | 0; //@line 990
+ $17 = ($16 | 0) > 0; //@line 991
  if ($13 << 24 >> 24 != 2) {
   if (!$17) {
-   _SDL_UnlockSurface($screen | 0); //@line 1174
-   _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1175
-   STACKTOP = sp; //@line 1176
+   _SDL_UnlockSurface($screen | 0); //@line 996
+   _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 997
+   STACKTOP = sp; //@line 998
    return;
   }
-  $18 = $screen + 8 | 0; //@line 1179
-  $19 = $screen + 16 | 0; //@line 1180
+  $18 = $screen + 8 | 0; //@line 1001
+  $19 = $screen + 16 | 0; //@line 1002
   $buffer_033 = $9;
   $i_034 = 0;
   $24 = $16;
   $23 = $13;
   while (1) {
-   _memset($buffer_033 | 0, (($i_034 * 255 | 0 | 0) / ($24 | 0) | 0) & 255 | 0, Math_imul($23 & 255, HEAP32[$18 >> 2] | 0) | 0); //@line 1194
-   $31 = $i_034 + 1 | 0; //@line 1195
-   $32 = HEAP32[$15 >> 2] | 0; //@line 1196
+   _memset($buffer_033 | 0, (($i_034 * 255 | 0 | 0) / ($24 | 0) | 0) & 255 | 0, Math_imul($23 & 255, HEAP32[$18 >> 2] | 0) | 0); //@line 1016
+   $31 = $i_034 + 1 | 0; //@line 1017
+   $32 = HEAP32[$15 >> 2] | 0; //@line 1018
    if (($31 | 0) >= ($32 | 0)) {
     break;
    }
@@ -8335,36 +8324,36 @@ function _FillBackground($screen) {
    $24 = $32;
    $23 = HEAP8[(HEAP32[$10 >> 2] | 0) + 9 | 0] | 0;
   }
-  _SDL_UnlockSurface($screen | 0); //@line 1210
-  _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1211
-  STACKTOP = sp; //@line 1212
+  _SDL_UnlockSurface($screen | 0); //@line 1032
+  _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1033
+  STACKTOP = sp; //@line 1034
   return;
  }
  if (!$17) {
-  _SDL_UnlockSurface($screen | 0); //@line 1217
-  _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1218
-  STACKTOP = sp; //@line 1219
+  _SDL_UnlockSurface($screen | 0); //@line 1039
+  _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1040
+  STACKTOP = sp; //@line 1041
   return;
  }
- $20 = $screen + 8 | 0; //@line 1222
- $21 = $screen + 16 | 0; //@line 1223
+ $20 = $screen + 8 | 0; //@line 1044
+ $21 = $screen + 16 | 0; //@line 1045
  $buffer_128 = $9;
  $i_129 = 0;
  $38 = $16;
  $37 = $11;
  while (1) {
-  $41 = (($i_129 * 255 | 0 | 0) / ($38 | 0) | 0) & 255; //@line 1233
-  $43 = (_SDL_MapRGB($37 | 0, $41 | 0, $41 | 0, $41 | 0) | 0) & 65535; //@line 1235
-  $44 = $buffer_128; //@line 1236
+  $41 = (($i_129 * 255 | 0 | 0) / ($38 | 0) | 0) & 255; //@line 1055
+  $43 = (_SDL_MapRGB($37 | 0, $41 | 0, $41 | 0, $41 | 0) | 0) & 65535; //@line 1057
+  $44 = $buffer_128; //@line 1058
   if ((HEAP32[$20 >> 2] | 0) > 0) {
-   $k_027 = 0; //@line 1241
+   $k_027 = 0; //@line 1063
    do {
-    HEAP16[$44 + ($k_027 << 1) >> 1] = $43; //@line 1245
-    $k_027 = $k_027 + 1 | 0; //@line 1246
+    HEAP16[$44 + ($k_027 << 1) >> 1] = $43; //@line 1067
+    $k_027 = $k_027 + 1 | 0; //@line 1068
    } while (($k_027 | 0) < (HEAP32[$20 >> 2] | 0));
   }
-  $51 = $i_129 + 1 | 0; //@line 1257
-  $52 = HEAP32[$15 >> 2] | 0; //@line 1258
+  $51 = $i_129 + 1 | 0; //@line 1079
+  $52 = HEAP32[$15 >> 2] | 0; //@line 1080
   if (($51 | 0) >= ($52 | 0)) {
    break;
   }
@@ -8373,9 +8362,9 @@ function _FillBackground($screen) {
   $38 = $52;
   $37 = HEAP32[$10 >> 2] | 0;
  }
- _SDL_UnlockSurface($screen | 0); //@line 1270
- _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1271
- STACKTOP = sp; //@line 1272
+ _SDL_UnlockSurface($screen | 0); //@line 1092
+ _SDL_UpdateRect($screen | 0, 0, 0, 0, 0); //@line 1093
+ STACKTOP = sp; //@line 1094
  return;
 }
 function _memset(ptr, value, num) {
@@ -8383,27 +8372,27 @@ function _memset(ptr, value, num) {
  value = value | 0;
  num = num | 0;
  var stop = 0, value4 = 0, stop4 = 0, unaligned = 0;
- stop = ptr + num | 0; //@line 5174
+ stop = ptr + num | 0; //@line 5190
  if ((num | 0) >= 20) {
-  value = value & 255; //@line 5177
-  unaligned = ptr & 3; //@line 5178
-  value4 = value | value << 8 | value << 16 | value << 24; //@line 5179
-  stop4 = stop & ~3; //@line 5180
+  value = value & 255; //@line 5193
+  unaligned = ptr & 3; //@line 5194
+  value4 = value | value << 8 | value << 16 | value << 24; //@line 5195
+  stop4 = stop & ~3; //@line 5196
   if (unaligned) {
-   unaligned = ptr + 4 - unaligned | 0; //@line 5182
+   unaligned = ptr + 4 - unaligned | 0; //@line 5198
    while ((ptr | 0) < (unaligned | 0)) {
-    HEAP8[ptr] = value; //@line 5184
-    ptr = ptr + 1 | 0; //@line 5185
+    HEAP8[ptr] = value; //@line 5200
+    ptr = ptr + 1 | 0; //@line 5201
    }
   }
   while ((ptr | 0) < (stop4 | 0)) {
-   HEAP32[ptr >> 2] = value4; //@line 5189
-   ptr = ptr + 4 | 0; //@line 5190
+   HEAP32[ptr >> 2] = value4; //@line 5205
+   ptr = ptr + 4 | 0; //@line 5206
   }
  }
  while ((ptr | 0) < (stop | 0)) {
-  HEAP8[ptr] = value; //@line 5194
-  ptr = ptr + 1 | 0; //@line 5195
+  HEAP8[ptr] = value; //@line 5210
+  ptr = ptr + 1 | 0; //@line 5211
  }
 }
 function _memcpy(dest, src, num) {
@@ -8411,29 +8400,29 @@ function _memcpy(dest, src, num) {
  src = src | 0;
  num = num | 0;
  var ret = 0;
- ret = dest | 0; //@line 5147
+ ret = dest | 0; //@line 5163
  if ((dest & 3) == (src & 3)) {
   while (dest & 3) {
-   if ((num | 0) == 0) return ret | 0; //@line 5150
-   HEAP8[dest] = HEAP8[src] | 0; //@line 5151
-   dest = dest + 1 | 0; //@line 5152
-   src = src + 1 | 0; //@line 5153
-   num = num - 1 | 0; //@line 5154
+   if ((num | 0) == 0) return ret | 0; //@line 5166
+   HEAP8[dest] = HEAP8[src] | 0; //@line 5167
+   dest = dest + 1 | 0; //@line 5168
+   src = src + 1 | 0; //@line 5169
+   num = num - 1 | 0; //@line 5170
   }
   while ((num | 0) >= 4) {
-   HEAP32[dest >> 2] = HEAP32[src >> 2]; //@line 5157
-   dest = dest + 4 | 0; //@line 5158
-   src = src + 4 | 0; //@line 5159
-   num = num - 4 | 0; //@line 5160
+   HEAP32[dest >> 2] = HEAP32[src >> 2]; //@line 5173
+   dest = dest + 4 | 0; //@line 5174
+   src = src + 4 | 0; //@line 5175
+   num = num - 4 | 0; //@line 5176
   }
  }
  while ((num | 0) > 0) {
-  HEAP8[dest] = HEAP8[src] | 0; //@line 5164
-  dest = dest + 1 | 0; //@line 5165
-  src = src + 1 | 0; //@line 5166
-  num = num - 1 | 0; //@line 5167
+  HEAP8[dest] = HEAP8[src] | 0; //@line 5180
+  dest = dest + 1 | 0; //@line 5181
+  src = src + 1 | 0; //@line 5182
+  num = num - 1 | 0; //@line 5183
  }
- return ret | 0; //@line 5169
+ return ret | 0; //@line 5185
 }
 function copyTempDouble(ptr) {
  ptr = ptr | 0;
@@ -8464,11 +8453,11 @@ function stackAlloc(size) {
 function _strlen(ptr) {
  ptr = ptr | 0;
  var curr = 0;
- curr = ptr; //@line 5138
+ curr = ptr; //@line 5154
  while (HEAP8[curr] | 0) {
-  curr = curr + 1 | 0; //@line 5140
+  curr = curr + 1 | 0; //@line 5156
  }
- return curr - ptr | 0; //@line 5142
+ return curr - ptr | 0; //@line 5158
 }
 function setThrew(threw, value) {
  threw = threw | 0;
@@ -8482,32 +8471,32 @@ function dynCall_iii(index, a1, a2) {
  index = index | 0;
  a1 = a1 | 0;
  a2 = a2 | 0;
- return FUNCTION_TABLE_iii[index & 1](a1 | 0, a2 | 0) | 0; //@line 5220
+ return FUNCTION_TABLE_iii[index & 1](a1 | 0, a2 | 0) | 0; //@line 5236
 }
 function dynCall_ii(index, a1) {
  index = index | 0;
  a1 = a1 | 0;
- return FUNCTION_TABLE_ii[index & 1](a1 | 0) | 0; //@line 5206
+ return FUNCTION_TABLE_ii[index & 1](a1 | 0) | 0; //@line 5222
 }
 function dynCall_vi(index, a1) {
  index = index | 0;
  a1 = a1 | 0;
- FUNCTION_TABLE_vi[index & 1](a1 | 0); //@line 5227
+ FUNCTION_TABLE_vi[index & 1](a1 | 0); //@line 5243
 }
 function b2(p0, p1) {
  p0 = p0 | 0;
  p1 = p1 | 0;
- abort(2); //@line 5232
- return 0; //@line 5232
-}
-function _quit($rc) {
- $rc = $rc | 0;
- _SDL_Quit(); //@line 1123
- _exit($rc | 0); //@line 1124
+ abort(2); //@line 5248
+ return 0; //@line 5248
 }
 function dynCall_v(index) {
  index = index | 0;
- FUNCTION_TABLE_v[index & 1](); //@line 5213
+ FUNCTION_TABLE_v[index & 3](); //@line 5229
+}
+function _quit($rc) {
+ $rc = $rc | 0;
+ _SDL_Quit(); //@line 953
+ _exit($rc | 0); //@line 954
 }
 function setTempRet9(value) {
  value = value | 0;
@@ -8551,8 +8540,8 @@ function setTempRet0(value) {
 }
 function b0(p0) {
  p0 = p0 | 0;
- abort(0); //@line 5230
- return 0; //@line 5230
+ abort(0); //@line 5246
+ return 0; //@line 5246
 }
 function stackRestore(top) {
  top = top | 0;
@@ -8560,13 +8549,13 @@ function stackRestore(top) {
 }
 function b3(p0) {
  p0 = p0 | 0;
- abort(3); //@line 5233
+ abort(3); //@line 5249
 }
 function stackSave() {
  return STACKTOP | 0; //@line 9
 }
 function b1() {
- abort(1); //@line 5231
+ abort(1); //@line 5247
 }
 function __GLOBAL__I_a() {
  return;
@@ -8575,13 +8564,13 @@ function runPostSets() {
 }
 // EMSCRIPTEN_END_FUNCS
   var FUNCTION_TABLE_ii = [b0,b0];
-  var FUNCTION_TABLE_v = [b1,b1];
+  var FUNCTION_TABLE_v = [b1,b1,_main_loop,b1];
   var FUNCTION_TABLE_iii = [b2,b2];
   var FUNCTION_TABLE_vi = [b3,b3];
   return { _strlen: _strlen, _free: _free, _main: _main, __GLOBAL__I_a: __GLOBAL__I_a, _memset: _memset, _malloc: _malloc, _memcpy: _memcpy, runPostSets: runPostSets, stackAlloc: stackAlloc, stackSave: stackSave, stackRestore: stackRestore, setThrew: setThrew, setTempRet0: setTempRet0, setTempRet1: setTempRet1, setTempRet2: setTempRet2, setTempRet3: setTempRet3, setTempRet4: setTempRet4, setTempRet5: setTempRet5, setTempRet6: setTempRet6, setTempRet7: setTempRet7, setTempRet8: setTempRet8, setTempRet9: setTempRet9, dynCall_ii: dynCall_ii, dynCall_v: dynCall_v, dynCall_iii: dynCall_iii, dynCall_vi: dynCall_vi };
 })
 // EMSCRIPTEN_END_ASM
-({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_strncmp": _strncmp, "_llvm_lifetime_end": _llvm_lifetime_end, "_SDL_SetColorKey": _SDL_SetColorKey, "_sysconf": _sysconf, "_SDL_RWFromFile": _SDL_RWFromFile, "_abort": _abort, "_fprintf": _fprintf, "_sqrt": _sqrt, "_printf": _printf, "_SDL_UpdateRects": _SDL_UpdateRects, "_fflush": _fflush, "_SDL_LockSurface": _SDL_LockSurface, "__reallyNegative": __reallyNegative, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_FillRect": _SDL_FillRect, "_strtol": _strtol, "_fputc": _fputc, "_SDL_GetMouseState": _SDL_GetMouseState, "_SDL_PollEvent": _SDL_PollEvent, "_SDL_GetVideoInfo": _SDL_GetVideoInfo, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_SDL_MapRGB": _SDL_MapRGB, "_SDL_MapRGBA": _SDL_MapRGBA, "_send": _send, "_write": _write, "_fputs": _fputs, "_SDL_UpperBlit": _SDL_UpperBlit, "_exit": _exit, "_SDL_UpdateRect": _SDL_UpdateRect, "_SDL_SetAlpha": _SDL_SetAlpha, "_SDL_GetError": _SDL_GetError, "_isspace": _isspace, "_SDL_DisplayFormat": _SDL_DisplayFormat, "_puts": _puts, "__parseInt": __parseInt, "_llvm_dbg_value": _llvm_dbg_value, "__formatString": __formatString, "_IMG_Load_RW": _IMG_Load_RW, "_atoi": _atoi, "_SDL_Delay": _SDL_Delay, "_SDL_GetTicks": _SDL_GetTicks, "_SDL_SetClipRect": _SDL_SetClipRect, "_pwrite": _pwrite, "_SDL_UnlockSurface": _SDL_UnlockSurface, "_sbrk": _sbrk, "_SDL_Init": _SDL_Init, "_SDL_CreateRGBSurface": _SDL_CreateRGBSurface, "___errno_location": ___errno_location, "_llvm_lifetime_start": _llvm_lifetime_start, "_SDL_Quit": _SDL_Quit, "_SDL_FreeSurface": _SDL_FreeSurface, "_time": _time, "__exit": __exit, "_SDL_FreeRW": _SDL_FreeRW, "_strcmp": _strcmp, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
+({ "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array }, { "abort": abort, "assert": assert, "asmPrintInt": asmPrintInt, "asmPrintFloat": asmPrintFloat, "min": Math_min, "invoke_ii": invoke_ii, "invoke_v": invoke_v, "invoke_iii": invoke_iii, "invoke_vi": invoke_vi, "_strncmp": _strncmp, "_llvm_lifetime_end": _llvm_lifetime_end, "_SDL_SetColorKey": _SDL_SetColorKey, "_sysconf": _sysconf, "_SDL_RWFromFile": _SDL_RWFromFile, "_abort": _abort, "_exit": _exit, "_fprintf": _fprintf, "_sqrt": _sqrt, "_printf": _printf, "_SDL_UpdateRects": _SDL_UpdateRects, "_fflush": _fflush, "_SDL_LockSurface": _SDL_LockSurface, "__reallyNegative": __reallyNegative, "_SDL_SetVideoMode": _SDL_SetVideoMode, "_SDL_FillRect": _SDL_FillRect, "_strtol": _strtol, "_SDL_DisplayFormatAlpha": _SDL_DisplayFormatAlpha, "_SDL_GetMouseState": _SDL_GetMouseState, "_SDL_PollEvent": _SDL_PollEvent, "_SDL_GetVideoInfo": _SDL_GetVideoInfo, "___setErrNo": ___setErrNo, "_fwrite": _fwrite, "_emscripten_run_script": _emscripten_run_script, "_SDL_MapRGBA": _SDL_MapRGBA, "_send": _send, "_write": _write, "_fputs": _fputs, "_SDL_UpperBlit": _SDL_UpperBlit, "_SDL_MapRGB": _SDL_MapRGB, "_SDL_UpdateRect": _SDL_UpdateRect, "_SDL_SetAlpha": _SDL_SetAlpha, "_SDL_GetError": _SDL_GetError, "_isspace": _isspace, "_puts": _puts, "__parseInt": __parseInt, "_fputc": _fputc, "_llvm_dbg_value": _llvm_dbg_value, "_emscripten_set_main_loop": _emscripten_set_main_loop, "__formatString": __formatString, "_IMG_Load_RW": _IMG_Load_RW, "_atoi": _atoi, "_SDL_GetTicks": _SDL_GetTicks, "_SDL_SetClipRect": _SDL_SetClipRect, "_pwrite": _pwrite, "_SDL_UnlockSurface": _SDL_UnlockSurface, "_sbrk": _sbrk, "_SDL_Init": _SDL_Init, "_SDL_CreateRGBSurface": _SDL_CreateRGBSurface, "___errno_location": ___errno_location, "_llvm_lifetime_start": _llvm_lifetime_start, "_SDL_Quit": _SDL_Quit, "_SDL_FreeSurface": _SDL_FreeSurface, "_time": _time, "__exit": __exit, "_SDL_FreeRW": _SDL_FreeRW, "_strcmp": _strcmp, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "NaN": NaN, "Infinity": Infinity, "_stderr": _stderr }, buffer);
 var _strlen = Module["_strlen"] = asm["_strlen"];
 var _free = Module["_free"] = asm["_free"];
 var _main = Module["_main"] = asm["_main"];
