@@ -16,6 +16,11 @@
 #include "SDL.h"
 #include "SDL_audio.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+#endif
+
 struct {
 	SDL_AudioSpec spec;
 	Uint8   *sound;			/* Pointer to wave data */
@@ -103,12 +108,26 @@ int main(int argc, char *argv[])
 
 	/* Let the audio run */
 	printf("Using audio driver: %s\n", SDL_AudioDriverName(name, 32));
+#ifndef EMSCRIPTEN
 	while ( ! done && (SDL_GetAudioStatus() == SDL_AUDIO_PLAYING) )
 		SDL_Delay(1000);
+#else
+	emscripten_set_main_loop(&main_loop, 1, 1);
+}
+
+void main_loop() {
+	if (done || (SDL_GetAudioStatus() != SDL_AUDIO_PLAYING)) {
+#endif
 
 	/* Clean up on signal */
 	SDL_CloseAudio();
 	SDL_FreeWAV(wave.sound);
 	SDL_Quit();
+
+#ifndef EMSCRIPTEN
 	return(0);
+#else
+	exit(0);
+	}
+#endif
 }

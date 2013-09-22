@@ -8,6 +8,12 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+	void end_main(void *);
+#endif
+
 /* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
 static void quit(int rc)
 {
@@ -70,18 +76,17 @@ int get_video_args(char *argv[], int *w, int *h, int *bpp, Uint32 *flags)
 	return i;
 }
 
+SDL_Surface *screen;
+SDL_Surface *image;
+float gamma;
+int i;
+int w, h, bpp;
+Uint32 flags;
+Uint16 ramp[256];
+Uint16 red_ramp[256];
+Uint32 then, timeout;
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
-	SDL_Surface *image;
-	float gamma;
-	int i;
-	int w, h, bpp;
-	Uint32 flags;
-	Uint16 ramp[256];
-	Uint16 red_ramp[256];
-	Uint32 then, timeout;
-
 	/* Check command line arguments */
 	argv += get_video_args(argv, &w, &h, &bpp, &flags);
 
@@ -140,7 +145,16 @@ int main(int argc, char *argv[])
 	/* Wait a bit, handling events */
 	then = SDL_GetTicks();
 	timeout = (5*1000);
+#ifndef EMSCRIPTEN
 	while ( (SDL_GetTicks()-then) < timeout ) {
+#else
+	
+	emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop() {
+	if ( (SDL_GetTicks()-then) < timeout ) {
+#endif
 		SDL_Event event;
 
 		while ( SDL_PollEvent(&event) ) {
@@ -171,6 +185,9 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+#ifdef EMSCRIPTEN
+	else {
+#endif
 
 	/* Perform a gamma flash to red using color ramps */
 	while ( gamma < 10.0 ) {
@@ -190,8 +207,22 @@ int main(int argc, char *argv[])
 		memset(red_ramp, i, sizeof(red_ramp));
 		SDL_SetGammaRamp(red_ramp, NULL, NULL);
 	}
-	SDL_Delay(1*1000);
 
+#ifndef EMSCRIPTEN
+	SDL_Delay(1*1000);
+#else
+	emscripten_pause_main_loop();
+	emscripten_async_call(&end_main, 0, 1*1000);
+	}
+}
+
+void end_main() {
+#endif
 	SDL_Quit();
+
+#ifndef EMSCRIPTEN
 	return(0);
+#else
+	exit(0);
+#endif
 }

@@ -17,6 +17,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+    #include <emscripten.h>
+    void main_loop();
+#endif
+
 /* screen size */
 #define SCRW 640
 #define SCRH 480
@@ -128,21 +133,20 @@ static SDL_Surface *hflip(SDL_Surface *s)
     return z;
 }
 
+SDL_Color cmap[256];
+SDL_Surface *screen;
+SDL_Surface *bg;
+SDL_Surface *boat[2];
+unsigned vidflags = 0;
+unsigned start;
+int fade_max = 400;
+int fade_level, fade_dir;
+int boatcols, frames, i, red;
+int boatx[NBOATS], boaty[NBOATS], boatdir[NBOATS];
+int gamma_fade = 0;
+int gamma_ramp = 0;
 int main(int argc, char **argv)
 {
-    SDL_Color cmap[256];
-    SDL_Surface *screen;
-    SDL_Surface *bg;
-    SDL_Surface *boat[2];
-    unsigned vidflags = 0;
-    unsigned start;
-    int fade_max = 400;
-    int fade_level, fade_dir;
-    int boatcols, frames, i, red;
-    int boatx[NBOATS], boaty[NBOATS], boatdir[NBOATS];
-    int gamma_fade = 0;
-    int gamma_ramp = 0;
-
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	sdlerr("initialising SDL");
 
@@ -184,7 +188,13 @@ int main(int argc, char **argv)
     boat[1] = hflip(boat[0]);
     SDL_SetColorKey(boat[1], SDL_SRCCOLORKEY | SDL_RLEACCEL,
 		    SDL_MapRGB(boat[1]->format, 0xff, 0x00, 0xff));
-
+    
+    // This will cause segmentation faults later, if unchecked. (cmap will be too small!)
+    if(boatcols > 66) {
+        //sdlerr("boatcols > 66");
+        boatcols = 66;
+    }
+    
     /*
      * First set the physical screen palette to black, so the user won't
      * see our initial drawing on the screen.
@@ -230,7 +240,14 @@ int main(int argc, char **argv)
     frames = 0;
     fade_dir = 1;
     fade_level = 0;
+#ifndef EMSCRIPTEN
     do {
+#else
+    emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop() {
+#endif
 	SDL_Event e;
 	SDL_Rect updates[NBOATS];
 	SDL_Rect r;
@@ -276,18 +293,19 @@ int main(int argc, char **argv)
 		updates[i].w = SCRW - updates[i].x;
 	}
 
-	for(i = 0; i < NBOATS; i++) {
+    for(i = 0; i < NBOATS; i++) {
 	    /* paint boat on new position */
 	    r.x = boatx[i];
 	    r.y = boaty[i];
-	    if(SDL_BlitSurface(boat[(boatdir[i] + 1) / 2], NULL,
+        
+        if(SDL_BlitSurface(boat[(boatdir[i] + 1) / 2], NULL,
 			       screen, &r) < 0)
 		sdlerr("blitting boat");
 	}
-
+    
 	/* cycle wave palette */
 	for(i = 0; i < 64; i++)
-	    cmap[boatcols + ((i + frames) & 63)] = wavemap[i];
+        cmap[boatcols + ((i + frames) & 63)] = wavemap[i];
 
 	if(fade_dir) {
 	    /* Fade the entire palette in/out */
@@ -330,13 +348,22 @@ int main(int argc, char **argv)
 	/* update changed areas of the screen */
 	SDL_UpdateRects(screen, NBOATS, updates);
 	frames++;
+#ifndef EMSCRIPTEN
     } while(fade_level > 0);
-
+#else
+    if(fade_level < 1) {
+#endif
     printf("%d frames, %.2f fps\n",
 	   frames, 1000.0 * frames / (SDL_GetTicks() - start));
 
     if (vidflags & SDL_FULLSCREEN) SDL_ShowCursor (SDL_TRUE);
     SDL_Quit();
+#ifndef EMSCRIPTEN
     return 0;
+#else
+    exit(0);
+    }
+    emscripten_run_script("report(true);");
+#endif
 }
 

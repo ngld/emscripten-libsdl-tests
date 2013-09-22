@@ -9,6 +9,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+	#include <emscripten.h>
+	void main_loop();
+#endif
+
 #define NUM_SPRITES	100
 #define MAX_SPEED 	1
 
@@ -148,18 +153,17 @@ Uint32 FastestFlags(Uint32 flags, int width, int height, int bpp)
 	return(flags);
 }
 
+SDL_Surface *screen;
+Uint8 *mem;
+int width, height;
+Uint8  video_bpp;
+Uint32 videoflags;
+Uint32 background;
+int    i, done;
+SDL_Event event;
+Uint32 then, now, frames;
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
-	Uint8 *mem;
-	int width, height;
-	Uint8  video_bpp;
-	Uint32 videoflags;
-	Uint32 background;
-	int    i, done;
-	SDL_Event event;
-	Uint32 then, now, frames;
-
 	/* Initialize SDL */
 	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
@@ -290,7 +294,15 @@ int main(int argc, char *argv[])
 	then = SDL_GetTicks();
 	done = 0;
 	sprites_visible = 0;
+
+#ifndef EMSCRIPTEN
 	while ( !done ) {
+#else
+	emscripten_set_main_loop(&main_loop, 0, 1);
+}
+
+void main_loop() {
+#endif
 		/* Check for events */
 		++frames;
 		while ( SDL_PollEvent(&event) ) {
@@ -308,7 +320,15 @@ int main(int argc, char *argv[])
 			}
 		}
 		MoveSprites(screen, background);
+#ifndef EMSCRIPTEN
 	}
+#else
+	if(frames == 10) {
+		emscripten_run_script("report(true);");
+	}
+	
+	if(done) {
+#endif
 	SDL_FreeSurface(sprite);
 	free(mem);
 
@@ -319,5 +339,10 @@ int main(int argc, char *argv[])
 					((double)frames*1000)/(now-then));
 	}
 	SDL_Quit();
+
+#ifndef EMSCRIPTEN
 	return(0);
+#else
+	}
+#endif
 }

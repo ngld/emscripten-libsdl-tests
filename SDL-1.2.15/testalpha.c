@@ -10,6 +10,11 @@
 
 #include "SDL.h"
 
+#ifdef EMSCRIPTEN
+    #include <emscripten.h>
+    void main_loop();
+#endif
+
 #define FRAME_TICKS	(1000/30)		/* 30 frames/second */
 
 /* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
@@ -319,20 +324,19 @@ void WarpSprite(SDL_Surface *screen, int x, int y)
 	SDL_UpdateRects(screen, 2, updates);
 }
 
+int mouse_pressed;
+Uint32 ticks, lastticks;
+int    w, h;
+SDL_Surface *screen;
+Uint32 videoflags;
+int    i, done;
+SDL_Event event;
+const SDL_VideoInfo *info;
+Uint8  video_bpp;
+SDL_Surface *light;
+
 int main(int argc, char *argv[])
 {
-	const SDL_VideoInfo *info;
-	SDL_Surface *screen;
-	int    w, h;
-	Uint8  video_bpp;
-	Uint32 videoflags;
-	int    i, done;
-	SDL_Event event;
-	SDL_Surface *light;
-	int mouse_pressed;
-	Uint32 ticks, lastticks;
-
-
 	/* Initialize SDL */
 	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
@@ -449,7 +453,15 @@ int main(int argc, char *argv[])
 	lastticks = SDL_GetTicks();
 	done = 0;
 	mouse_pressed = 0;
+#ifndef EMSCRIPTEN
 	while ( !done ) {
+#else
+	emscripten_run_script("report(true);");
+	emscripten_set_main_loop(&main_loop, 30, 1);
+}
+
+void main_loop() {
+#endif
 		/* Update the frame -- move the sprite */
 		if ( mouse_pressed ) {
 			MoveSprite(screen, light);
@@ -458,6 +470,7 @@ int main(int argc, char *argv[])
 			MoveSprite(screen, NULL);
 		}
 
+#ifndef EMSCRIPTEN
 		/* Slow down the loop to 30 frames/second */
 		ticks = SDL_GetTicks();
 		if ( (ticks-lastticks) < FRAME_TICKS ) {
@@ -470,6 +483,7 @@ fprintf(stderr, "Slept %d ticks\n", (SDL_GetTicks()-ticks));
 #endif
 		}
 		lastticks = ticks;
+#endif
 
 		/* Check for events */
 		while ( SDL_PollEvent(&event) ) {
@@ -531,7 +545,10 @@ fprintf(stderr, "Slept %d ticks\n", (SDL_GetTicks()-ticks));
 					break;
 			}
 		}
+
+#ifndef EMSCRIPTEN
 	}
+	
 	SDL_FreeSurface(light);
 	SDL_FreeSurface(sprite);
 	SDL_FreeSurface(backing);
@@ -541,7 +558,22 @@ fprintf(stderr, "Slept %d ticks\n", (SDL_GetTicks()-ticks));
 		printf("%d alpha blits, ~%4.4f ms per blit\n", 
 			flashes, (float)flashtime/flashes);
 	}
-
+	
 	SDL_Quit();
 	return(0);
+#else
+	if(done) {
+		SDL_FreeSurface(light);
+		SDL_FreeSurface(sprite);
+		SDL_FreeSurface(backing);
+
+		/* Print out some timing information */
+		if ( flashes > 0 ) {
+			printf("%d alpha blits, ~%4.4f ms per blit\n", 
+				flashes, (float)flashtime/flashes);
+		}
+		
+		SDL_Quit();
+	}
+#endif
 }
