@@ -69,23 +69,42 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(out)
     
-    def compile_test(self, test):
+    def get_build_cmd(self, test):
         test = os.path.basename(urllib.unquote(test))
         srcfile = os.path.join(TEST_PATH, test)
         destfile = os.path.join(BUILD_PATH, test + '.js')
         logfile = os.path.join(BUILD_PATH, test + '.log')
+        support = os.path.relpath(os.path.join(TEST_PATH, 'support'))
         
         if not os.path.isfile(srcfile):
-            self.send_error(404, "Couldn't find test!")
-            return
+            return -1, None, None, None
         
         if os.path.isfile(destfile):
             os.unlink(destfile)
         if os.path.isfile(destfile + '.map'):
             os.unlink(destfile + '.map')
         
+        cmd = ['emcc', '-g4', '-O2', '-Xclang', '-fcolor-diagnostics', '-o', destfile, srcfile]
+        if os.path.isdir(support):
+            cmd.extend(['-I' + support ])
+            
+            for item in os.listdir(support):
+                path = os.path.join(support, item)
+                if os.path.isfile(path) and item[:3] == 'lib' and item[-3:] == '.bc':
+                    cmd.append(path)
+        
+        return cmd, srcfile, destfile, logfile
+    
+    def compile_test(self, test):
+        cmd, srcfile, destfile, logfile = self.get_build_cmd(test)
+        
+        if cmd == -1:
+            self.send_error(404, 'Test not found!')
+            return
+        
+        logging.info('Running %s.' % cmd)
         logstream = open(logfile, 'wb')
-        handle = subprocess.Popen(['emcc', '-g4', '-O2', '-Xclang', '-fcolor-diagnostics', '-o', destfile, srcfile], stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
+        handle = subprocess.Popen(cmd, stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
         handle.wait()
         logstream.close()
         
@@ -120,22 +139,12 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.send_plain('py_emcc: Sorry, I couldn\'t parse the command!\n')
             return
         
-        srcfile = os.path.join(TEST_PATH, test)
-        destfile = os.path.join(BUILD_PATH, test + '.js')
-        logfile = os.path.join(BUILD_PATH, test + '.log')
-        
-        if not os.path.isfile(srcfile):
-            self.send_plain('emcc: Couldn\'t find "' + test + '!"\n')
-            return
-        
-        if os.path.isfile(destfile):
-            os.unlink(destfile)
-        if os.path.isfile(destfile + '.map'):
-            os.unlink(destfile + '.map')
+        cmd, srcfile, destfile, logfile = self.get_build_cmd(test)
+        logging.info('Running %s.' % cmd)
         
         logstream = open(logfile, 'wb')
         try:
-            handle = subprocess.Popen(['emcc', '-g4', '-O2', '-Xclang', '-fcolor-diagnostics', '-o', destfile, srcfile] + args, stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
+            handle = subprocess.Popen(cmd + args, stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
             handle.wait()
         except:
             logging.exception('emcc failed!')

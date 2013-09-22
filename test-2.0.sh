@@ -13,7 +13,8 @@ cd build
 echo "Compiling..."
 emcc --version | head -1 > emcc_version.txt
 
-for path in ../SDL-1.2.*/*.{c,cpp}; do
+sdl_path=../SDL-2.0.*
+for path in $sdl_path/*.{c,cpp}; do
     [ ! -f "$path" ] && continue
     
     file="$(basename "$path")"
@@ -22,12 +23,12 @@ for path in ../SDL-1.2.*/*.{c,cpp}; do
     [ -f "$file.js.map" ] && rm "$file.js.map"
     
     echo "$file"
-    emcc -g4 -O2 -Xclang -fcolor-diagnostics -o "$file.js" "$path" 2>&1 | tee "$file.log"
+    emcc -g4 -O2 -Xclang -fcolor-diagnostics -o "$file.js" -I${sdl_path}/support "$path" ${sdl_path}/support/libsdl2_test.bc 2>&1 | tee "$file.log"
 done
 
 if [ ! "$1" = "--no-web" ]; then
     echo "Starting web server..."
     cd ..
 
-    ./test_server.py -l SDL-1.2.* "$@"
+    ./test_server.py -l SDL-2.0.* "$@"
 fi

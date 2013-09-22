@@ -2,14 +2,15 @@ emscripten-libsdl-tests
 =======================
 
 Run libSDL's tests against emscripten to test SDL support.
-Note: For now only the tests from version 1.2.15 are working.
-The 2.0 tests won't compile at all, right now.
+Most of the 1.2 tests are changed to work with emscripten (the changes are inside ```#ifdef EMSCRIPTEN``` blocks).
+Work on the 2.0 tests has begun.
 
 
 Usage
 =====
 
-Just run ```./test_server.py -l SDL-1.2.15``` to start.
+Just run ```./test_server.py -l SDL-1.2.15``` to start the test framework for SDL 1.2.15.
+If you replace ```SDL-1.2.15``` with ```SDL-2.0.0``` you can run the tests for SDL 2.0.0.
 Then click "Compile tests" and "Run tests" afterwards.
 
 If you move your mouse over a stacktrace and it turns into a pointer, you can click to see
