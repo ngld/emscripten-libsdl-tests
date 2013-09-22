@@ -1,5 +1,5 @@
 (function () {
-    var can_compile = false;
+    var can_compile = true;
     
     function getRow(name) {
         var found = false, row;
@@ -68,7 +68,7 @@
         $('#test-display .progress').addClass('active');
         $('#test-display .progress-bar').css('width', '0%');
         $('.terminal-win').modal('show');
-        term.write('\x1b[H\x1b[2J');
+        term.write('\x1b[H\x1b[2J\x1b[5;1H');
         lockTerm();
         
         var idx = -1, tests = [];
@@ -296,6 +296,7 @@
                 can_compile = true;
             } else {
                 $('.runner-compile').remove();
+                $('.compile').remove();
                 can_compile = false;
             }
             $('.emcc-version').text(ver[0]);

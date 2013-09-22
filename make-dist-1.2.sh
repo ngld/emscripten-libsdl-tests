@@ -2,8 +2,6 @@
 
 set -e
 cd "$(dirname "$0")"
-
-[ -d build ] && rm -r build
 sh ./test-1.2.sh --no-web
 
 [ -f dist-1.2.tar.gz ] && rm dist-1.2.tar.gz

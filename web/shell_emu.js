@@ -142,7 +142,7 @@ function initTerm() {
         }, 300);
     });
     $('.terminal-win').on('hide.bs.modal', function () {
-        Terminal.focus.blur();
+        term.blur();
     });
 }
 
