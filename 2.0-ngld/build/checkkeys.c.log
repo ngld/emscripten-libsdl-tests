@@ -1,0 +1,16 @@
+[1m../SDL-2.0.0/checkkeys.c:123:16: [0m[0;1;35mwarning: [0m[1massigning to 'unsigned char *' from 'char *' converts between pointers to integer types with different sign [-Wpointer-sign][0m
+    for ( spot = text; *spot; ++spot )
+[0;1;32m               ^ ~~~~
+[0m[1m../SDL-2.0.0/checkkeys.c:125:36: [0m[0;1;35mwarning: [0m[1mpassing 'unsigned char [1024]' to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign][0m
+        size_t length = SDL_strlen(expanded);
+[0;1;32m                                   ^~~~~~~~
+[0m[1m/home/tobias/dev/em-dev/emscripten/system/include/SDL/SDL_stdinc.h:409:55: [0m[0;1;30mnote: [0mpassing argument to parameter 'string' here[0m
+extern DECLSPEC size_t SDLCALL SDL_strlen(const char *string);
+[0;1;32m                                                      ^
+[0m[1m../SDL-2.0.0/checkkeys.c:126:22: [0m[0;1;35mwarning: [0m[1mpassing 'unsigned char *' to parameter of type 'char *' converts between pointers to integer types with different sign [-Wpointer-sign][0m
+        SDL_snprintf(expanded + length, sizeof(expanded) - length, "\\x%.2x", *spot);
+[0;1;32m                     ^~~~~~~~~~~~~~~~~
+[0m[1m/home/tobias/dev/em-dev/emscripten/system/include/SDL/SDL_stdinc.h:624:48: [0m[0;1;30mnote: [0mpassing argument to parameter 'text' here[0m
+extern DECLSPEC int SDLCALL SDL_snprintf(char *text, size_t maxlen,
+[0;1;32m                                               ^
+[0m3 warnings generated.

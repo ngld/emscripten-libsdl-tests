@@ -1,0 +1,47 @@
+[1m../SDL-2.0.0/testmessage.c:35:11: [0m[0;1;31merror: [0m[1munknown type name 'SDL_MessageBoxButtonData'[0m
+    const SDL_MessageBoxButtonData buttons[] = {
+[0;1;32m          ^
+[0m[1m../SDL-2.0.0/testmessage.c:37:13: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT'[0m
+            SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT,
+[0;1;32m            ^
+[0m[1m../SDL-2.0.0/testmessage.c:41:13: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT'[0m
+            SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,
+[0;1;32m            ^
+[0m[1m../SDL-2.0.0/testmessage.c:47:5: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MessageBoxData'[0m
+    SDL_MessageBoxData data = {
+[0;1;32m    ^
+[0m[1m../SDL-2.0.0/testmessage.c:60:9: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'data'[0m
+        data.message = "This is a custom messagebox from a background thread.";
+[0;1;32m        ^
+[0m[1m../SDL-2.0.0/testmessage.c:63:15: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_ShowMessageBox' is invalid in C99 [-Wimplicit-function-declaration][0m
+    success = SDL_ShowMessageBox(&data, &button);
+[0;1;32m              ^
+[0m[1m../SDL-2.0.0/testmessage.c:63:35: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'data'[0m
+    success = SDL_ShowMessageBox(&data, &button);
+[0;1;32m                                  ^
+[0m[1m../SDL-2.0.0/testmessage.c:91:15: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_ShowSimpleMessageBox' is invalid in C99 [-Wimplicit-function-declaration][0m
+    success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m              ^
+[0m[1m../SDL-2.0.0/testmessage.c:91:40: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_ERROR'[0m
+    success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m                                       ^
+[0m[1m../SDL-2.0.0/testmessage.c:100:40: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_ERROR'[0m
+    success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m                                       ^
+[0m[1m../SDL-2.0.0/testmessage.c:110:40: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_ERROR'[0m
+    success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m                                       ^
+[0m[1m../SDL-2.0.0/testmessage.c:120:40: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_ERROR'[0m
+    success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m                                       ^
+[0m[1m../SDL-2.0.0/testmessage.c:145:81: [0m[0;1;31merror: [0m[1mtoo many arguments to function call, expected 2, have 3[0m
+        SDL_Thread* thread = SDL_CreateThread(&button_messagebox, "MessageBox", (void*)eventNumber);
+[0;1;32m                             ~~~~~~~~~~~~~~~~                                   ^~~~~~~~~~~~~~~~~~
+[0m[1m/home/tobias/dev/em-dev/emscripten/system/include/SDL/SDL_thread.h:141:1: [0m[0;1;30mnote: [0m'SDL_CreateThread' declared here[0m
+extern DECLSPEC SDL_Thread *SDLCALL
+[0;1;32m^
+[0m[1m../SDL-2.0.0/testmessage.c:164:44: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_MESSAGEBOX_ERROR'[0m
+        success = SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+[0;1;32m                                           ^
+[0m2 warnings and 12 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

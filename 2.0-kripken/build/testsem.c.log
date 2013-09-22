@@ -1,0 +1,8 @@
+[1m../SDL-2.0.0/testsem.c:110:57: [0m[0;1;31merror: [0m[1mtoo many arguments to function call, expected 2, have 3[0m
+        threads[i] = SDL_CreateThread(ThreadFunc, name, (void *) i);
+[0;1;32m                     ~~~~~~~~~~~~~~~~                   ^~~~~~~~~~
+[0m[1m/home/tobias/dev/emscripten/system/include/SDL/SDL_thread.h:141:1: [0m[0;1;30mnote: [0m'SDL_CreateThread' declared here[0m
+extern DECLSPEC SDL_Thread *SDLCALL
+[0;1;32m^
+[0m1 error generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

@@ -1,0 +1,2 @@
+emcc (Emscripten GCC-like replacement) 1.5.9 (commit 088b8e3eed97e7872052d2cc2f573bf6f3581a1a)
+nope

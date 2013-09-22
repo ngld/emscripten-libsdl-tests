@@ -1,0 +1,26 @@
+[1m../SDL-2.0.0/testthread.c:22:8: [0m[0;1;31merror: [0m[1munknown type name 'SDL_TLSID'[0m
+static SDL_TLSID tls;
+[0;1;32m       ^
+[0m[1m../SDL-2.0.0/testthread.c:36:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_TLSSet' is invalid in C99 [-Wimplicit-function-declaration][0m
+    SDL_TLSSet(tls, "baby thread", NULL);
+[0;1;32m    ^
+[0m[1m../SDL-2.0.0/testthread.c:38:57: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_TLSGet' is invalid in C99 [-Wimplicit-function-declaration][0m
+           (char *) data, SDL_ThreadID(), (const char *)SDL_TLSGet(tls));
+[0;1;32m                                                        ^
+[0m[1m../SDL-2.0.0/testthread.c:67:11: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_TLSCreate' is invalid in C99 [-Wimplicit-function-declaration][0m
+    tls = SDL_TLSCreate();
+[0;1;32m          ^
+[0m[1m../SDL-2.0.0/testthread.c:73:50: [0m[0;1;31merror: [0m[1mtoo many arguments to function call, expected 2, have 3[0m
+    thread = SDL_CreateThread(ThreadFunc, "One", "#1");
+[0;1;32m             ~~~~~~~~~~~~~~~~                    ^~~~
+[0m[1m/home/tobias/dev/em-dev/emscripten/system/include/SDL/SDL_thread.h:141:1: [0m[0;1;30mnote: [0m'SDL_CreateThread' declared here[0m
+extern DECLSPEC SDL_Thread *SDLCALL
+[0;1;32m^
+[0m[1m../SDL-2.0.0/testthread.c:87:50: [0m[0;1;31merror: [0m[1mtoo many arguments to function call, expected 2, have 3[0m
+    thread = SDL_CreateThread(ThreadFunc, "Two", "#2");
+[0;1;32m             ~~~~~~~~~~~~~~~~                    ^~~~
+[0m[1m/home/tobias/dev/em-dev/emscripten/system/include/SDL/SDL_thread.h:141:1: [0m[0;1;30mnote: [0m'SDL_CreateThread' declared here[0m
+extern DECLSPEC SDL_Thread *SDLCALL
+[0;1;32m^
+[0m3 warnings and 3 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
