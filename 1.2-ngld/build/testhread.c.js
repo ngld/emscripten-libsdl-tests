@@ -7589,7 +7589,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw new Error('abort() at ' + (new Error().stack));
+  throw 'abort() at ' + (new Error().stack);
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}

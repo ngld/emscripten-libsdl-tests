@@ -4543,6 +4543,33 @@ function copyTempDouble(ptr) {
       } else {
         dr = { x: 0, y: 0, w: -1, h: -1 };
       }
+      // This should fix issues with negative values for x or y.
+      // It only works as long as dr and sr have the same size... otherwise the result will be slightly distorted.
+      if (sr.x < 0) {
+        sr.w += sr.x;
+        dr.x -= sr.x;
+        dr.w += sr.x;
+        sr.x = 0;
+      }
+      if (sr.y < 0) {
+        sr.h += sr.y;
+        dr.y -= sr.y;
+        dr.h += sr.y;
+        sr.y = 0;
+      }
+      if (dr.x < 0) {
+        dr.w += dr.x;
+        sr.x -= dr.x;
+        sr.w += dr.x;
+        dr.x = 0;
+      }
+      if (dr.y < 0) {
+        dr.h += dr.y;
+        sr.y -= dr.y;
+        sr.h += dr.y;
+        dr.y = 0;
+      }
+      if(sr.w < 1 || sr.h < 1 || dr.w < 1 || dr.h < 1) return 1;
       dstData.ctx.globalAlpha = srcData.alpha / 255;
       dstData.ctx.drawImage(srcData.canvas, sr.x, sr.y, sr.w, sr.h, dr.x, dr.y, sr.w, sr.h);
       dstData.ctx.globalAlpha = 1;
@@ -8556,7 +8583,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw new Error('abort() at ' + (new Error().stack));
+  throw 'abort() at ' + (new Error().stack);
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}

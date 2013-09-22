@@ -61,6 +61,8 @@ TraceKit.report.subscribe(function (exc) {
     msg += ': ' + (exc.message.indexOf('abort() at abort') > -1 ? 'abort()' : exc.message);
   }
   
+  ABORT = 1;
+  EXITSTATUS = 1;
   Module.printErr('\nFail: ' + msg);
   
   $.each(exc.stack, function (i, frame) {

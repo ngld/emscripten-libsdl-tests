@@ -1,4 +1,6 @@
 (function () {
+    var can_compile = true;
+    
     function getRow(name) {
         var found = false, row;
         $('td.name').each(function () {
@@ -66,7 +68,7 @@
         $('#test-display .progress').addClass('active');
         $('#test-display .progress-bar').css('width', '0%');
         $('.terminal-win').modal('show');
-        term.write('\x1b[H\x1b[2J');
+        term.write('\x1b[H\x1b[2J\x1b[5;1H');
         lockTerm();
         
         var idx = -1, tests = [];
@@ -156,6 +158,7 @@
     $(function () {
         buildTable(function () {
             $('.test-result').text('Ready.');
+            if(!can_compile) $('.compile').remove();
         });
         
         $('body').on('click', '.run-test', function (e) {
@@ -289,9 +292,12 @@
         $.get('build/emcc_version.txt?' + $.now(), function (ver) {
             var ver = ver.split('\n');
             if(ver.length > 1 && ver[1] == 'can compile') {
-                $('#test-compile, .compile').show();
+                $('#test-compile').show();
+                can_compile = true;
             } else {
-                $('.runner-compile, .compile').remove();
+                $('.runner-compile').remove();
+                $('.compile').remove();
+                can_compile = false;
             }
             $('.emcc-version').text(ver[0]);
         });
