@@ -1,0 +1,7 @@
+[1mtestdrawchessboard.c:35:7: [0m[0;1;35mwarning: [0m[1mexpression result unused [-Wunused-value][0m
+                for(coloum; coloum < 4+(row%2); coloum++)
+[0;1;32m                    ^~~~~~
+[0m[1mtestdrawchessboard.c:31:6: [0m[0;1;35mwarning: [0m[1mexpression result unused [-Wunused-value][0m
+        for(row; row < 8; row++)
+[0;1;32m            ^~~
+[0m2 warnings generated.

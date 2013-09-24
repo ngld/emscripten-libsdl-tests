@@ -1,7 +1,0 @@
-[1m../SDL-1.2.15/testplatform.c:135:26: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_HasMMXExt' is invalid in C99 [-Wimplicit-function-declaration][0m
-                printf("MMX Ext %s\n", SDL_HasMMXExt() ? "detected" : "not detected");
-[0;1;32m                                       ^
-[0m[1m../SDL-1.2.15/testplatform.c:137:28: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_Has3DNowExt' is invalid in C99 [-Wimplicit-function-declaration][0m
-                printf("3DNow Ext %s\n", SDL_Has3DNowExt() ? "detected" : "not detected");
-[0;1;32m                                         ^
-[0m2 warnings generated.

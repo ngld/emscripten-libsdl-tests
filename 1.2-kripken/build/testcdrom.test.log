@@ -1,0 +1,100 @@
+[1mtestcdrom.c:18:41: [0m[0;1;31merror: [0m[1munknown type name 'SDL_CD'[0m
+static void PrintStatus(int driveindex, SDL_CD *cdrom)
+[0;1;32m                                        ^
+[0m[1mtestcdrom.c:20:2: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CDstatus'[0m
+        CDstatus status;
+[0;1;32m        ^
+[0m[1mtestcdrom.c:23:2: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'status'[0m
+        status = SDL_CDStatus(cdrom);
+[0;1;32m        ^
+[0m[1mtestcdrom.c:23:11: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDStatus' is invalid in C99 [-Wimplicit-function-declaration][0m
+        status = SDL_CDStatus(cdrom);
+[0;1;32m                 ^
+[0m[1mtestcdrom.c:24:10: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'status'[0m
+        switch (status) {
+[0;1;32m                ^
+[0m[1mtestcdrom.c:42:7: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'status'[0m
+        if ( status >= CD_PLAYING ) {
+[0;1;32m             ^
+[0m[1mtestcdrom.c:42:17: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CD_PLAYING'[0m
+        if ( status >= CD_PLAYING ) {
+[0;1;32m                       ^
+[0m[1mtestcdrom.c:44:3: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'FRAMES_TO_MSF' is invalid in C99 [-Wimplicit-function-declaration][0m
+                FRAMES_TO_MSF(cdrom->cur_frame, &m, &s, &f);
+[0;1;32m                ^
+[0m[1mtestcdrom.c:50:24: [0m[0;1;31merror: [0m[1munknown type name 'SDL_CD'[0m
+static void ListTracks(SDL_CD *cdrom)
+[0;1;32m                       ^
+[0m[1mtestcdrom.c:97:2: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_CD'[0m
+        SDL_CD *cdrom;
+[0;1;32m        ^
+[0m[1mtestcdrom.c:97:10: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+        SDL_CD *cdrom;
+[0;1;32m                ^
+[0m[1mtestcdrom.c:100:16: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_INIT_CDROM'[0m
+        if ( SDL_Init(SDL_INIT_CDROM) < 0 ) {
+[0;1;32m                      ^
+[0m[1mtestcdrom.c:106:7: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDNumDrives' is invalid in C99 [-Wimplicit-function-declaration][0m
+        if ( SDL_CDNumDrives() == 0 ) {
+[0;1;32m             ^
+[0m[1mtestcdrom.c:112:36: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDName' is invalid in C99 [-Wimplicit-function-declaration][0m
+                printf("Drive %d:  \"%s\"\n", i, SDL_CDName(i));
+[0;1;32m                                                 ^
+[0m[1mtestcdrom.c:112:36: [0m[0;1;35mwarning: [0m[1mformat specifies type 'char *' but the argument has type 'int' [-Wformat][0m
+                printf("Drive %d:  \"%s\"\n", i, SDL_CDName(i));
+[0;1;32m                                     ~~          ^~~~~~~~~~~~~
+[0m[0;32m                                     %d
+[0m[1mtestcdrom.c:121:2: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+        cdrom = SDL_CDOpen(drive);
+[0;1;32m        ^
+[0m[1mtestcdrom.c:121:10: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDOpen' is invalid in C99 [-Wimplicit-function-declaration][0m
+        cdrom = SDL_CDOpen(drive);
+[0;1;32m                ^
+[0m[1mtestcdrom.c:122:7: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+        if ( cdrom == NULL ) {
+[0;1;32m             ^
+[0m[1mtestcdrom.c:137:15: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        ListTracks(cdrom);
+[0;1;32m                                   ^
+[0m[1mtestcdrom.c:159:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'CD_INDRIVE' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        if ( CD_INDRIVE(SDL_CDStatus(cdrom)) ) {
+[0;1;32m                             ^
+[0m[1mtestcdrom.c:159:33: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        if ( CD_INDRIVE(SDL_CDStatus(cdrom)) ) {
+[0;1;32m                                                     ^
+[0m[1mtestcdrom.c:160:10: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDPlayTracks' is invalid in C99 [-Wimplicit-function-declaration][0m
+                                if ( SDL_CDPlayTracks(cdrom, strack, sframe,
+[0;1;32m                                     ^
+[0m[1mtestcdrom.c:160:27: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                                if ( SDL_CDPlayTracks(cdrom, strack, sframe,
+[0;1;32m                                                      ^
+[0m[1mtestcdrom.c:171:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDPause' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        if ( SDL_CDPause(cdrom) < 0 ) {
+[0;1;32m                             ^
+[0m[1mtestcdrom.c:171:21: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        if ( SDL_CDPause(cdrom) < 0 ) {
+[0;1;32m                                         ^
+[0m[1mtestcdrom.c:177:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDResume' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        if ( SDL_CDResume(cdrom) < 0 ) {
+[0;1;32m                             ^
+[0m[1mtestcdrom.c:177:22: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        if ( SDL_CDResume(cdrom) < 0 ) {
+[0;1;32m                                          ^
+[0m[1mtestcdrom.c:183:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDStop' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        if ( SDL_CDStop(cdrom) < 0 ) {
+[0;1;32m                             ^
+[0m[1mtestcdrom.c:183:20: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        if ( SDL_CDStop(cdrom) < 0 ) {
+[0;1;32m                                        ^
+[0m[1mtestcdrom.c:189:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDEject' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        if ( SDL_CDEject(cdrom) < 0 ) {
+[0;1;32m                             ^
+[0m[1mtestcdrom.c:189:21: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'cdrom'[0m
+                        if ( SDL_CDEject(cdrom) < 0 ) {
+[0;1;32m                                         ^
+[0m[1mtestcdrom.c:200:4: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CDClose' is invalid in C99 [-Wimplicit-function-declaration][0m
+                        SDL_CDClose(cdrom);
+[0;1;32m                        ^
+[0m[0;1;31mfatal error: [0m[1mtoo many errors emitted, stopping now [-ferror-limit=][0m
+13 warnings and 20 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

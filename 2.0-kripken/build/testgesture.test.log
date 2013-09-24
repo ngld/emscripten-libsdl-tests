@@ -1,0 +1,5 @@
+[1mtestgesture.c:79:3: [0m[0;1;35mwarning: [0m[1mimplicitly declaring library function 'exit' with type 'void (int) __attribute__((noreturn))'[0m
+  exit (0);
+[0;1;32m  ^
+[0m[1mtestgesture.c:79:3: [0m[0;1;30mnote: [0mplease include the header <stdlib.h> or explicitly provide a declaration for 'exit'[0m
+1 warning generated.

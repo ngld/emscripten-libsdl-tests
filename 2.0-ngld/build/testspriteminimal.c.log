@@ -1,7 +1,0 @@
-[1m../SDL-2.0.0/testspriteminimal.c:129:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CreateWindowAndRenderer' is invalid in C99 [-Wimplicit-function-declaration][0m
-    if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) < 0) {
-[0;1;32m        ^
-[0m1 warning generated.
-Warning: Casting a function pointer type to a potentially incompatible one (use -s VERBOSE=1 to see more)
-Warning: See https://github.com/kripken/emscripten/wiki/CodeGuidlinesAndLimitations#function-pointer-issues for more information on dangerous function pointer casts
-Warning: Incompatible function pointer casts are very dangerous with ASM_JS=1, you should investigate and correct these

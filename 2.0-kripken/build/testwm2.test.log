@@ -1,0 +1,42 @@
+[1mtestwm2.c:51:46: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_NUM_SYSTEM_CURSORS'[0m
+    SDL_assert(SDL_arraysize(cursorNames) == SDL_NUM_SYSTEM_CURSORS);
+[0;1;32m                                             ^
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_assert.h:159:53: [0m[0;1;30mnote: [0mexpanded from macro 'SDL_assert'[0m
+#   define SDL_assert(condition) SDL_enabled_assert(condition)
+[0;1;32m                                                    ^
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_assert.h:130:19: [0m[0;1;30mnote: [0mexpanded from macro 'SDL_enabled_assert'[0m
+        while ( !(condition) ) { \
+[0;1;32m                  ^
+[0m[1mtestwm2.c:100:29: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetDisplayName' is invalid in C99 [-Wimplicit-function-declaration][0m
+                            SDL_GetDisplayName(SDL_GetWindowDisplayIndex(window)));
+[0;1;32m                            ^
+[0m[1mtestwm2.c:100:48: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetWindowDisplayIndex' is invalid in C99 [-Wimplicit-function-declaration][0m
+                            SDL_GetDisplayName(SDL_GetWindowDisplayIndex(window)));
+[0;1;32m                                               ^
+[0m[1mtestwm2.c:100:29: [0m[0;1;35mwarning: [0m[1mformat specifies type 'char *' but the argument has type 'int' [-Wformat][0m
+                            SDL_GetDisplayName(SDL_GetWindowDisplayIndex(window)));
+[0;1;32m                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1mtestwm2.c:110:41: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_NUM_SYSTEM_CURSORS'[0m
+                        system_cursor = SDL_NUM_SYSTEM_CURSORS - 1;
+[0;1;32m                                        ^
+[0m[1mtestwm2.c:115:42: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_NUM_SYSTEM_CURSORS'[0m
+                    if (system_cursor >= SDL_NUM_SYSTEM_CURSORS) {
+[0;1;32m                                         ^
+[0m[1mtestwm2.c:123:30: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CreateSystemCursor' is invalid in C99 [-Wimplicit-function-declaration][0m
+                    cursor = SDL_CreateSystemCursor((SDL_SystemCursor)system_cursor);
+[0;1;32m                             ^
+[0m[1mtestwm2.c:123:54: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_SystemCursor'; did you mean 'SDL_SetCursor'?[0m
+                    cursor = SDL_CreateSystemCursor((SDL_SystemCursor)system_cursor);
+[0;1;32m                                                     ^~~~~~~~~~~~~~~~
+[0m[0;32m                                                     SDL_SetCursor
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_mouse.h:160:30: [0m[0;1;30mnote: [0m'SDL_SetCursor' declared here[0m
+extern DECLSPEC void SDLCALL SDL_SetCursor(SDL_Cursor * cursor);
+[0;1;32m                             ^
+[0m[1mtestwm2.c:123:71: [0m[0;1;31merror: [0m[1mexpected ')'[0m
+                    cursor = SDL_CreateSystemCursor((SDL_SystemCursor)system_cursor);
+[0;1;32m                                                                      ^
+[0m[1mtestwm2.c:123:52: [0m[0;1;30mnote: [0mto match this '('[0m
+                    cursor = SDL_CreateSystemCursor((SDL_SystemCursor)system_cursor);
+[0;1;32m                                                   ^
+[0m4 warnings and 5 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

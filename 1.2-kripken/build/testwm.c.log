@@ -1,7 +1,0 @@
-[1m../SDL-1.2.15/testwm.c:410:20: [0m[0;1;35mwarning: [0m[1mpassing 'char **' to parameter of type 'const char **' discards qualifiers in nested pointer types [-Wincompatible-pointer-types][0m
-        SDL_WM_GetCaption(&title, NULL);
-[0;1;32m                          ^~~~~~
-[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_compat.h:303:61: [0m[0;1;30mnote: [0mpassing argument to parameter 'title' here[0m
-extern DECLSPEC void SDLCALL SDL_WM_GetCaption(const char **title,
-[0;1;32m                                                            ^
-[0m1 warning generated.

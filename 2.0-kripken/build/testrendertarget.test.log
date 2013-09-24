@@ -1,0 +1,33 @@
+[1mtestrendertarget.c:101:70: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_TEXTUREACCESS_TARGET'; did you mean 'SDL_TEXTUREACCESS_STATIC'?[0m
+        A = SDL_CreateTexture(s->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1, 1);
+[0;1;32m                                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m                                                                     SDL_TEXTUREACCESS_STATIC
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_render.h:90:5: [0m[0;1;30mnote: [0m'SDL_TEXTUREACCESS_STATIC' declared here[0m
+    SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
+[0;1;32m    ^
+[0m[1mtestrendertarget.c:104:70: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_TEXTUREACCESS_TARGET'; did you mean 'SDL_TEXTUREACCESS_STATIC'?[0m
+        B = SDL_CreateTexture(s->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1, 1);
+[0;1;32m                                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m                                                                     SDL_TEXTUREACCESS_STATIC
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_render.h:90:5: [0m[0;1;30mnote: [0m'SDL_TEXTUREACCESS_STATIC' declared here[0m
+    SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
+[0;1;32m    ^
+[0m[1mtestrendertarget.c:107:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_SetRenderTarget' is invalid in C99 [-Wimplicit-function-declaration][0m
+        SDL_SetRenderTarget(s->renderer, A);
+[0;1;32m        ^
+[0m[1mtestrendertarget.c:126:71: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_TEXTUREACCESS_TARGET'; did you mean 'SDL_TEXTUREACCESS_STATIC'?[0m
+    target = SDL_CreateTexture(s->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, viewport.w, viewport.h);
+[0;1;32m                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m                                                                      SDL_TEXTUREACCESS_STATIC
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_render.h:90:5: [0m[0;1;30mnote: [0m'SDL_TEXTUREACCESS_STATIC' declared here[0m
+    SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
+[0;1;32m    ^
+[0m[1mtestrendertarget.c:180:71: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_TEXTUREACCESS_TARGET'; did you mean 'SDL_TEXTUREACCESS_STATIC'?[0m
+    target = SDL_CreateTexture(s->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, viewport.w, viewport.h);
+[0;1;32m                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m                                                                      SDL_TEXTUREACCESS_STATIC
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_render.h:90:5: [0m[0;1;30mnote: [0m'SDL_TEXTUREACCESS_STATIC' declared here[0m
+    SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
+[0;1;32m    ^
+[0m1 warning and 4 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

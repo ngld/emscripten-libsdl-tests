@@ -1,0 +1,11 @@
+[1mtestlock.c:118:55: [0m[0;1;31merror: [0m[1mtoo many arguments to function call, expected 2, have 3[0m
+        if ((threads[i] = SDL_CreateThread(Run, name, NULL)) == NULL)
+[0;1;32m                          ~~~~~~~~~~~~~~~~            ^~~~
+[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/libc/stddef.h:4:14: [0m[0;1;30mnote: [0mexpanded from macro 'NULL'[0m
+#define NULL 0L
+[0;1;32m             ^~
+[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_thread.h:141:1: [0m[0;1;30mnote: [0m'SDL_CreateThread' declared here[0m
+extern DECLSPEC SDL_Thread *SDLCALL
+[0;1;32m^
+[0m1 error generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m

@@ -1,0 +1,100 @@
+[1mtestautomation_keyboard.c:70:13: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetKeyFromName' is invalid in C99 [-Wimplicit-function-declaration][0m
+   result = SDL_GetKeyFromName("A");
+[0;1;32m            ^
+[0m[1mtestautomation_keyboard.c:315:31: [0m[0;1;35mwarning: [0m[1mcomparison of unsigned enum expression >= 0 is always true [-Wtautological-compare][0m
+   SDLTest_AssertCheck(result >=0 && result <= allStates, "Verify result from call is valid, expected: 0 <= result <= %i, got: %i", allStates, result);
+[0;1;32m                       ~~~~~~ ^ ~
+[0m[1mtestautomation_keyboard.c:547:15: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetScancodeFromName' is invalid in C99 [-Wimplicit-function-declaration][0m
+   scancode = SDL_GetScancodeFromName("A");
+[0;1;32m              ^
+[0m3 warnings generated.
+[1mtestautomation_main.c:74:52: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_INIT_GAMECONTROLLER'[0m
+const int joy_and_controller = SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+[0;1;32m                                                   ^
+[0m1 error generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
+[1mtestautomation_pixels.c:38:5: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_PIXELFORMAT_RGBX8888'; did you mean 'SDL_PIXELFORMAT_RGBA8888'?[0m
+    SDL_PIXELFORMAT_RGBX8888,
+[0;1;32m    ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m    SDL_PIXELFORMAT_RGBA8888
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_pixels.h:221:5: [0m[0;1;30mnote: [0m'SDL_PIXELFORMAT_RGBA8888' declared here[0m
+    SDL_PIXELFORMAT_RGBA8888 =
+[0;1;32m    ^
+[0m[1mtestautomation_pixels.c:40:5: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_PIXELFORMAT_BGRX8888'; did you mean 'SDL_PIXELFORMAT_BGRA8888'?[0m
+    SDL_PIXELFORMAT_BGRX8888,
+[0;1;32m    ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m    SDL_PIXELFORMAT_BGRA8888
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_pixels.h:227:5: [0m[0;1;30mnote: [0m'SDL_PIXELFORMAT_BGRA8888' declared here[0m
+    SDL_PIXELFORMAT_BGRA8888 =
+[0;1;32m    ^
+[0m2 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
+[1mtestautomation_rwops.c:240:36: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_MEMORY'[0m
+   SDLTest_AssertCheck(rw->type == SDL_RWOPS_MEMORY, "Verify RWops type is SDL_RWOPS_MEMORY; expected: %d, got: %d", SDL_RWOPS_MEMORY, rw->type);
+[0;1;32m                                   ^
+[0m[1mtestautomation_rwops.c:276:36: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_MEMORY_RO'[0m
+   SDLTest_AssertCheck(rw->type == SDL_RWOPS_MEMORY_RO, "Verify RWops type is SDL_RWOPS_MEMORY_RO; expected: %d, got: %d", SDL_RWOPS_MEMORY_RO, rw->type);
+[0;1;32m                                   ^
+[0m[1mtestautomation_rwops.c:322:19: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_STDFILE'[0m
+      rw->type == SDL_RWOPS_STDFILE,
+[0;1;32m                  ^
+[0m[1mtestautomation_rwops.c:369:19: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_STDFILE'[0m
+      rw->type == SDL_RWOPS_STDFILE,
+[0;1;32m                  ^
+[0m[1mtestautomation_rwops.c:420:19: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_STDFILE'[0m
+      rw->type == SDL_RWOPS_STDFILE,
+[0;1;32m                  ^
+[0m[1mtestautomation_rwops.c:470:19: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_STDFILE'[0m
+      rw->type == SDL_RWOPS_STDFILE,
+[0;1;32m                  ^
+[0m[1mtestautomation_rwops.c:501:19: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_RWOPS_UNKNOWN'[0m
+      rw->type == SDL_RWOPS_UNKNOWN,
+[0;1;32m                  ^
+[0m7 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
+[1mtestautomation_surface.c:232:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'unlink' is invalid in C99 [-Wimplicit-function-declaration][0m
+    unlink(sampleFilename);
+[0;1;32m    ^
+[0m[1mtestautomation_surface.c:335:9: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_PIXELFORMAT_RGBX8888'; did you mean 'SDL_PIXELFORMAT_RGBA8888'?[0m
+        SDL_PIXELFORMAT_RGBX8888,
+[0;1;32m        ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m        SDL_PIXELFORMAT_RGBA8888
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_pixels.h:221:5: [0m[0;1;30mnote: [0m'SDL_PIXELFORMAT_RGBA8888' declared here[0m
+    SDL_PIXELFORMAT_RGBA8888 =
+[0;1;32m    ^
+[0m[1mtestautomation_surface.c:337:9: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_PIXELFORMAT_BGRX8888'; did you mean 'SDL_PIXELFORMAT_BGRA8888'?[0m
+        SDL_PIXELFORMAT_BGRX8888,
+[0;1;32m        ^~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m        SDL_PIXELFORMAT_BGRA8888
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_pixels.h:227:5: [0m[0;1;30mnote: [0m'SDL_PIXELFORMAT_BGRA8888' declared here[0m
+    SDL_PIXELFORMAT_BGRA8888 =
+[0;1;32m    ^
+[0m1 warning and 2 errors generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
+[1mtestautomation_video.c:276:15: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_WINDOW_FULLSCREEN_DESKTOP'; did you mean 'SDL_WINDOW_FULLSCREEN'?[0m
+      flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+[0;1;32m              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[0;32m              SDL_WINDOW_FULLSCREEN
+[0m[1m/home/ngld/dev/emscripten/system/include/SDL/SDL_video.h:99:5: [0m[0;1;30mnote: [0m'SDL_WINDOW_FULLSCREEN' declared here[0m
+    SDL_WINDOW_FULLSCREEN = 0x00000001,         /**< fullscreen window */
+[0;1;32m    ^
+[0m[1mtestautomation_video.c:1298:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_SetWindowMinimumSize' is invalid in C99 [-Wimplicit-function-declaration][0m
+    SDL_SetWindowMinimumSize(window, desiredW, desiredH);
+[0;1;32m    ^
+[0m[1mtestautomation_video.c:1304:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetWindowMinimumSize' is invalid in C99 [-Wimplicit-function-declaration][0m
+    SDL_GetWindowMinimumSize(window, &currentW, &currentH);
+[0;1;32m    ^
+[0m[1mtestautomation_video.c:1433:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_SetWindowMaximumSize' is invalid in C99 [-Wimplicit-function-declaration][0m
+    SDL_SetWindowMaximumSize(window, desiredW, desiredH);
+[0;1;32m    ^
+[0m[1mtestautomation_video.c:1439:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_GetWindowMaximumSize' is invalid in C99 [-Wimplicit-function-declaration][0m
+    SDL_GetWindowMaximumSize(window, &currentW, &currentH);
+[0;1;32m    ^
+[0m4 warnings and 1 error generated.
+ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
+Traceback (most recent call last):
+  File "/home/ngld/dev/emscripten/emcc", line 990, in <module>
+    if arg.endswith(ASSEMBLY_SUFFIXES) or shared.Building.is_bitcode(arg):
+  File "/home/ngld/dev/emscripten/tools/shared.py", line 1389, in is_bitcode
+    if b[0] == 'B' and b[1] == 'C':
+IndexError: string index out of range

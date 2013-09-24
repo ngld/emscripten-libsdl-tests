@@ -1,0 +1,4 @@
+[1mtestspriteminimal.c:129:9: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'SDL_CreateWindowAndRenderer' is invalid in C99 [-Wimplicit-function-declaration][0m
+    if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) < 0) {
+[0;1;32m        ^
+[0m1 warning generated.

@@ -1,0 +1,28 @@
+[1mtestlock.c:29:35: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+        printf("Process %u:  exiting\n", SDL_ThreadID());
+[0;1;32m                        ~~               ^~~~~~~~~~~~~~
+[0m[0;32m                        %lu
+[0m[1mtestlock.c:45:2: [0m[0;1;35mwarning: [0m[1mimplicitly declaring library function 'exit' with type 'void (int) __attribute__((noreturn))'[0m
+        exit(sig);
+[0;1;32m        ^
+[0m[1mtestlock.c:45:2: [0m[0;1;30mnote: [0mplease include the header <stdlib.h> or explicitly provide a declaration for 'exit'[0m
+[1mtestlock.c:52:40: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+                printf("Process %u ready to work\n", SDL_ThreadID());
+[0;1;32m                                ~~                   ^~~~~~~~~~~~~~
+[0m[0;32m                                %lu
+[0m[1mtestlock.c:57:36: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+                printf("Process %u, working!\n", SDL_ThreadID());
+[0;1;32m                                ~~               ^~~~~~~~~~~~~~
+[0m[0;32m                                %lu
+[0m[1mtestlock.c:59:33: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+                printf("Process %u, done!\n", SDL_ThreadID());
+[0;1;32m                                ~~            ^~~~~~~~~~~~~~
+[0m[0;32m                                %lu
+[0m[1mtestlock.c:67:45: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned int' but the argument has type 'SDL_threadID' (aka 'unsigned long') [-Wformat][0m
+                        printf("Process %u:  raising SIGTERM\n", SDL_ThreadID());
+[0;1;32m                                        ~~                       ^~~~~~~~~~~~~~
+[0m[0;32m                                        %lu
+[0m[1mtestlock.c:84:2: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'atexit' is invalid in C99 [-Wimplicit-function-declaration][0m
+        atexit(SDL_Quit_Wrapper);
+[0;1;32m        ^
+[0m7 warnings generated.
