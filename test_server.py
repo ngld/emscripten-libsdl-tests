@@ -7,67 +7,7 @@ PORT = 8080
 TEST_PATH = os.path.abspath('.')
 BUILD_PATH = os.path.join(os.path.dirname(__file__), 'build')
 
-class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def handle(self):
-        try:
-            SimpleHTTPServer.SimpleHTTPRequestHandler.handle(self)
-        except KeyboardInterrupt:
-            sys.exit(0)
-    
-    def send_head(self):
-        if self.path[:6] == '/emcc/':
-            self.handle_build(self.path[6:])
-            return False
-        
-        if self.path[:11] == '/emcc_full/':
-            self.emcc_full(self.path[11:])
-            return False
-        
-        if self.path[:23] == '/build/emcc_version.txt':
-            self.emcc_version()
-            return False
-        
-        path = self.translate_path(self.path)
-        
-        if path[-10:] == '/index.txt':
-            path = path[:-9]
-            self.list_txt(path)
-            return False
-        
-        return SimpleHTTPServer.SimpleHTTPRequestHandler.send_head(self)
-    
-    def translate_path(self, path):
-        if path[:7] == '/tests/':
-            return os.path.join(TEST_PATH, path[7:].split('?')[0])
-        
-        if path[:7] == '/build/':
-            return os.path.join(BUILD_PATH, path[7:].split('?')[0])
-        
-        return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
-    
-    def list_txt(self, path):
-        try:
-            list_ = os.listdir(path)
-        except os.error:
-            logging.exception('Failed to get an index for %s.' % path)
-            self.send_plain('')
-            return None
-        
-        out = []
-        for name in list_:
-            itempath = os.path.join(path, name)
-            if os.path.isfile(itempath):
-                out.append(name)
-        
-        out = '\n'.join(out)
-        
-        self.send_response(200)
-        encoding = sys.getfilesystemencoding()
-        
-        self.send_header("Content-type", "text/plain; charset=%s" % encoding)
-        self.send_header("Content-Length", str(len(out)))
-        self.end_headers()
-        self.wfile.write(out)
+class Compiler(object):
     
     def run(self, cmd, **kwargs):
         logging.info('Running %s' % ' '.join(cmd))
@@ -159,6 +99,68 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             logstream.close()
         
         return destfile, logfile
+
+class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler, Compiler):
+    def handle(self):
+        try:
+            SimpleHTTPServer.SimpleHTTPRequestHandler.handle(self)
+        except KeyboardInterrupt:
+            sys.exit(0)
+    
+    def send_head(self):
+        if self.path[:6] == '/emcc/':
+            self.handle_build(self.path[6:])
+            return False
+        
+        if self.path[:11] == '/emcc_full/':
+            self.emcc_full(self.path[11:])
+            return False
+        
+        if self.path[:23] == '/build/emcc_version.txt':
+            self.emcc_version()
+            return False
+        
+        path = self.translate_path(self.path)
+        
+        if path[-10:] == '/index.txt':
+            path = path[:-9]
+            self.list_txt(path)
+            return False
+        
+        return SimpleHTTPServer.SimpleHTTPRequestHandler.send_head(self)
+    
+    def translate_path(self, path):
+        if path[:7] == '/tests/':
+            return os.path.join(TEST_PATH, path[7:].split('?')[0])
+        
+        if path[:7] == '/build/':
+            return os.path.join(BUILD_PATH, path[7:].split('?')[0])
+        
+        return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
+    
+    def list_txt(self, path):
+        try:
+            list_ = os.listdir(path)
+        except os.error:
+            logging.exception('Failed to get an index for %s.' % path)
+            self.send_plain('')
+            return None
+        
+        out = []
+        for name in list_:
+            itempath = os.path.join(path, name)
+            if os.path.isfile(itempath):
+                out.append(name)
+        
+        out = '\n'.join(out)
+        
+        self.send_response(200)
+        encoding = sys.getfilesystemencoding()
+        
+        self.send_header("Content-type", "text/plain; charset=%s" % encoding)
+        self.send_header("Content-Length", str(len(out)))
+        self.end_headers()
+        self.wfile.write(out)
     
     def handle_build(self, test):
         destfile, logfile = self.build_test(test, log=True)
@@ -240,6 +242,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='The test server.')
     parser.add_argument('test_path', nargs=1, metavar='test directory', help='The directory containing the test files.')
+    parser.add_argument('-c', dest='compile', action='store_true', default=False, help='Compile all tests.')
     parser.add_argument('-b', dest='build_path', nargs=1, default=BUILD_PATH, help='All generated files will be put into this directory.')
     parser.add_argument('-l', dest='launch_browser', action='store_true', default=False, help='Automatically launch the browser.')
     parser.add_argument('-p', dest='port', nargs=1, type=int, default=PORT, help='The port on which to start the server.')
@@ -256,6 +259,14 @@ if __name__ == '__main__':
     if not os.path.isdir(BUILD_PATH):
         print('The directory "%s" doesn\'t exist!' % BUILD_PATH)
         sys.exit(1)
+    
+    if opts.compile:
+        comp = Compiler()
+        for item in os.listdir(TEST_PATH):
+            if item[-5:] == '.test':
+                comp.build_test(os.path.join(TEST_PATH, item), log=True)
+        
+        sys.exit(0)
     
     # Switch to our web directory
     os.chdir(os.path.join(os.path.dirname(__file__), 'web'))
