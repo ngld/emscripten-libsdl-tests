@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "loopwave.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "loopwave.c.test", 
+    "notes": ""
+}

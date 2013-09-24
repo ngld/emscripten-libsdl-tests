@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "threadwin.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "threadwin.c.test", 
+    "notes": ""
+}

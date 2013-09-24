@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testjoystick.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testjoystick.c.test", 
+    "notes": ""
+}

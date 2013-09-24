@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "torturethread.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "torturethread.c.test", 
+    "notes": ""
+}

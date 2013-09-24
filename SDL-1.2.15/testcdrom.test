@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testcdrom.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testcdrom.c.test", 
+    "notes": ""
+}

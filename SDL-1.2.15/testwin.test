@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testwin.c"
+    ], 
+    "files": [
+        "sample.bmp"
+    ], 
+    "libs": [], 
+    "name": "testwin.c.test", 
+    "notes": ""
+}

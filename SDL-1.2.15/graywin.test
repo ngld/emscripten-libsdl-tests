@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "graywin.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "graywin.c.test", 
+    "notes": ""
+}

@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testloadso.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testloadso.c.test", 
+    "notes": ""
+}
