@@ -84,7 +84,7 @@
             }
             
             var test = tests[idx];
-            term.writeln(term_cwd + '# emcc ' + test);
+            term.writeln('Compiling ' + test + '...');
             $.get('emcc/' + test, function (result) {
                 $.get('build/' + test + '.log', function (log) {
                     term.write(log.replace(/\n/g, '\r\n'));
@@ -96,7 +96,7 @@
         $('#test-name').text('Please wait...');
         $.get('tests/index.txt?' + $.now(), function (files) {
             $.each(files.split('\n'), function (i, file) {
-                if(file.match(/\.(c|cpp)$/)) {
+                if(file.match(/\.test$/)) {
                     tests.push(file);
                 }
             });

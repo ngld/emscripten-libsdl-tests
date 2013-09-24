@@ -1,7 +1,7 @@
 #!/bin/env python2
 
 from __future__ import print_function
-import sys, os, subprocess, webbrowser, SimpleHTTPServer, SocketServer, socket, logging, argparse, urllib, shlex
+import sys, os, subprocess, webbrowser, SimpleHTTPServer, SocketServer, socket, tempfile, json, logging, argparse, urllib, shlex
 
 PORT = 8080
 TEST_PATH = os.path.abspath('.')
@@ -16,7 +16,7 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     
     def send_head(self):
         if self.path[:6] == '/emcc/':
-            self.compile_test(self.path[6:])
+            self.handle_build(self.path[6:])
             return False
         
         if self.path[:11] == '/emcc_full/':
@@ -69,44 +69,103 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(out)
     
-    def get_build_cmd(self, test):
+    def run(self, cmd, **kwargs):
+        logging.info('Running %s' % ' '.join(cmd))
+        try:
+            handle = subprocess.Popen(cmd, **kwargs)
+            handle.wait()
+        except:
+            logging.exception('Command %s failed!' % ' '.join(cmd))
+            return False
+        
+        return True
+    
+    def build_test(self, test, cflags=[], **p_opts):
         test = os.path.basename(urllib.unquote(test))
         srcfile = os.path.join(TEST_PATH, test)
         destfile = os.path.join(BUILD_PATH, test + '.js')
         logfile = os.path.join(BUILD_PATH, test + '.log')
-        support = os.path.relpath(os.path.join(TEST_PATH, 'support'))
         
         if not os.path.isfile(srcfile):
-            return -1, None, None, None
+            return -1, None
         
         if os.path.isfile(destfile):
             os.unlink(destfile)
         if os.path.isfile(destfile + '.map'):
             os.unlink(destfile + '.map')
         
-        cmd = ['emcc', '-g4', '-O2', '-Xclang', '-fcolor-diagnostics', '-o', destfile, srcfile]
-        if os.path.isdir(support):
-            cmd.extend(['-I' + support ])
+        meta = {
+            'notes': '',
+            'cflags': [],
+            'code': [ test.replace('.test', '.c') ],
+            'libs': [],
+            'files': []
+        }
+        with open(srcfile, 'r') as stream:
+            try:
+                data = json.load(stream)
+            except:
+                logging.exception('Failed to parse %s.' % srcfile)
+                return -1, None
+        
+        if len(data.keys()) < len(meta.keys()):
+            meta.update(data)
+            with open(srcfile, 'w') as stream:
+                json.dump(meta, stream, indent=4, sort_keys=True)
+        else:
+            meta = data
+        del data
+        
+        cflags = ['-Xclang', '-fcolor-diagnostics'] + cflags + meta['cflags']
+        libs = meta['libs']
+        logstream = None
+        p_opts['cwd'] = TEST_PATH
+        
+        if 'log' in p_opts and p_opts['log']:
+            del p_opts['log']
             
-            for item in os.listdir(support):
-                path = os.path.join(support, item)
-                if os.path.isfile(path) and item[:3] == 'lib' and item[-3:] == '.bc':
-                    cmd.append(path)
+            logstream = open(logfile, 'wb')
+            p_opts['stdout'] = logstream
+            p_opts['stderr'] = subprocess.STDOUT
         
-        return cmd, srcfile, destfile, logfile
+        for i, lib in enumerate(libs):
+            libs[i] = lib
+        
+        if len(meta['code']) == 1:
+            self.run(['emcc', '-o', destfile] + cflags + meta['code'] + libs, **p_opts)
+        else:
+            objs = []
+            failed = False
+            for source in meta['code']:
+                fd, out = tempfile.mkstemp('.o')
+                os.close(fd)
+                if not self.run(['emcc', '-o', out, source] + cflags, **p_opts):
+                    failed = True
+                    break
+                
+                if not os.path.isfile(out):
+                    failed = True
+                    break
+                
+                objs.append(out)
+            
+            if not failed:
+                self.run(['emcc', '-o', destfile] + cflags + objs + libs, **p_opts)
+            
+            for item in objs:
+                os.unlink(item)
+        
+        if logstream != None:
+            logstream.close()
+        
+        return destfile, logfile
     
-    def compile_test(self, test):
-        cmd, srcfile, destfile, logfile = self.get_build_cmd(test)
+    def handle_build(self, test):
+        destfile, logfile = self.build_test(test, log=True)
         
-        if cmd == -1:
+        if destfile == -1:
             self.send_error(404, 'Test not found!')
             return
-        
-        logging.info('Running %s.' % cmd)
-        logstream = open(logfile, 'wb')
-        handle = subprocess.Popen(cmd, stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
-        handle.wait()
-        logstream.close()
         
         if os.path.isfile(destfile):
             msg = 'success'
@@ -121,7 +180,7 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         i = len(args)
         for arg in reversed(args):
             i -= 1
-            if (arg[-2:] == '.c' or arg[-5:] == '.cpp') and arg[0] != '-':
+            if arg[-6:] == '.test' and arg[0] != '-':
                 test = os.path.basename(arg)
                 del args[i]
             
@@ -139,20 +198,13 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.send_plain('py_emcc: Sorry, I couldn\'t parse the command!\n')
             return
         
-        cmd, srcfile, destfile, logfile = self.get_build_cmd(test)
-        logging.info('Running %s.' % cmd)
+        destfile, logfile = self.build_test(test, args)
         
-        logstream = open(logfile, 'wb')
-        try:
-            handle = subprocess.Popen(cmd + args, stdout=logstream, stderr=subprocess.STDOUT, cwd=BUILD_PATH)
-            handle.wait()
-        except:
-            logging.exception('emcc failed!')
-        
-        logstream.close()
-        
-        with open(logfile, 'rb') as logstream:
-            self.send_plain(logstream.read())
+        if destfile == -1:
+            self.send_plain('emcc: Test not found!\n')
+        else:
+            with open(logfile, 'rb') as logstream:
+                self.send_plain(logstream.read())
     
     def emcc_version(self):
         try:
