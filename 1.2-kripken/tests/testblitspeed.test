@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testblitspeed.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testblitspeed.c.test", 
+    "notes": ""
+}

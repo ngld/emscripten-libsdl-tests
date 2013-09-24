@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testiconv.c"
+    ], 
+    "files": [
+        "utf8.txt"
+    ], 
+    "libs": [], 
+    "name": "testiconv.c.test", 
+    "notes": ""
+}

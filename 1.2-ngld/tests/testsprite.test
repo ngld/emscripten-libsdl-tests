@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testsprite.c"
+    ], 
+    "files": [
+        "icon.bmp"
+    ], 
+    "libs": [], 
+    "name": "testsprite.c.test", 
+    "notes": ""
+}

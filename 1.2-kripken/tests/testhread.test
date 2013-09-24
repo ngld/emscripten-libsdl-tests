@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testhread.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testhread.c.test", 
+    "notes": ""
+}

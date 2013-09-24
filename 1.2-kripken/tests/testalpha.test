@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testalpha.c"
+    ], 
+    "files": [
+        "icon.bmp"
+    ], 
+    "libs": [], 
+    "name": "testalpha.c.test", 
+    "notes": ""
+}

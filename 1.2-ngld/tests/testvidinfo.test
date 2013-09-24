@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testvidinfo.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testvidinfo.c.test", 
+    "notes": ""
+}

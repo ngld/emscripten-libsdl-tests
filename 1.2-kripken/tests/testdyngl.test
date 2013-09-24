@@ -1,0 +1,10 @@
+{
+    "cflags": [], 
+    "code": [
+        "testdyngl.c"
+    ], 
+    "files": [], 
+    "libs": [], 
+    "name": "testdyngl.c.test", 
+    "notes": ""
+}

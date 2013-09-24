@@ -1,0 +1,7 @@
+{
+    "notes": "",
+    "cflags": ["-Isupport"],
+    "libs": ["support/libsdl2_test.bc"],
+    "code": ["testkeys.c"],
+    "files": []
+}

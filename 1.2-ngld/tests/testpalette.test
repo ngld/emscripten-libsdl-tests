@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testpalette.c"
+    ], 
+    "files": [
+        "sail.bmp"
+    ], 
+    "libs": [], 
+    "name": "testpalette.c.test", 
+    "notes": ""
+}

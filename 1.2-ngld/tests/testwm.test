@@ -1,0 +1,12 @@
+{
+    "cflags": [], 
+    "code": [
+        "testwm.c"
+    ], 
+    "files": [
+        "icon.bmp"
+    ], 
+    "libs": [], 
+    "name": "testwm.c.test", 
+    "notes": ""
+}

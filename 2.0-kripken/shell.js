@@ -102,14 +102,13 @@ var Module = {
     Module.dynCall = TraceKit.wrap(Module.dynCall);
     
     Module.addRunDependency('load_fs');
-    var path = location.hash.substr(1).replace(/\.js$/, '.files');
+    var path = location.hash.substr(1).replace(/\.test\.js$/, '.test');
     
-    $.get('tests/' + path + '?' + $.now(), function (data) {
-      $.each(data.split("\n"), function (i, name) {
-        name = name.replace(/\s+$/, '');
-        if(name != '') {
-          FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
-        }
+    $.getJSON('tests/' + path + '?' + $.now(), function (data) {
+      if(data.notes && data.notes != '') Module.print('Notes: ' + data.notes + '\n');
+      
+      $.each(data.files, function (i, name) {
+        FS.createPreloadedFile('/', name, 'tests/' + name, true, false);
       });
       
       Module.removeRunDependency('load_fs');
