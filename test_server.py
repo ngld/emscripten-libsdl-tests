@@ -1,7 +1,7 @@
 #!/bin/env python2
 
 from __future__ import print_function
-import sys, os, subprocess, webbrowser, SimpleHTTPServer, SocketServer, socket, tempfile, json, logging, argparse, urllib, shlex
+import sys, os, re, subprocess, webbrowser, SimpleHTTPServer, SocketServer, socket, tempfile, json, logging, argparse, urllib, shlex
 
 PORT = 8080
 TEST_PATH = os.path.abspath('.')
@@ -68,8 +68,8 @@ class Compiler(object):
             p_opts['stdout'] = logstream
             p_opts['stderr'] = subprocess.STDOUT
         
-        for i, lib in enumerate(libs):
-            libs[i] = lib
+        # for i, lib in enumerate(libs):
+        #     libs[i] = lib
         
         if len(meta['code']) == 1:
             self.run(['emcc', '-o', destfile] + cflags + meta['code'] + libs, **p_opts)
@@ -98,7 +98,17 @@ class Compiler(object):
         if logstream != None:
             logstream.close()
         
+        if os.path.isfile(destfile):
+            # Make sure the script throws proper exceptions.
+            
+            with open(destfile, 'r') as stream:
+                script = re.sub(r'throw\s+((?:\'|new)[^;}]+)', r'throw ensureExc(\1)', stream.read())
+            
+            with open(destfile, 'w') as stream:
+                stream.write(script)
+        
         return destfile, logfile
+
 
 class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler, Compiler):
     def handle(self):
@@ -182,7 +192,7 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler, Compiler):
         i = len(args)
         for arg in reversed(args):
             i -= 1
-            if arg[-6:] == '.test' and arg[0] != '-':
+            if arg[-5:] == '.test' and arg[0] != '-':
                 test = os.path.basename(arg)
                 del args[i]
             
@@ -200,7 +210,7 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler, Compiler):
             self.send_plain('py_emcc: Sorry, I couldn\'t parse the command!\n')
             return
         
-        destfile, logfile = self.build_test(test, args)
+        destfile, logfile = self.build_test(test, args, log=True)
         
         if destfile == -1:
             self.send_plain('emcc: Test not found!\n')
@@ -224,7 +234,8 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler, Compiler):
         self.send_header("Content-Length", str(len(msg)))
         self.end_headers()
         self.wfile.write(msg)
-        
+
+
 def start_server(s_port):
     try:
         httpd = SocketServer.TCPServer(("", s_port), Handler)
