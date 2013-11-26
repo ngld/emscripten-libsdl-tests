@@ -1,0 +1,3 @@
+warning: unresolved symbol: SDL_CreateCursor
+warning: unresolved symbol: SDL_FreeCursor
+warning: unresolved symbol: SDL_SetCursor

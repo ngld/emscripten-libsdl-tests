@@ -14,3 +14,10 @@ extern DECLSPEC size_t SDLCALL SDL_strlen(const char *string);
 extern DECLSPEC int SDLCALL SDL_snprintf(char *text, size_t maxlen,
 [0;1;32m                                               ^
 [0m3 warnings generated.
+warning: unresolved symbol: SDL_CreateWindow
+warning: unresolved symbol: SDL_WaitEvent
+warning: unresolved symbol: SDL_strlen
+warning: unresolved symbol: SDL_snprintf
+warning: unresolved symbol: SDL_Log
+warning: unresolved symbol: SDL_GetScancodeName
+warning: unresolved symbol: SDL_vsnprintf

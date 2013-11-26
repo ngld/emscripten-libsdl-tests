@@ -5,3 +5,4 @@
 extern DECLSPEC void SDLCALL SDL_WM_GetCaption(const char **title,
 [0;1;32m                                                            ^
 [0m1 warning generated.
+warning: unresolved symbol: SDL_WM_GetCaption

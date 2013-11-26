@@ -69,7 +69,7 @@ else if (ENVIRONMENT_IS_SHELL) {
   if (typeof read != 'undefined') {
     Module['read'] = read;
   } else {
-    Module['read'] = function() { throw 'no read() available (jsc?)' };
+    Module['read'] = function() { throw ensureExc('no read() available (jsc?)' )};
   }
   Module['readBinary'] = function(f) {
     return read(f, 'binary');
@@ -115,7 +115,7 @@ else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
 }
 else {
   // Unreachable because SHELL is dependant on the others
-  throw 'Unknown runtime environment. Where are we?';
+  throw ensureExc('Unknown runtime environment. Where are we?');
 }
 function globalEval(x) {
   eval.call(null, x);
@@ -287,7 +287,7 @@ var Runtime = {
         size = field.substr(1)|0;
         alignSize = 1;
       } else {
-        throw 'Unclear type in struct: ' + field + ', in ' + type.name_ + ' :: ' + dump(Types.types[type.name_]);
+        throw ensureExc('Unclear type in struct: ' + field + ', in ' + type.name_ + ' :: ' + dump(Types.types[type.name_]));
       }
       if (type.packed) alignSize = 1;
       type.alignSize = Math.max(type.alignSize, alignSize);
@@ -1134,7 +1134,7 @@ function copyTempDouble(ptr) {
         var paths = Array.prototype.slice.call(arguments, 0);
         return PATH.normalize(paths.filter(function(p, index) {
           if (typeof p !== 'string') {
-            throw new TypeError('Arguments to path.join must be strings');
+            throw ensureExc(new TypeError('Arguments to path.join must be strings'));
           }
           return p;
         }).join('/'));
@@ -1145,7 +1145,7 @@ function copyTempDouble(ptr) {
           var path = (i >= 0) ? arguments[i] : FS.cwd();
           // Skip empty and invalid entries
           if (typeof path !== 'string') {
-            throw new TypeError('Arguments to path.resolve must be strings');
+            throw ensureExc(new TypeError('Arguments to path.resolve must be strings'));
           } else if (!path) {
             continue;
           }
@@ -1215,7 +1215,7 @@ function copyTempDouble(ptr) {
       },stream_ops:{open:function (stream) {
           var tty = TTY.ttys[stream.node.rdev];
           if (!tty) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENODEV);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENODEV));
           }
           stream.tty = tty;
           stream.seekable = false;
@@ -1226,7 +1226,7 @@ function copyTempDouble(ptr) {
           }
         },read:function (stream, buffer, offset, length, pos /* ignored */) {
           if (!stream.tty || !stream.tty.ops.get_char) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENXIO);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENXIO));
           }
           var bytesRead = 0;
           for (var i = 0; i < length; i++) {
@@ -1234,10 +1234,10 @@ function copyTempDouble(ptr) {
             try {
               result = stream.tty.ops.get_char(stream.tty);
             } catch (e) {
-              throw new FS.ErrnoError(ERRNO_CODES.EIO);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
             }
             if (result === undefined && bytesRead === 0) {
-              throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EAGAIN));
             }
             if (result === null || result === undefined) break;
             bytesRead++;
@@ -1249,13 +1249,13 @@ function copyTempDouble(ptr) {
           return bytesRead;
         },write:function (stream, buffer, offset, length, pos) {
           if (!stream.tty || !stream.tty.ops.put_char) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENXIO);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENXIO));
           }
           for (var i = 0; i < length; i++) {
             try {
               stream.tty.ops.put_char(stream.tty, buffer[offset+i]);
             } catch (e) {
-              throw new FS.ErrnoError(ERRNO_CODES.EIO);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
             }
           }
           if (length) {
@@ -1319,7 +1319,7 @@ function copyTempDouble(ptr) {
       },create_node:function (parent, name, mode, dev) {
         if (FS.isBlkdev(mode) || FS.isFIFO(mode)) {
           // no supported
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         var node = FS.createNode(parent, name, mode, dev);
         if (FS.isDir(node.mode)) {
@@ -1414,7 +1414,7 @@ function copyTempDouble(ptr) {
             else while (attr.size > contents.length) contents.push(0);
           }
         },lookup:function (parent, name) {
-          throw new FS.ErrnoError(ERRNO_CODES.ENOENT);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOENT));
         },mknod:function (parent, name, mode, dev) {
           return MEMFS.create_node(parent, name, mode, dev);
         },rename:function (old_node, new_dir, new_name) {
@@ -1427,7 +1427,7 @@ function copyTempDouble(ptr) {
             }
             if (new_node) {
               for (var i in new_node.contents) {
-                throw new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY));
               }
             }
           }
@@ -1440,7 +1440,7 @@ function copyTempDouble(ptr) {
         },rmdir:function (parent, name) {
           var node = FS.lookupNode(parent, name);
           for (var i in node.contents) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY));
           }
           delete parent.contents[name];
         },readdir:function (node) {
@@ -1458,7 +1458,7 @@ function copyTempDouble(ptr) {
           return node;
         },readlink:function (node) {
           if (!FS.isLink(node.mode)) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
           }
           return node.link;
         }},stream_ops:{read:function (stream, buffer, offset, length, position) {
@@ -1506,7 +1506,7 @@ function copyTempDouble(ptr) {
             }
           }
           if (position < 0) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
           }
           stream.ungotten = [];
           stream.position = position;
@@ -1518,7 +1518,7 @@ function copyTempDouble(ptr) {
           while (limit > contents.length) contents.push(0);
         },mmap:function (stream, buffer, offset, length, position, prot, flags) {
           if (!FS.isFile(stream.node.mode)) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENODEV);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENODEV));
           }
           var ptr;
           var allocated;
@@ -1542,7 +1542,7 @@ function copyTempDouble(ptr) {
             allocated = true;
             ptr = _malloc(length);
             if (!ptr) {
-              throw new FS.ErrnoError(ERRNO_CODES.ENOMEM);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOMEM));
             }
             buffer.set(contents, ptr);
           }
@@ -1573,7 +1573,7 @@ function copyTempDouble(ptr) {
         path = PATH.resolve(FS.currentPath, path);
         opts = opts || { recurse_count: 0 };
         if (opts.recurse_count > 8) {  // max recursive lookup of 8
-          throw new FS.ErrnoError(ERRNO_CODES.ELOOP);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ELOOP));
         }
         // split the path
         var parts = PATH.normalizeArray(path.split('/').filter(function(p) {
@@ -1605,7 +1605,7 @@ function copyTempDouble(ptr) {
               var lookup = FS.lookupPath(current_path, { recurse_count: opts.recurse_count });
               current = lookup.node;
               if (count++ > 40) {  // limit max consecutive symlinks to 40 (SYMLOOP_MAX).
-                throw new FS.ErrnoError(ERRNO_CODES.ELOOP);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ELOOP));
               }
             }
           }
@@ -1647,7 +1647,7 @@ function copyTempDouble(ptr) {
       },lookupNode:function (parent, name) {
         var err = FS.mayLookup(parent);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         var hash = FS.hashName(parent.id, name);
         for (var node = FS.nameTable[hash]; node; node = node.name_next) {
@@ -1719,7 +1719,7 @@ function copyTempDouble(ptr) {
       },flagModes:{"r":0,"rs":1052672,"r+":2,"w":577,"wx":705,"xw":705,"w+":578,"wx+":706,"xw+":706,"a":1089,"ax":1217,"xa":1217,"a+":1090,"ax+":1218,"xa+":1218},modeStringToFlags:function (str) {
         var flags = FS.flagModes[str];
         if (typeof flags === 'undefined') {
-          throw new Error('Unknown file open mode: ' + str);
+          throw ensureExc(new Error('Unknown file open mode: ' + str));
         }
         return flags;
       },flagsToPermissionString:function (flag) {
@@ -1796,7 +1796,7 @@ function copyTempDouble(ptr) {
             return fd;
           }
         }
-        throw new FS.ErrnoError(ERRNO_CODES.EMFILE);
+        throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EMFILE));
       },getStream:function (fd) {
         return FS.streams[fd];
       },createStream:function (stream, fd_start, fd_end) {
@@ -1831,7 +1831,7 @@ function copyTempDouble(ptr) {
             stream.stream_ops.open(stream);
           }
         },llseek:function () {
-          throw new FS.ErrnoError(ERRNO_CODES.ESPIPE);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ESPIPE));
         }},major:function (dev) {
         return ((dev) >> 8);
       },minor:function (dev) {
@@ -1875,10 +1875,10 @@ function copyTempDouble(ptr) {
         var name = PATH.basename(path);
         var err = FS.mayCreate(parent, name);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         if (!parent.node_ops.mknod) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         return parent.node_ops.mknod(parent, name, mode, dev);
       },create:function (path, mode) {
@@ -1904,10 +1904,10 @@ function copyTempDouble(ptr) {
         var newname = PATH.basename(newpath);
         var err = FS.mayCreate(parent, newname);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         if (!parent.node_ops.symlink) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         return parent.node_ops.symlink(parent, newname, oldpath);
       },rename:function (old_path, new_path) {
@@ -1923,23 +1923,23 @@ function copyTempDouble(ptr) {
           lookup = FS.lookupPath(new_path, { parent: true });
           new_dir = lookup.node;
         } catch (e) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBUSY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBUSY));
         }
         // need to be part of the same mount
         if (old_dir.mount !== new_dir.mount) {
-          throw new FS.ErrnoError(ERRNO_CODES.EXDEV);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EXDEV));
         }
         // source must exist
         var old_node = FS.lookupNode(old_dir, old_name);
         // old path should not be an ancestor of the new path
         var relative = PATH.relative(old_path, new_dirname);
         if (relative.charAt(0) !== '.') {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         // new path should not be an ancestor of the old path
         relative = PATH.relative(new_path, old_dirname);
         if (relative.charAt(0) !== '.') {
-          throw new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTEMPTY));
         }
         // see if the new path already exists
         var new_node;
@@ -1956,7 +1956,7 @@ function copyTempDouble(ptr) {
         var isdir = FS.isDir(old_node.mode);
         var err = FS.mayDelete(old_dir, old_name, isdir);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         // need delete permissions if we'll be overwriting.
         // need create permissions if new doesn't already exist.
@@ -1964,19 +1964,19 @@ function copyTempDouble(ptr) {
           FS.mayDelete(new_dir, new_name, isdir) :
           FS.mayCreate(new_dir, new_name);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         if (!old_dir.node_ops.rename) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         if (FS.isMountpoint(old_node) || (new_node && FS.isMountpoint(new_node))) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBUSY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBUSY));
         }
         // if we are going to change the parent, check write permissions
         if (new_dir !== old_dir) {
           err = FS.nodePermissions(old_dir, 'w');
           if (err) {
-            throw new FS.ErrnoError(err);
+            throw ensureExc(new FS.ErrnoError(err));
           }
         }
         // remove the node from the lookup hash
@@ -1998,13 +1998,13 @@ function copyTempDouble(ptr) {
         var node = FS.lookupNode(parent, name);
         var err = FS.mayDelete(parent, name, true);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         if (!parent.node_ops.rmdir) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         if (FS.isMountpoint(node)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBUSY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBUSY));
         }
         parent.node_ops.rmdir(parent, name);
         FS.destroyNode(node);
@@ -2012,7 +2012,7 @@ function copyTempDouble(ptr) {
         var lookup = FS.lookupPath(path, { follow: true });
         var node = lookup.node;
         if (!node.node_ops.readdir) {
-          throw new FS.ErrnoError(ERRNO_CODES.ENOTDIR);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTDIR));
         }
         return node.node_ops.readdir(node);
       },unlink:function (path) {
@@ -2024,13 +2024,13 @@ function copyTempDouble(ptr) {
         if (err) {
           // POSIX says unlink should set EPERM, not EISDIR
           if (err === ERRNO_CODES.EISDIR) err = ERRNO_CODES.EPERM;
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         if (!parent.node_ops.unlink) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         if (FS.isMountpoint(node)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBUSY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBUSY));
         }
         parent.node_ops.unlink(parent, name);
         FS.destroyNode(node);
@@ -2038,14 +2038,14 @@ function copyTempDouble(ptr) {
         var lookup = FS.lookupPath(path, { follow: false });
         var link = lookup.node;
         if (!link.node_ops.readlink) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         return link.node_ops.readlink(link);
       },stat:function (path, dontFollow) {
         var lookup = FS.lookupPath(path, { follow: !dontFollow });
         var node = lookup.node;
         if (!node.node_ops.getattr) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         return node.node_ops.getattr(node);
       },lstat:function (path) {
@@ -2059,7 +2059,7 @@ function copyTempDouble(ptr) {
           node = path;
         }
         if (!node.node_ops.setattr) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         node.node_ops.setattr(node, {
           mode: (mode & 4095) | (node.mode & ~4095),
@@ -2070,7 +2070,7 @@ function copyTempDouble(ptr) {
       },fchmod:function (fd, mode) {
         var stream = FS.getStream(fd);
         if (!stream) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         FS.chmod(stream.node, mode);
       },chown:function (path, uid, gid, dontFollow) {
@@ -2082,7 +2082,7 @@ function copyTempDouble(ptr) {
           node = path;
         }
         if (!node.node_ops.setattr) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         node.node_ops.setattr(node, {
           timestamp: Date.now()
@@ -2093,12 +2093,12 @@ function copyTempDouble(ptr) {
       },fchown:function (fd, uid, gid) {
         var stream = FS.getStream(fd);
         if (!stream) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         FS.chown(stream.node, uid, gid);
       },truncate:function (path, len) {
         if (len < 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         var node;
         if (typeof path === 'string') {
@@ -2108,17 +2108,17 @@ function copyTempDouble(ptr) {
           node = path;
         }
         if (!node.node_ops.setattr) {
-          throw new FS.ErrnoError(ERRNO_CODES.EPERM);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
         if (FS.isDir(node.mode)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EISDIR);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EISDIR));
         }
         if (!FS.isFile(node.mode)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         var err = FS.nodePermissions(node, 'w');
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         node.node_ops.setattr(node, {
           size: len,
@@ -2127,10 +2127,10 @@ function copyTempDouble(ptr) {
       },ftruncate:function (fd, len) {
         var stream = FS.getStream(fd);
         if (!stream) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         if ((stream.flags & 2097155) === 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         FS.truncate(stream.node, len);
       },utime:function (path, atime, mtime) {
@@ -2163,7 +2163,7 @@ function copyTempDouble(ptr) {
           if (node) {
             // if O_CREAT and O_EXCL are set, error out if the node already exists
             if ((flags & 128)) {
-              throw new FS.ErrnoError(ERRNO_CODES.EEXIST);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EEXIST));
             }
           } else {
             // node doesn't exist, try to create it
@@ -2171,7 +2171,7 @@ function copyTempDouble(ptr) {
           }
         }
         if (!node) {
-          throw new FS.ErrnoError(ERRNO_CODES.ENOENT);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOENT));
         }
         // can't truncate a device
         if (FS.isChrdev(node.mode)) {
@@ -2180,7 +2180,7 @@ function copyTempDouble(ptr) {
         // check permissions
         var err = FS.mayOpen(node, flags);
         if (err) {
-          throw new FS.ErrnoError(err);
+          throw ensureExc(new FS.ErrnoError(err));
         }
         // do truncation if necessary
         if ((flags & 512)) {
@@ -2222,51 +2222,51 @@ function copyTempDouble(ptr) {
         }
       },llseek:function (stream, offset, whence) {
         if (!stream.seekable || !stream.stream_ops.llseek) {
-          throw new FS.ErrnoError(ERRNO_CODES.ESPIPE);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ESPIPE));
         }
         return stream.stream_ops.llseek(stream, offset, whence);
       },read:function (stream, buffer, offset, length, position) {
         if (length < 0 || position < 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         if ((stream.flags & 2097155) === 1) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         if (FS.isDir(stream.node.mode)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EISDIR);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EISDIR));
         }
         if (!stream.stream_ops.read) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         var seeking = true;
         if (typeof position === 'undefined') {
           position = stream.position;
           seeking = false;
         } else if (!stream.seekable) {
-          throw new FS.ErrnoError(ERRNO_CODES.ESPIPE);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ESPIPE));
         }
         var bytesRead = stream.stream_ops.read(stream, buffer, offset, length, position);
         if (!seeking) stream.position += bytesRead;
         return bytesRead;
       },write:function (stream, buffer, offset, length, position, canOwn) {
         if (length < 0 || position < 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         if ((stream.flags & 2097155) === 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         if (FS.isDir(stream.node.mode)) {
-          throw new FS.ErrnoError(ERRNO_CODES.EISDIR);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EISDIR));
         }
         if (!stream.stream_ops.write) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         var seeking = true;
         if (typeof position === 'undefined') {
           position = stream.position;
           seeking = false;
         } else if (!stream.seekable) {
-          throw new FS.ErrnoError(ERRNO_CODES.ESPIPE);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ESPIPE));
         }
         if (stream.flags & 1024) {
           // seek to the end before writing in append mode
@@ -2277,30 +2277,30 @@ function copyTempDouble(ptr) {
         return bytesWritten;
       },allocate:function (stream, offset, length) {
         if (offset < 0 || length <= 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
         }
         if ((stream.flags & 2097155) === 0) {
-          throw new FS.ErrnoError(ERRNO_CODES.EBADF);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EBADF));
         }
         if (!FS.isFile(stream.node.mode) && !FS.isDir(node.mode)) {
-          throw new FS.ErrnoError(ERRNO_CODES.ENODEV);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENODEV));
         }
         if (!stream.stream_ops.allocate) {
-          throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP));
         }
         stream.stream_ops.allocate(stream, offset, length);
       },mmap:function (stream, buffer, offset, length, position, prot, flags) {
         // TODO if PROT is PROT_WRITE, make sure we have write access
         if ((stream.flags & 2097155) === 1) {
-          throw new FS.ErrnoError(ERRNO_CODES.EACCES);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EACCES));
         }
         if (!stream.stream_ops.mmap) {
-          throw new FS.errnoError(ERRNO_CODES.ENODEV);
+          throw ensureExc(new FS.errnoError(ERRNO_CODES.ENODEV));
         }
         return stream.stream_ops.mmap(stream, buffer, offset, length, position, prot, flags);
       },ioctl:function (stream, cmd, arg) {
         if (!stream.stream_ops.ioctl) {
-          throw new FS.ErrnoError(ERRNO_CODES.ENOTTY);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTTY));
         }
         return stream.stream_ops.ioctl(stream, cmd, arg);
       },readFile:function (path, opts) {
@@ -2322,7 +2322,7 @@ function copyTempDouble(ptr) {
         } else if (opts.encoding === 'binary') {
           ret = buf;
         } else {
-          throw new Error('Invalid encoding type "' + opts.encoding + '"');
+          throw ensureExc(new Error('Invalid encoding type "' + opts.encoding + '"'));
         }
         FS.close(stream);
         return ret;
@@ -2338,7 +2338,7 @@ function copyTempDouble(ptr) {
         } else if (opts.encoding === 'binary') {
           FS.write(stream, data, 0, data.length, 0);
         } else {
-          throw new Error('Invalid encoding type "' + opts.encoding + '"');
+          throw ensureExc(new Error('Invalid encoding type "' + opts.encoding + '"'));
         }
         FS.close(stream);
       },createDefaultDirectories:function () {
@@ -2532,10 +2532,10 @@ function copyTempDouble(ptr) {
               try {
                 result = input();
               } catch (e) {
-                throw new FS.ErrnoError(ERRNO_CODES.EIO);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
               }
               if (result === undefined && bytesRead === 0) {
-                throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EAGAIN));
               }
               if (result === null || result === undefined) break;
               bytesRead++;
@@ -2551,7 +2551,7 @@ function copyTempDouble(ptr) {
               try {
                 output(buffer[offset+i]);
               } catch (e) {
-                throw new FS.ErrnoError(ERRNO_CODES.EIO);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
               }
             }
             if (length) {
@@ -2568,7 +2568,7 @@ function copyTempDouble(ptr) {
         if (obj.isDevice || obj.isFolder || obj.link || obj.contents) return true;
         var success = true;
         if (typeof XMLHttpRequest !== 'undefined') {
-          throw new Error("Lazy loading should have been performed (contents set) in createLazyFile, but it was not. Lazy loading only works in web workers. Use --embed-file or --preload-file in emcc on the main thread.");
+          throw ensureExc(new Error("Lazy loading should have been performed (contents set) in createLazyFile, but it was not. Lazy loading only works in web workers. Use --embed-file or --preload-file in emcc on the main thread."));
         } else if (Module['read']) {
           // Command-line.
           try {
@@ -2579,13 +2579,13 @@ function copyTempDouble(ptr) {
             success = false;
           }
         } else {
-          throw new Error('Cannot load without read() or XMLHttpRequest.');
+          throw ensureExc(new Error('Cannot load without read() or XMLHttpRequest.'));
         }
         if (!success) ___setErrNo(ERRNO_CODES.EIO);
         return success;
       },createLazyFile:function (parent, name, url, canRead, canWrite) {
         if (typeof XMLHttpRequest !== 'undefined') {
-          if (!ENVIRONMENT_IS_WORKER) throw 'Cannot do synchronous binary XHRs outside webworkers in modern browsers. Use --embed-file or --preload-file in emcc';
+          if (!ENVIRONMENT_IS_WORKER) throw ensureExc('Cannot do synchronous binary XHRs outside webworkers in modern browsers. Use --embed-file or --preload-file in emcc');
           // Lazy chunked Uint8Array (implements get and length from Uint8Array). Actual getting is abstracted away for eventual reuse.
           var LazyUint8Array = function() {
             this.lengthKnown = false;
@@ -2607,7 +2607,7 @@ function copyTempDouble(ptr) {
               var xhr = new XMLHttpRequest();
               xhr.open('HEAD', url, false);
               xhr.send(null);
-              if (!(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304)) throw new Error("Couldn't load " + url + ". Status: " + xhr.status);
+              if (!(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304)) throw ensureExc(new Error("Couldn't load " + url + ". Status: " + xhr.status));
               var datalength = Number(xhr.getResponseHeader("Content-length"));
               var header;
               var hasByteServing = (header = xhr.getResponseHeader("Accept-Ranges")) && header === "bytes";
@@ -2615,8 +2615,8 @@ function copyTempDouble(ptr) {
               if (!hasByteServing) chunkSize = datalength;
               // Function to get a range from the remote URL.
               var doXHR = (function(from, to) {
-                if (from > to) throw new Error("invalid range (" + from + ", " + to + ") or no bytes requested!");
-                if (to > datalength-1) throw new Error("only " + datalength + " bytes available! programmer error!");
+                if (from > to) throw ensureExc(new Error("invalid range (" + from + ", " + to + ") or no bytes requested!"));
+                if (to > datalength-1) throw ensureExc(new Error("only " + datalength + " bytes available! programmer error!"));
                 // TODO: Use mozResponseArrayBuffer, responseStream, etc. if available.
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', url, false);
@@ -2627,7 +2627,7 @@ function copyTempDouble(ptr) {
                   xhr.overrideMimeType('text/plain; charset=x-user-defined');
                 }
                 xhr.send(null);
-                if (!(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304)) throw new Error("Couldn't load " + url + ". Status: " + xhr.status);
+                if (!(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304)) throw ensureExc(new Error("Couldn't load " + url + ". Status: " + xhr.status));
                 if (xhr.response !== undefined) {
                   return new Uint8Array(xhr.response || []);
                 } else {
@@ -2642,7 +2642,7 @@ function copyTempDouble(ptr) {
                 if (typeof(lazyArray.chunks[chunkNum]) === "undefined") {
                   lazyArray.chunks[chunkNum] = doXHR(start, end);
                 }
-                if (typeof(lazyArray.chunks[chunkNum]) === "undefined") throw new Error("doXHR failed!");
+                if (typeof(lazyArray.chunks[chunkNum]) === "undefined") throw ensureExc(new Error("doXHR failed!"));
                 return lazyArray.chunks[chunkNum];
               });
               this._length = datalength;
@@ -2687,7 +2687,7 @@ function copyTempDouble(ptr) {
           var fn = node.stream_ops[key];
           stream_ops[key] = function() {
             if (!FS.forceLoadFile(node)) {
-              throw new FS.ErrnoError(ERRNO_CODES.EIO);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
             }
             return fn.apply(null, arguments);
           };
@@ -2695,7 +2695,7 @@ function copyTempDouble(ptr) {
         // use a custom read function
         stream_ops.read = function(stream, buffer, offset, length, position) {
           if (!FS.forceLoadFile(node)) {
-            throw new FS.ErrnoError(ERRNO_CODES.EIO);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
           }
           var contents = stream.node.contents;
           var size = Math.min(contents.length - position, length);
@@ -2905,7 +2905,7 @@ function copyTempDouble(ptr) {
             else {
               var result = /ws[s]?:\/\/([^:]+):(\d+)/.exec(ws.url);
               if (!result) {
-                throw new Error('WebSocket URL must be in the format ws(s)://address:port');
+                throw ensureExc(new Error('WebSocket URL must be in the format ws(s)://address:port'));
               }
               addr = result[1];
               port = parseInt(result[2], 10);
@@ -2919,7 +2919,7 @@ function copyTempDouble(ptr) {
               ws = new WebSocket(url, opts);
               ws.binaryType = 'arraybuffer';
             } catch (e) {
-              throw new FS.ErrnoError(ERRNO_CODES.EHOSTUNREACH);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EHOSTUNREACH));
             }
           }
           var peer = {
@@ -3057,7 +3057,7 @@ function copyTempDouble(ptr) {
           return 0;
         },bind:function (sock, addr, port) {
           if (typeof sock.saddr !== 'undefined' || typeof sock.sport !== 'undefined') {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);  // already bound
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));  // already bound
           }
           sock.saddr = addr;
           sock.sport = port || _mkport();
@@ -3081,7 +3081,7 @@ function copyTempDouble(ptr) {
           }
         },connect:function (sock, addr, port) {
           if (sock.server) {
-            throw new FS.ErrnoError(ERRNO_CODS.EOPNOTSUPP);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODS.EOPNOTSUPP));
           }
           // TODO autobind
           // if (!sock.addr && sock.type == 2) {
@@ -3091,9 +3091,9 @@ function copyTempDouble(ptr) {
             var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
             if (dest) {
               if (dest.socket.readyState === dest.socket.CONNECTING) {
-                throw new FS.ErrnoError(ERRNO_CODES.EALREADY);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EALREADY));
               } else {
-                throw new FS.ErrnoError(ERRNO_CODES.EISCONN);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EISCONN));
               }
             }
           }
@@ -3103,13 +3103,13 @@ function copyTempDouble(ptr) {
           sock.daddr = peer.addr;
           sock.dport = peer.port;
           // always "fail" in non-blocking mode
-          throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINPROGRESS));
         },listen:function (sock, backlog) {
           if (!ENVIRONMENT_IS_NODE) {
-            throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP));
           }
           if (sock.server) {
-             throw new FS.ErrnoError(ERRNO_CODES.EINVAL);  // already listening
+             throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));  // already listening
           }
           var WebSocketServer = require('ws').Server;
           var host = sock.saddr;
@@ -3142,7 +3142,7 @@ function copyTempDouble(ptr) {
           });
         },accept:function (listensock) {
           if (!listensock.server) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
           }
           var newsock = listensock.pending.shift();
           newsock.stream.flags = listensock.stream.flags;
@@ -3151,7 +3151,7 @@ function copyTempDouble(ptr) {
           var addr, port;
           if (peer) {
             if (sock.daddr === undefined || sock.dport === undefined) {
-              throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTCONN));
             }
             addr = sock.daddr;
             port = sock.dport;
@@ -3172,7 +3172,7 @@ function copyTempDouble(ptr) {
             }
             // if there was no address to fall back to, error out
             if (addr === undefined || port === undefined) {
-              throw new FS.ErrnoError(ERRNO_CODES.EDESTADDRREQ);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EDESTADDRREQ));
             }
           } else {
             // connection-based sockets will only use the bound
@@ -3184,9 +3184,9 @@ function copyTempDouble(ptr) {
           // early out if not connected with a connection-based socket
           if (sock.type === 1) {
             if (!dest || dest.socket.readyState === dest.socket.CLOSING || dest.socket.readyState === dest.socket.CLOSED) {
-              throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTCONN));
             } else if (dest.socket.readyState === dest.socket.CONNECTING) {
-              throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EAGAIN));
             }
           }
           // create a copy of the incoming data to send, as the WebSocket API
@@ -3216,13 +3216,13 @@ function copyTempDouble(ptr) {
             dest.socket.send(data);
             return length;
           } catch (e) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
           }
         },recvmsg:function (sock, length) {
           // http://pubs.opengroup.org/onlinepubs/7908799/xns/recvmsg.html
           if (sock.type === 1 && sock.server) {
             // tcp servers should not be recv()'ing on the listen socket
-            throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTCONN));
           }
           var queued = sock.recv_queue.shift();
           if (!queued) {
@@ -3230,7 +3230,7 @@ function copyTempDouble(ptr) {
               var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
               if (!dest) {
                 // if we have a destination address but are not connected, error out
-                throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTCONN));
               }
               else if (dest.socket.readyState === dest.socket.CLOSING || dest.socket.readyState === dest.socket.CLOSED) {
                 // return null if the socket has closed
@@ -3238,10 +3238,10 @@ function copyTempDouble(ptr) {
               }
               else {
                 // else, our socket is in a valid state but truly has nothing available
-                throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EAGAIN));
               }
             } else {
-              throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EAGAIN));
             }
           }
           // queued.data will be an ArrayBuffer if it's unadulterated, but if it's
@@ -3970,7 +3970,7 @@ function copyTempDouble(ptr) {
           } else {
             ctx = canvas.getContext('2d');
           }
-          if (!ctx) throw ':(';
+          if (!ctx) throw ensureExc(':(');
         } catch (e) {
           Module.print('Could not create canvas - ' + e);
           return null;
@@ -4150,7 +4150,7 @@ function copyTempDouble(ptr) {
           if (onerror) {
             onerror();
           } else {
-            throw 'Loading data file "' + url + '" failed.';
+            throw ensureExc('Loading data file "' + url + '" failed.');
           }
         });
         if (!noRunDep) addRunDependency('al ' + url);
@@ -4238,7 +4238,7 @@ if (memoryInitializer) {
       applyData(data);
       removeRunDependency('memory initializer');
     }, function(data) {
-      throw 'could not load memory initializer ' + memoryInitializer;
+      throw ensureExc('could not load memory initializer ' + memoryInitializer);
     });
   }
 }
@@ -4351,7 +4351,7 @@ function exit(status) {
   // would be great for checking test exit statuses).
   // https://github.com/kripken/emscripten/issues/1371
   // throw an exception to halt the current execution
-  throw new ExitStatus(status);
+  throw ensureExc(new ExitStatus(status));
 }
 Module['exit'] = Module.exit = exit;
 function abort(text) {
@@ -4361,7 +4361,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw 'abort() at ' + (new Error().stack);
+  throw ensureExc('abort() at ' + (new Error().stack));
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}

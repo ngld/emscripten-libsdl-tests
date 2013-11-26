@@ -18,6 +18,24 @@ function report(result) {
   }
 }
 
+function ensureExc(value) {
+  if(typeof value == 'string' && value != 'SimulateInfiniteLoop') {
+    value = new Error(value);
+  }
+  if(value instanceof FS.ErrnoError) {
+    // FS.ErrnoError doesn't have the stack property.
+    // Replace it to ensure a proper stacktrace.
+    
+    var errno = value.errno;
+    var code = value.code;
+    value = new Error(value.message);
+    value.errno = errno;
+    value.code = code;
+  }
+  
+  return value;
+}
+
 function makeMainWrapper(_callMain) {
   return function callMain() {
     try {
@@ -66,6 +84,11 @@ TraceKit.report.subscribe(function (exc) {
   Module.printErr('\nFail: ' + msg);
   
   $.each(exc.stack, function (i, frame) {
+    if(frame.func == 'ensureExc') {
+      // Skip this one.
+      return;
+    }
+    
     var file = frame.url;
     if(file) file = file.split('/').pop()
     var line = $('<div class="stack-line">').text(frame.func + '(' + (frame.args ? frame.args.join(', ') : '?') + ') at line ' + frame.line + ' in ' + file);
@@ -94,7 +117,6 @@ TraceKit.report.subscribe(function (exc) {
   report(false);
 });
 
-// connect to canvas
 var Module = {
   preRun: [function () {
     Module.callMain = makeMainWrapper(Module.callMain);
@@ -148,9 +170,10 @@ var Module = {
     Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
   }
 };
-Module.setStatus('Downloading...');
 
 if(location.hash && location.hash[0] == '#') {
+  Module.setStatus('Downloading...');
+  
   var path = location.hash.substr(1);
   // Manually add the tag to our head and avoid $.getScript() to prevent screwed stacktraces.
   // $('head').append($('<script type="text/javascript">').attr('src', 'build/' + path)); // This doesn't work...
@@ -159,4 +182,6 @@ if(location.hash && location.hash[0] == '#') {
   tag.setAttribute('type', 'text/javascript');
   tag.setAttribute('src', 'build/' + path + '?' + $.now());
   $('head')[0].appendChild(tag);
+} else {
+  Module.setStatus('Ready.');
 }

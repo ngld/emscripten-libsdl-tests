@@ -1,4 +1,4 @@
-(function () {
+//(function () {
     var can_compile = true;
     
     function getRow(name) {
@@ -210,7 +210,6 @@
             
             var $this = $(this);
             var name = $this.parents('tr').find('.name').text();
-            var cap = $this.html();
             $this.html('Compiling...<br>');
             
             $.get('emcc/' + name, function (out) {
@@ -225,7 +224,7 @@
                         row.find('.actions').append('<a href="#" class="run-test">Run test</a><br><a href="#" class="clear-rlog">Clear run log</a><br>');
                     }
                 }
-                $this.html(cap);
+                $this.html('Compile<br>');
             }).fail(function () {
                 $this.html('Failed!<br>');
             });
@@ -246,7 +245,6 @@
             e.preventDefault();
            
             var $this = $(this);
-            var cap = $this.text();
             $this.text('Compiling...');
             
             $.get('emcc/' + $('#test-name').text(), function (out) {
@@ -257,7 +255,7 @@
                     getRow($('#test-name').text()).find('.actions .log').click();
                 }
                 
-                $this.text(cap);
+                $this.text('Compile');
             }).fail(function () {
                 $this.text('Failed! Please see the console for more details.');
             });
@@ -316,4 +314,4 @@
             setTimeout(function () { $(window).resize(); }, 1);
         });
     });
-})();
+//})();

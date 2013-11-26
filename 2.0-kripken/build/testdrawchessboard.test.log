@@ -5,3 +5,11 @@
         for(row; row < 8; row++)
 [0;1;32m            ^~~
 [0m2 warnings generated.
+warning: unresolved symbol: SDL_RenderGetViewport
+warning: unresolved symbol: SDL_SetRenderDrawColor
+warning: unresolved symbol: SDL_RenderFillRect
+warning: unresolved symbol: SDL_CreateWindow
+warning: unresolved symbol: SDL_GetWindowSurface
+warning: unresolved symbol: SDL_CreateSoftwareRenderer
+warning: unresolved symbol: SDL_RenderClear
+warning: unresolved symbol: SDL_UpdateWindowSurface

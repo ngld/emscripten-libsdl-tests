@@ -1,0 +1,4 @@
+warning: unresolved symbol: SDL_iconv_string
+warning: unresolved symbol: SDL_strlen
+warning: unresolved symbol: SDL_memcmp
+warning: unresolved symbol: SDL_free

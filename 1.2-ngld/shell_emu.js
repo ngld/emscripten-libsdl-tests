@@ -208,7 +208,12 @@ function autoComplete() {
     if(item.indexOf('/') > -1) {
         var path = item.split('/');
         item = path.pop();
-        path = resolvPath(path.join('/'));
+        
+        if(path.length == 1 && path[0] == '') {
+            path = '/';
+        } else {
+            path = resolvPath(path.join('/'));
+        }
     } else {
         var path = resolvPath('.');
     }
@@ -354,8 +359,9 @@ function runTest(path) {
         return;
     }
     
-    var name = path.substring(7);
-    getRow(name).find('.actions .run').click();
+    var name = path.substring(7, path.length - 3);
+    getRow(name).find('.actions .run-test').click();
+    $('.terminal-win').modal('hide');
     promptTerm();
 }
 
