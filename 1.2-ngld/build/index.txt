@@ -29,9 +29,6 @@ testerror.test.log
 testfile.test.js
 testfile.test.js.map
 testfile.test.log
-testfont.test.js
-testfont.test.js.map
-testfont.test.log
 testgamma.test.js
 testgamma.test.js.map
 testgamma.test.log
