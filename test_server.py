@@ -102,7 +102,7 @@ class Compiler(object):
             # Make sure the script throws proper exceptions.
             
             with open(destfile, 'r') as stream:
-                script = re.sub(r'throw\s+((?:\'|new)[^;}]+)', r'throw ensureExc(\1)', stream.read())
+                script = re.sub(r'throw([ \t]+)([^;}\n]+)([;}])', r'throw\1ensureExc(\2)\3', stream.read())
             
             with open(destfile, 'w') as stream:
                 stream.write(script)
