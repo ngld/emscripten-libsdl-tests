@@ -1,0 +1,3 @@
+warning: unresolved symbol: SDL_LoadObject
+warning: unresolved symbol: SDL_LoadFunction
+warning: unresolved symbol: SDL_UnloadObject

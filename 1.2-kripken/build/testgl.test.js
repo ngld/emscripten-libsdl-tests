@@ -1610,7 +1610,7 @@ function copyTempDouble(ptr) {
             else while (attr.size > contents.length) contents.push(0);
           }
         },lookup:function (parent, name) {
-          throw FS.genericErrors[ERRNO_CODES.ENOENT];
+          throw ensureExc(FS.genericErrors[ERRNO_CODES.ENOENT]);
         },mknod:function (parent, name, mode, dev) {
           return MEMFS.createNode(parent, name, mode, dev);
         },rename:function (old_node, new_dir, new_name) {
@@ -1947,7 +1947,7 @@ function copyTempDouble(ptr) {
             stat.mode = stat.mode | ((stat.mode & 146) >> 1);
           }
         } catch (e) {
-          if (!e.code) throw e;
+          if (!e.code) throw ensureExc(e);
           throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
         }
         return stat.mode;
@@ -1972,7 +1972,7 @@ function copyTempDouble(ptr) {
           try {
             stat = fs.lstatSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           // node.js v0.10.20 doesn't report blksize and blocks on Windows. Fake them with default blksize of 4096.
@@ -2014,7 +2014,7 @@ function copyTempDouble(ptr) {
               fs.truncateSync(path, attr.size);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },lookup:function (parent, name) {
@@ -2032,7 +2032,7 @@ function copyTempDouble(ptr) {
               fs.writeFileSync(path, '', { mode: node.mode });
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           return node;
@@ -2042,7 +2042,7 @@ function copyTempDouble(ptr) {
           try {
             fs.renameSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },unlink:function (parent, name) {
@@ -2050,7 +2050,7 @@ function copyTempDouble(ptr) {
           try {
             fs.unlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },rmdir:function (parent, name) {
@@ -2058,7 +2058,7 @@ function copyTempDouble(ptr) {
           try {
             fs.rmdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readdir:function (node) {
@@ -2066,7 +2066,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },symlink:function (parent, newName, oldPath) {
@@ -2074,7 +2074,7 @@ function copyTempDouble(ptr) {
           try {
             fs.symlinkSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readlink:function (node) {
@@ -2082,7 +2082,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         }},stream_ops:{open:function (stream) {
@@ -2092,7 +2092,7 @@ function copyTempDouble(ptr) {
               stream.nfd = fs.openSync(path, NODEFS.flagsToPermissionString(stream.flags));
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },close:function (stream) {
@@ -2101,7 +2101,7 @@ function copyTempDouble(ptr) {
               fs.closeSync(stream.nfd);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },read:function (stream, buffer, offset, length, position) {
@@ -2157,7 +2157,7 @@ function copyTempDouble(ptr) {
       // http://pubs.opengroup.org/onlinepubs/000095399/functions/fflush.html
       // we don't currently perform any user-space buffering of data
     }var FS={root:null,mounts:[],devices:[null],streams:[null],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:null,genericErrors:{},handleFSError:function (e) {
-        if (!(e instanceof FS.ErrnoError)) throw e + ' : ' + stackTrace();
+        if (!(e instanceof FS.ErrnoError)) throw ensureExc(e + ' : ' + stackTrace());
         return ___setErrNo(e.errno);
       },lookupPath:function (path, opts) {
         path = PATH.resolve(FS.cwd(), path);
@@ -2622,7 +2622,7 @@ function copyTempDouble(ptr) {
         try {
           old_dir.node_ops.rename(old_node, new_dir, new_name);
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           // add the node back to the hash (in case node_ops.rename
           // changed its name)
@@ -2858,7 +2858,7 @@ function copyTempDouble(ptr) {
             stream.stream_ops.close(stream);
           }
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           FS.closeStream(stream.fd);
         }
@@ -3756,8 +3756,8 @@ function copyTempDouble(ptr) {
             try {
               sock.sock_ops.listen(sock, 0);
             } catch (e) {
-              if (!(e instanceof FS.ErrnoError)) throw e;
-              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              if (!(e instanceof FS.ErrnoError)) throw ensureExc(e);
+              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw ensureExc(e);
             }
           }
         },connect:function (sock, addr, port) {
@@ -5014,7 +5014,7 @@ Module['callMain'] = Module.callMain = function callMain(args) {
       return;
     } else {
       if (e && typeof e === 'object' && e.stack) Module.printErr('exception thrown: ' + [e, e.stack]);
-      throw e;
+      throw ensureExc(e);
     }
   } finally {
     calledMain = true;

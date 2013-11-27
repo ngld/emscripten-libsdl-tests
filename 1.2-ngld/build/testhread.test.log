@@ -2,3 +2,4 @@
                                 (char *)data, SDL_ThreadID());
 [0;1;32m                                              ^~~~~~~~~~~~~~
 [0m1 warning generated.
+warning: unresolved symbol: raise

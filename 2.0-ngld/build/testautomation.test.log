@@ -93,8 +93,8 @@ ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[
 [0m4 warnings and 1 error generated.
 ERROR    root: [31mcompiler frontend failed to generate LLVM bitcode, halting[0m
 Traceback (most recent call last):
-  File "/home/ngld/dev/em-dev/emscripten/emcc", line 987, in <module>
-    if arg.endswith(ASSEMBLY_SUFFIXES) or shared.Building.is_bitcode(arg):
-  File "/home/ngld/dev/em-dev/emscripten/tools/shared.py", line 1389, in is_bitcode
+  File "/home/ngld/dev/em-dev/emscripten/emcc", line 1036, in <module>
+    elif arg_suffix.endswith(ASSEMBLY_SUFFIXES) or shared.Building.is_bitcode(arg): # this should be bitcode, make sure it is valid
+  File "/home/ngld/dev/em-dev/emscripten/tools/shared.py", line 1398, in is_bitcode
     if b[0] == 'B' and b[1] == 'C':
 IndexError: string index out of range

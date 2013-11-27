@@ -2,3 +2,9 @@
     if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) < 0) {
 [0;1;32m        ^
 [0m1 warning generated.
+warning: unresolved symbol: SDL_CreateTextureFromSurface
+warning: unresolved symbol: SDL_SetRenderDrawColor
+warning: unresolved symbol: SDL_RenderClear
+warning: unresolved symbol: SDL_RenderCopy
+warning: unresolved symbol: SDL_RenderPresent
+warning: unresolved symbol: SDL_CreateWindowAndRenderer

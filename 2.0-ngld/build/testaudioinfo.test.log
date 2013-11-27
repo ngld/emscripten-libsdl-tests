@@ -1,0 +1,5 @@
+warning: unresolved symbol: SDL_GetNumAudioDrivers
+warning: unresolved symbol: SDL_GetAudioDriver
+warning: unresolved symbol: SDL_GetCurrentAudioDriver
+warning: unresolved symbol: SDL_GetNumAudioDevices
+warning: unresolved symbol: SDL_GetAudioDeviceName

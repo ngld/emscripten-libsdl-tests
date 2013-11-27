@@ -3,3 +3,15 @@
 [0;1;32m  ^
 [0m[1mtestgesture.c:79:3: [0m[0;1;30mnote: [0mplease include the header <stdlib.h> or explicitly provide a declaration for 'exit'[0m
 1 warning generated.
+warning: unresolved symbol: SDL_Log
+warning: unresolved symbol: SDL_memcpy
+warning: unresolved symbol: SDL_GetRGB
+warning: unresolved symbol: SDL_fabs
+warning: unresolved symbol: SDL_cos
+warning: unresolved symbol: SDL_sin
+warning: unresolved symbol: SDL_UpdateWindowSurface
+warning: unresolved symbol: SDL_CreateWindow
+warning: unresolved symbol: SDL_GetWindowSurface
+warning: unresolved symbol: SDL_RecordGesture
+warning: unresolved symbol: SDL_SaveAllDollarTemplates
+warning: unresolved symbol: SDL_LoadDollarTemplates

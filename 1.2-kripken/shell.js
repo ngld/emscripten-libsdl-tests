@@ -22,7 +22,7 @@ function ensureExc(value) {
   if(typeof value == 'string' && value != 'SimulateInfiniteLoop') {
     value = new Error(value);
   }
-  if(value instanceof FS.ErrnoError) {
+  /*if(value instanceof FS.ErrnoError) {
     // FS.ErrnoError doesn't have the stack property.
     // Replace it to ensure a proper stacktrace.
     
@@ -31,7 +31,7 @@ function ensureExc(value) {
     value = new Error(value.message);
     value.errno = errno;
     value.code = code;
-  }
+  }*/
   
   return value;
 }
@@ -144,6 +144,10 @@ var Module = {
     $('#output').append($('<span>').text(text)).append('<br>').scrollTop(9999999);
   },
   printErr: function(text) {
+    if(text.substring(0, 18) == 'exception thrown: ') {
+      // We generate our own stack traces using TraceKit. Hide the simple default stacktraces...
+      return;
+    }
     $('#output').append($('<span class="error">').text(text)).append('<br>').scrollTop(9999999);
   },
   canvas: document.getElementById('canvas'),

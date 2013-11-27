@@ -1,0 +1,4 @@
+warning: unresolved symbol: SDL_memcpy
+warning: unresolved symbol: SDL_LoadWAV_RW
+warning: unresolved symbol: SDL_FreeWAV
+warning: unresolved symbol: SDL_GetAudioStatus

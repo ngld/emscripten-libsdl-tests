@@ -1,0 +1,6 @@
+warning: unresolved symbol: SDL_SemWait
+warning: unresolved symbol: SDL_SemValue
+warning: unresolved symbol: SDL_SemPost
+warning: unresolved symbol: SDL_CreateSemaphore
+warning: unresolved symbol: SDL_DestroySemaphore
+warning: unresolved symbol: SDL_SemWaitTimeout

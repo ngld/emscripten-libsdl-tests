@@ -37,15 +37,15 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 if (ENVIRONMENT_IS_NODE) {
   // Expose functionality in the same simple way that the shells work
   // Note that we pollute the global namespace here, otherwise we break in node
-  Module['print'] = function(x) {
+  Module['print'] = function print(x) {
     process['stdout'].write(x + '\n');
   };
-  Module['printErr'] = function(x) {
+  Module['printErr'] = function printErr(x) {
     process['stderr'].write(x + '\n');
   };
   var nodeFS = require('fs');
   var nodePath = require('path');
-  Module['read'] = function(filename, binary) {
+  Module['read'] = function read(filename, binary) {
     filename = nodePath['normalize'](filename);
     var ret = nodeFS['readFileSync'](filename);
     // The path is absolute if the normalized version is the same as the resolved.
@@ -56,12 +56,12 @@ if (ENVIRONMENT_IS_NODE) {
     if (ret && !binary) ret = ret.toString();
     return ret;
   };
-  Module['readBinary'] = function(filename) { return Module['read'](filename, true) };
-  Module['load'] = function(f) {
+  Module['readBinary'] = function readBinary(filename) { return Module['read'](filename, true) };
+  Module['load'] = function load(f) {
     globalEval(read(f));
   };
   Module['arguments'] = process['argv'].slice(2);
-  module.exports = Module;
+  module['exports'] = Module;
 }
 else if (ENVIRONMENT_IS_SHELL) {
   Module['print'] = print;
@@ -69,9 +69,9 @@ else if (ENVIRONMENT_IS_SHELL) {
   if (typeof read != 'undefined') {
     Module['read'] = read;
   } else {
-    Module['read'] = function() { throw ensureExc('no read() available (jsc?)' )};
+    Module['read'] = function read() { throw ensureExc('no read() available (jsc?)' )};
   }
-  Module['readBinary'] = function(f) {
+  Module['readBinary'] = function readBinary(f) {
     return read(f, 'binary');
   };
   if (typeof scriptArgs != 'undefined') {
@@ -80,9 +80,10 @@ else if (ENVIRONMENT_IS_SHELL) {
     Module['arguments'] = arguments;
   }
   this['Module'] = Module;
+  eval("if (typeof gc === 'function' && gc.toString().indexOf('[native code]') > 0) var gc = undefined"); // wipe out the SpiderMonkey shell 'gc' function, which can confuse closure (uses it as a minified name, and it is then initted to a non-falsey value unexpectedly)
 }
 else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
-  Module['read'] = function(url) {
+  Module['read'] = function read(url) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, false);
     xhr.send(null);
@@ -92,10 +93,10 @@ else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
     Module['arguments'] = arguments;
   }
   if (typeof console !== 'undefined') {
-    Module['print'] = function(x) {
+    Module['print'] = function print(x) {
       console.log(x);
     };
-    Module['printErr'] = function(x) {
+    Module['printErr'] = function printErr(x) {
       console.log(x);
     };
   } else {
@@ -121,7 +122,7 @@ function globalEval(x) {
   eval.call(null, x);
 }
 if (!Module['load'] == 'undefined' && Module['read']) {
-  Module['load'] = function(f) {
+  Module['load'] = function load(f) {
     globalEval(Module['read'](f));
   };
 }
@@ -164,8 +165,7 @@ var Runtime = {
     if (isNumber(target) && isNumber(quantum)) {
       return Math.ceil(target/quantum)*quantum;
     } else if (isNumber(quantum) && isPowerOfTwo(quantum)) {
-      var logg = log2(quantum);
-      return '((((' +target + ')+' + (quantum-1) + ')>>' + logg + ')<<' + logg + ')';
+      return '(((' +target + ')+' + (quantum-1) + ')&' + -quantum + ')';
     }
     return 'Math.ceil((' + target + ')/' + quantum + ')*' + quantum;
   },
@@ -199,27 +199,26 @@ var Runtime = {
     var h = (Math.round(x / 4294967296) ^ Math.round(y / 4294967296)) * 4294967296;
     return l + h;
   },
-  getNativeTypeSize: function (type, quantumSize) {
-    if (Runtime.QUANTUM_SIZE == 1) return 1;
-    var size = {
-      '%i1': 1,
-      '%i8': 1,
-      '%i16': 2,
-      '%i32': 4,
-      '%i64': 8,
-      "%float": 4,
-      "%double": 8
-    }['%'+type]; // add '%' since float and double confuse Closure compiler as keys, and also spidermonkey as a compiler will remove 's from '_i8' etc
-    if (!size) {
-      if (type.charAt(type.length-1) == '*') {
-        size = Runtime.QUANTUM_SIZE; // A pointer
-      } else if (type[0] == 'i') {
-        var bits = parseInt(type.substr(1));
-        assert(bits % 8 == 0);
-        size = bits/8;
+  getNativeTypeSize: function (type) {
+    switch (type) {
+      case 'i1': case 'i8': return 1;
+      case 'i16': return 2;
+      case 'i32': return 4;
+      case 'i64': return 8;
+      case 'float': return 4;
+      case 'double': return 8;
+      default: {
+        if (type[type.length-1] === '*') {
+          return Runtime.QUANTUM_SIZE; // A pointer
+        } else if (type[0] === 'i') {
+          var bits = parseInt(type.substr(1));
+          assert(bits % 8 === 0);
+          return bits/8;
+        } else {
+          return 0;
+        }
       }
     }
-    return size;
   },
   getNativeFieldSize: function (type) {
     return Math.max(Runtime.getNativeTypeSize(type), Runtime.QUANTUM_SIZE);
@@ -286,8 +285,16 @@ var Runtime = {
         // bN, large number field, like a [N x i8]
         size = field.substr(1)|0;
         alignSize = 1;
+      } else if (field[0] === '<') {
+        // vector type
+        size = alignSize = Types.types[field].flatSize; // fully aligned
+      } else if (field[0] === 'i') {
+        // illegal integer field, that could not be legalized because it is an internal structure field
+        // it is ok to have such fields, if we just use them as markers of field size and nothing more complex
+        size = alignSize = parseInt(field.substr(1))/8;
+        assert(size % 1 === 0, 'cannot handle non-byte-size field ' + field);
       } else {
-        throw ensureExc('Unclear type in struct: ' + field + ', in ' + type.name_ + ' :: ' + dump(Types.types[type.name_]));
+        assert(false, 'invalid type for calculateStructAlignment');
       }
       if (type.packed) alignSize = 1;
       type.alignSize = Math.max(type.alignSize, alignSize);
@@ -299,6 +306,11 @@ var Runtime = {
       prev = curr;
       return curr;
     });
+    if (type.name_[0] === '[') {
+      // arrays have 2 elements, so we get the proper difference. then we scale here. that way we avoid
+      // allocating a potentially huge array for [999999 x i8] etc.
+      type.flatSize = parseInt(type.name_.substr(1))*type.flatSize/2;
+    }
     type.flatSize = Runtime.alignMemory(type.flatSize, type.alignSize);
     if (diffs.length == 0) {
       type.flatFactor = type.flatSize;
@@ -356,13 +368,25 @@ var Runtime = {
   addFunction: function (func) {
     var table = FUNCTION_TABLE;
     var ret = table.length;
+    assert(ret % 2 === 0);
     table.push(func);
-    table.push(0);
+    for (var i = 0; i < 2-1; i++) table.push(0);
     return ret;
   },
   removeFunction: function (index) {
     var table = FUNCTION_TABLE;
     table[index] = null;
+  },
+  getAsmConst: function (code, numArgs) {
+    // code is a constant string on the heap, so we can cache these
+    if (!Runtime.asmConstCache) Runtime.asmConstCache = {};
+    var func = Runtime.asmConstCache[code];
+    if (func) return func;
+    var args = [];
+    for (var i = 0; i < numArgs; i++) {
+      args.push(String.fromCharCode(36) + i); // $0, $1 etc
+    }
+    return Runtime.asmConstCache[code] = eval('(function(' + args.join(',') + '){ ' + Pointer_stringify(code) + ' })'); // new Function does not allow upvars in node
   },
   warnOnce: function (text) {
     if (!Runtime.warnOnce.shown) Runtime.warnOnce.shown = {};
@@ -375,7 +399,7 @@ var Runtime = {
   getFuncWrapper: function (func, sig) {
     assert(sig);
     if (!Runtime.funcWrappers[func]) {
-      Runtime.funcWrappers[func] = function() {
+      Runtime.funcWrappers[func] = function dynCall_wrapper() {
         return Runtime.dynCall(sig, func, arguments);
       };
     }
@@ -425,7 +449,7 @@ var Runtime = {
       buffer.length = 0;
       return ret;
     }
-    this.processJSString = function(string) {
+    this.processJSString = function processJSString(string) {
       string = unescape(encodeURIComponent(string));
       var ret = [];
       for (var i = 0; i < string.length; i++) {
@@ -434,11 +458,11 @@ var Runtime = {
       return ret;
     }
   },
-  stackAlloc: function (size) { var ret = STACKTOP;STACKTOP = (STACKTOP + size)|0;STACKTOP = ((((STACKTOP)+7)>>3)<<3);(assert((STACKTOP|0) < (STACK_MAX|0))|0); return ret; },
-  staticAlloc: function (size) { var ret = STATICTOP;STATICTOP = (STATICTOP + (assert(!staticSealed),size))|0;STATICTOP = ((((STATICTOP)+7)>>3)<<3); return ret; },
-  dynamicAlloc: function (size) { var ret = DYNAMICTOP;DYNAMICTOP = (DYNAMICTOP + (assert(DYNAMICTOP > 0),size))|0;DYNAMICTOP = ((((DYNAMICTOP)+7)>>3)<<3); if (DYNAMICTOP >= TOTAL_MEMORY) enlargeMemory();; return ret; },
+  stackAlloc: function (size) { var ret = STACKTOP;STACKTOP = (STACKTOP + size)|0;STACKTOP = (((STACKTOP)+7)&-8);(assert((STACKTOP|0) < (STACK_MAX|0))|0); return ret; },
+  staticAlloc: function (size) { var ret = STATICTOP;STATICTOP = (STATICTOP + (assert(!staticSealed),size))|0;STATICTOP = (((STATICTOP)+7)&-8); return ret; },
+  dynamicAlloc: function (size) { var ret = DYNAMICTOP;DYNAMICTOP = (DYNAMICTOP + (assert(DYNAMICTOP > 0),size))|0;DYNAMICTOP = (((DYNAMICTOP)+7)&-8); if (DYNAMICTOP >= TOTAL_MEMORY) enlargeMemory();; return ret; },
   alignMemory: function (size,quantum) { var ret = size = Math.ceil((size)/(quantum ? quantum : 8))*(quantum ? quantum : 8); return ret; },
-  makeBigInt: function (low,high,unsigned) { var ret = (unsigned ? (((low)>>>(0))+(((high)>>>(0))*4294967296)) : (((low)>>>(0))+(((high)|(0))*4294967296))); return ret; },
+  makeBigInt: function (low,high,unsigned) { var ret = (unsigned ? ((low>>>0)+((high>>>0)*4294967296)) : ((low>>>0)+((high|0)*4294967296))); return ret; },
   GLOBAL_BASE: 8,
   QUANTUM_SIZE: 4,
   __dummy__: 0
@@ -454,7 +478,7 @@ var EXITSTATUS = 0;
 var undef = 0;
 // tempInt is used for 32-bit signed values or smaller. tempBigInt is used
 // for 32-bit unsigned values or more than 32 bits. TODO: audit all uses of tempInt
-var tempValue, tempInt, tempBigInt, tempInt2, tempBigInt2, tempPair, tempBigIntI, tempBigIntR, tempBigIntS, tempBigIntP, tempBigIntD;
+var tempValue, tempInt, tempBigInt, tempInt2, tempBigInt2, tempPair, tempBigIntI, tempBigIntR, tempBigIntS, tempBigIntP, tempBigIntD, tempDouble, tempFloat;
 var tempI64, tempI64b;
 var tempRet0, tempRet1, tempRet2, tempRet3, tempRet4, tempRet5, tempRet6, tempRet7, tempRet8, tempRet9;
 function assert(condition, text) {
@@ -500,11 +524,10 @@ function ccallFunc(func, returnType, argTypes, args) {
   function toC(value, type) {
     if (type == 'string') {
       if (value === null || value === undefined || value === 0) return 0; // null string
-      if (!stack) stack = Runtime.stackSave();
-      var ret = Runtime.stackAlloc(value.length+1);
-      writeStringToMemory(value, ret);
-      return ret;
-    } else if (type == 'array') {
+      value = intArrayFromString(value);
+      type = 'array';
+    }
+    if (type == 'array') {
       if (!stack) stack = Runtime.stackSave();
       var ret = Runtime.stackAlloc(value.length);
       writeArrayToMemory(value, ret);
@@ -557,7 +580,7 @@ function setValue(ptr, value, type, noSafe) {
       case 'i8': HEAP8[(ptr)]=value; break;
       case 'i16': HEAP16[((ptr)>>1)]=value; break;
       case 'i32': HEAP32[((ptr)>>2)]=value; break;
-      case 'i64': (tempI64 = [value>>>0,(tempDouble=value,Math.abs(tempDouble) >= 1 ? (tempDouble > 0 ? Math.min(Math.floor((tempDouble)/4294967296), 4294967295)>>>0 : (~~(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296)))>>>0) : 0)],HEAP32[((ptr)>>2)]=tempI64[0],HEAP32[(((ptr)+(4))>>2)]=tempI64[1]); break;
+      case 'i64': (tempI64 = [value>>>0,(tempDouble=value,Math_abs(tempDouble) >= 1 ? (tempDouble > 0 ? Math_min(Math_floor((tempDouble)/4294967296), 4294967295)>>>0 : (~~(Math_ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296)))>>>0) : 0)],HEAP32[((ptr)>>2)]=tempI64[0],HEAP32[(((ptr)+(4))>>2)]=tempI64[1]); break;
       case 'float': HEAPF32[((ptr)>>2)]=value; break;
       case 'double': HEAPF64[((ptr)>>3)]=value; break;
       default: abort('invalid type for setValue: ' + type);
@@ -716,16 +739,16 @@ function UTF16ToString(ptr) {
   }
 }
 Module['UTF16ToString'] = UTF16ToString;
-// Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr', 
+// Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr',
 // null-terminated and encoded in UTF16LE form. The copy will require at most (str.length*2+1)*2 bytes of space in the HEAP.
 function stringToUTF16(str, outPtr) {
   for(var i = 0; i < str.length; ++i) {
     // charCodeAt returns a UTF-16 encoded code unit, so it can be directly written to the HEAP.
     var codeUnit = str.charCodeAt(i); // possibly a lead surrogate
-    HEAP16[(((outPtr)+(i*2))>>1)]=codeUnit
+    HEAP16[(((outPtr)+(i*2))>>1)]=codeUnit;
   }
   // Null-terminate the pointer to the HEAP.
-  HEAP16[(((outPtr)+(str.length*2))>>1)]=0
+  HEAP16[(((outPtr)+(str.length*2))>>1)]=0;
 }
 Module['stringToUTF16'] = stringToUTF16;
 // Given a pointer 'ptr' to a null-terminated UTF32LE-encoded string in the emscripten HEAP, returns
@@ -748,7 +771,7 @@ function UTF32ToString(ptr) {
   }
 }
 Module['UTF32ToString'] = UTF32ToString;
-// Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr', 
+// Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr',
 // null-terminated and encoded in UTF32LE form. The copy will require at most (str.length+1)*4 bytes of space in the HEAP,
 // but can use less, since str.length does not return the number of characters in the string, but the number of UTF-16 code units in the string.
 function stringToUTF32(str, outPtr) {
@@ -760,17 +783,163 @@ function stringToUTF32(str, outPtr) {
       var trailSurrogate = str.charCodeAt(++iCodeUnit);
       codeUnit = 0x10000 + ((codeUnit & 0x3FF) << 10) | (trailSurrogate & 0x3FF);
     }
-    HEAP32[(((outPtr)+(iChar*4))>>2)]=codeUnit
+    HEAP32[(((outPtr)+(iChar*4))>>2)]=codeUnit;
     ++iChar;
   }
   // Null-terminate the pointer to the HEAP.
-  HEAP32[(((outPtr)+(iChar*4))>>2)]=0
+  HEAP32[(((outPtr)+(iChar*4))>>2)]=0;
 }
 Module['stringToUTF32'] = stringToUTF32;
+function demangle(func) {
+  try {
+    if (typeof func === 'number') func = Pointer_stringify(func);
+    if (func[0] !== '_') return func;
+    if (func[1] !== '_') return func; // C function
+    if (func[2] !== 'Z') return func;
+    switch (func[3]) {
+      case 'n': return 'operator new()';
+      case 'd': return 'operator delete()';
+    }
+    var i = 3;
+    // params, etc.
+    var basicTypes = {
+      'v': 'void',
+      'b': 'bool',
+      'c': 'char',
+      's': 'short',
+      'i': 'int',
+      'l': 'long',
+      'f': 'float',
+      'd': 'double',
+      'w': 'wchar_t',
+      'a': 'signed char',
+      'h': 'unsigned char',
+      't': 'unsigned short',
+      'j': 'unsigned int',
+      'm': 'unsigned long',
+      'x': 'long long',
+      'y': 'unsigned long long',
+      'z': '...'
+    };
+    function dump(x) {
+      //return;
+      if (x) Module.print(x);
+      Module.print(func);
+      var pre = '';
+      for (var a = 0; a < i; a++) pre += ' ';
+      Module.print (pre + '^');
+    }
+    var subs = [];
+    function parseNested() {
+      i++;
+      if (func[i] === 'K') i++; // ignore const
+      var parts = [];
+      while (func[i] !== 'E') {
+        if (func[i] === 'S') { // substitution
+          i++;
+          var next = func.indexOf('_', i);
+          var num = func.substring(i, next) || 0;
+          parts.push(subs[num] || '?');
+          i = next+1;
+          continue;
+        }
+        if (func[i] === 'C') { // constructor
+          parts.push(parts[parts.length-1]);
+          i += 2;
+          continue;
+        }
+        var size = parseInt(func.substr(i));
+        var pre = size.toString().length;
+        if (!size || !pre) { i--; break; } // counter i++ below us
+        var curr = func.substr(i + pre, size);
+        parts.push(curr);
+        subs.push(curr);
+        i += pre + size;
+      }
+      i++; // skip E
+      return parts;
+    }
+    var first = true;
+    function parse(rawList, limit, allowVoid) { // main parser
+      limit = limit || Infinity;
+      var ret = '', list = [];
+      function flushList() {
+        return '(' + list.join(', ') + ')';
+      }
+      var name;
+      if (func[i] === 'N') {
+        // namespaced N-E
+        name = parseNested().join('::');
+        limit--;
+        if (limit === 0) return rawList ? [name] : name;
+      } else {
+        // not namespaced
+        if (func[i] === 'K' || (first && func[i] === 'L')) i++; // ignore const and first 'L'
+        var size = parseInt(func.substr(i));
+        if (size) {
+          var pre = size.toString().length;
+          name = func.substr(i + pre, size);
+          i += pre + size;
+        }
+      }
+      first = false;
+      if (func[i] === 'I') {
+        i++;
+        var iList = parse(true);
+        var iRet = parse(true, 1, true);
+        ret += iRet[0] + ' ' + name + '<' + iList.join(', ') + '>';
+      } else {
+        ret = name;
+      }
+      paramLoop: while (i < func.length && limit-- > 0) {
+        //dump('paramLoop');
+        var c = func[i++];
+        if (c in basicTypes) {
+          list.push(basicTypes[c]);
+        } else {
+          switch (c) {
+            case 'P': list.push(parse(true, 1, true)[0] + '*'); break; // pointer
+            case 'R': list.push(parse(true, 1, true)[0] + '&'); break; // reference
+            case 'L': { // literal
+              i++; // skip basic type
+              var end = func.indexOf('E', i);
+              var size = end - i;
+              list.push(func.substr(i, size));
+              i += size + 2; // size + 'EE'
+              break;
+            }
+            case 'A': { // array
+              var size = parseInt(func.substr(i));
+              i += size.toString().length;
+              if (func[i] !== '_') throw ensureExc('?');
+              i++; // skip _
+              list.push(parse(true, 1, true)[0] + ' [' + size + ']');
+              break;
+            }
+            case 'E': break paramLoop;
+            default: ret += '?' + c; break paramLoop;
+          }
+        }
+      }
+      if (!allowVoid && list.length === 1 && list[0] === 'void') list = []; // avoid (void)
+      return rawList ? list : ret + flushList();
+    }
+    return parse();
+  } catch(e) {
+    return func;
+  }
+}
+function demangleAll(text) {
+  return text.replace(/__Z[\w\d_]+/g, function(x) { var y = demangle(x); return x === y ? x : (x + ' [' + y + ']') });
+}
+function stackTrace() {
+  var stack = new Error().stack;
+  return stack ? demangleAll(stack) : '(no stack trace available)'; // Stack trace is not available at least on IE10 and Safari 6.
+}
 // Memory management
 var PAGE_SIZE = 4096;
 function alignMemoryPage(x) {
-  return ((x+4095)>>12)<<12;
+  return (x+4095)&-4096;
 }
 var HEAP;
 var HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
@@ -785,7 +954,7 @@ var TOTAL_MEMORY = Module['TOTAL_MEMORY'] || 16777216;
 var FAST_MEMORY = Module['FAST_MEMORY'] || 2097152;
 // Initialize the runtime's memory
 // check for full engine support (use string 'subarray' to avoid closure compiler confusion)
-assert(!!Int32Array && !!Float64Array && !!(new Int32Array(1)['subarray']) && !!(new Int32Array(1)['set']),
+assert(typeof Int32Array !== 'undefined' && typeof Float64Array !== 'undefined' && !!(new Int32Array(1)['subarray']) && !!(new Int32Array(1)['set']),
        'Cannot fallback to non-typed array case: Code is too specialized');
 var buffer = new ArrayBuffer(TOTAL_MEMORY);
 HEAP8 = new Int8Array(buffer);
@@ -917,7 +1086,7 @@ function writeStringToMemory(string, buffer, dontAddNull) {
   var i = 0;
   while (i < array.length) {
     var chr = array[i];
-    HEAP8[(((buffer)+(i))|0)]=chr
+    HEAP8[(((buffer)+(i))|0)]=chr;
     i = i + 1;
   }
 }
@@ -928,6 +1097,14 @@ function writeArrayToMemory(array, buffer) {
   }
 }
 Module['writeArrayToMemory'] = writeArrayToMemory;
+function writeAsciiToMemory(str, buffer, dontAddNull) {
+  for (var i = 0; i < str.length; i++) {
+    assert(str.charCodeAt(i) === str.charCodeAt(i)&0xff);
+    HEAP8[(((buffer)+(i))|0)]=str.charCodeAt(i);
+  }
+  if (!dontAddNull) HEAP8[(((buffer)+(str.length))|0)]=0;
+}
+Module['writeAsciiToMemory'] = writeAsciiToMemory;
 function getEmptySlot(x) {
   var slot = null;
   for (var i = 0; i < x.length; i++) {
@@ -961,7 +1138,7 @@ function reSign(value, bits, ignore, sig) {
   }
   return value;
 }
-if (!Math['imul']) Math['imul'] = function(a, b) {
+if (!Math['imul']) Math['imul'] = function imul(a, b) {
   var ah  = a >>> 16;
   var al = a & 0xffff;
   var bh  = b >>> 16;
@@ -969,6 +1146,23 @@ if (!Math['imul']) Math['imul'] = function(a, b) {
   return (al*bl + ((ah*bl + al*bh) << 16))|0;
 };
 Math.imul = Math['imul'];
+var Math_abs = Math.abs;
+var Math_cos = Math.cos;
+var Math_sin = Math.sin;
+var Math_tan = Math.tan;
+var Math_acos = Math.acos;
+var Math_asin = Math.asin;
+var Math_atan = Math.atan;
+var Math_atan2 = Math.atan2;
+var Math_exp = Math.exp;
+var Math_log = Math.log;
+var Math_sqrt = Math.sqrt;
+var Math_ceil = Math.ceil;
+var Math_floor = Math.floor;
+var Math_pow = Math.pow;
+var Math_imul = Math.imul;
+var Math_fround = Math.fround;
+var Math_min = Math.min;
 // A counter of dependencies for calling run(). If we need to
 // do asynchronous work before running, increment this and
 // decrement it. Incrementing must happen in a place like
@@ -977,9 +1171,9 @@ Math.imul = Math['imul'];
 // it happens right before run - run will be postponed until
 // the dependencies are met.
 var runDependencies = 0;
-var runDependencyTracking = {};
 var runDependencyWatcher = null;
 var dependenciesFulfilled = null; // overridden to take different actions when all run dependencies are fulfilled
+var runDependencyTracking = {};
 function addRunDependency(id) {
   runDependencies++;
   if (Module['monitorRunDependencies']) {
@@ -1026,8 +1220,9 @@ function removeRunDependency(id) {
       runDependencyWatcher = null;
     }
     if (dependenciesFulfilled) {
-      dependenciesFulfilled();
+      var callback = dependenciesFulfilled;
       dependenciesFulfilled = null;
+      callback(); // can add another dependenciesFulfilled
     }
   }
 }
@@ -1067,7 +1262,6 @@ function copyTempDouble(ptr) {
       HEAP32[((___errno_state)>>2)]=value
       return value;
     }
-  var VFS=undefined;
   var PATH={splitPath:function (filename) {
         var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
         return splitPathRe.exec(filename).slice(1);
@@ -1120,24 +1314,19 @@ function copyTempDouble(ptr) {
           dir = dir.substr(0, dir.length - 1);
         }
         return root + dir;
-      },basename:function (path, ext) {
+      },basename:function (path) {
         // EMSCRIPTEN return '/'' for '/', not an empty string
         if (path === '/') return '/';
-        var f = PATH.splitPath(path)[2];
-        if (ext && f.substr(-1 * ext.length) === ext) {
-          f = f.substr(0, f.length - ext.length);
-        }
-        return f;
+        var lastSlash = path.lastIndexOf('/');
+        if (lastSlash === -1) return path;
+        return path.substr(lastSlash+1);
       },extname:function (path) {
         return PATH.splitPath(path)[3];
       },join:function () {
         var paths = Array.prototype.slice.call(arguments, 0);
-        return PATH.normalize(paths.filter(function(p, index) {
-          if (typeof p !== 'string') {
-            throw ensureExc(new TypeError('Arguments to path.join must be strings'));
-          }
-          return p;
-        }).join('/'));
+        return PATH.normalize(paths.join('/'));
+      },join2:function (l, r) {
+        return PATH.normalize(l + '/' + r);
       },resolve:function () {
         var resolvedPath = '',
           resolvedAbsolute = false;
@@ -1308,64 +1497,78 @@ function copyTempDouble(ptr) {
             tty.output.push(TTY.utf8.processCChar(val));
           }
         }}};
-  var MEMFS={CONTENT_OWNING:1,CONTENT_FLEXIBLE:2,CONTENT_FIXED:3,ensureFlexible:function (node) {
-        if (node.contentMode !== MEMFS.CONTENT_FLEXIBLE) {
-          var contents = node.contents;
-          node.contents = Array.prototype.slice.call(contents);
-          node.contentMode = MEMFS.CONTENT_FLEXIBLE;
-        }
-      },mount:function (mount) {
-        return MEMFS.create_node(null, '/', 16384 | 0777, 0);
-      },create_node:function (parent, name, mode, dev) {
+  var MEMFS={ops_table:null,CONTENT_OWNING:1,CONTENT_FLEXIBLE:2,CONTENT_FIXED:3,mount:function (mount) {
+        return MEMFS.createNode(null, '/', 16384 | 0777, 0);
+      },createNode:function (parent, name, mode, dev) {
         if (FS.isBlkdev(mode) || FS.isFIFO(mode)) {
           // no supported
           throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EPERM));
         }
+        if (!MEMFS.ops_table) {
+          MEMFS.ops_table = {
+            dir: {
+              node: {
+                getattr: MEMFS.node_ops.getattr,
+                setattr: MEMFS.node_ops.setattr,
+                lookup: MEMFS.node_ops.lookup,
+                mknod: MEMFS.node_ops.mknod,
+                mknod: MEMFS.node_ops.mknod,
+                rename: MEMFS.node_ops.rename,
+                unlink: MEMFS.node_ops.unlink,
+                rmdir: MEMFS.node_ops.rmdir,
+                readdir: MEMFS.node_ops.readdir,
+                symlink: MEMFS.node_ops.symlink
+              },
+              stream: {
+                llseek: MEMFS.stream_ops.llseek
+              }
+            },
+            file: {
+              node: {
+                getattr: MEMFS.node_ops.getattr,
+                setattr: MEMFS.node_ops.setattr
+              },
+              stream: {
+                llseek: MEMFS.stream_ops.llseek,
+                read: MEMFS.stream_ops.read,
+                write: MEMFS.stream_ops.write,
+                allocate: MEMFS.stream_ops.allocate,
+                mmap: MEMFS.stream_ops.mmap
+              }
+            },
+            link: {
+              node: {
+                getattr: MEMFS.node_ops.getattr,
+                setattr: MEMFS.node_ops.setattr,
+                readlink: MEMFS.node_ops.readlink
+              },
+              stream: {}
+            },
+            chrdev: {
+              node: {
+                getattr: MEMFS.node_ops.getattr,
+                setattr: MEMFS.node_ops.setattr
+              },
+              stream: FS.chrdev_stream_ops
+            },
+          };
+        }
         var node = FS.createNode(parent, name, mode, dev);
         if (FS.isDir(node.mode)) {
-          node.node_ops = {
-            getattr: MEMFS.node_ops.getattr,
-            setattr: MEMFS.node_ops.setattr,
-            lookup: MEMFS.node_ops.lookup,
-            mknod: MEMFS.node_ops.mknod,
-            mknod: MEMFS.node_ops.mknod,
-            rename: MEMFS.node_ops.rename,
-            unlink: MEMFS.node_ops.unlink,
-            rmdir: MEMFS.node_ops.rmdir,
-            readdir: MEMFS.node_ops.readdir,
-            symlink: MEMFS.node_ops.symlink
-          };
-          node.stream_ops = {
-            llseek: MEMFS.stream_ops.llseek
-          };
+          node.node_ops = MEMFS.ops_table.dir.node;
+          node.stream_ops = MEMFS.ops_table.dir.stream;
           node.contents = {};
         } else if (FS.isFile(node.mode)) {
-          node.node_ops = {
-            getattr: MEMFS.node_ops.getattr,
-            setattr: MEMFS.node_ops.setattr
-          };
-          node.stream_ops = {
-            llseek: MEMFS.stream_ops.llseek,
-            read: MEMFS.stream_ops.read,
-            write: MEMFS.stream_ops.write,
-            allocate: MEMFS.stream_ops.allocate,
-            mmap: MEMFS.stream_ops.mmap
-          };
+          node.node_ops = MEMFS.ops_table.file.node;
+          node.stream_ops = MEMFS.ops_table.file.stream;
           node.contents = [];
           node.contentMode = MEMFS.CONTENT_FLEXIBLE;
         } else if (FS.isLink(node.mode)) {
-          node.node_ops = {
-            getattr: MEMFS.node_ops.getattr,
-            setattr: MEMFS.node_ops.setattr,
-            readlink: MEMFS.node_ops.readlink
-          };
-          node.stream_ops = {};
+          node.node_ops = MEMFS.ops_table.link.node;
+          node.stream_ops = MEMFS.ops_table.link.stream;
         } else if (FS.isChrdev(node.mode)) {
-          node.node_ops = {
-            getattr: MEMFS.node_ops.getattr,
-            setattr: MEMFS.node_ops.setattr
-          };
-          node.stream_ops = FS.chrdev_stream_ops;
+          node.node_ops = MEMFS.ops_table.chrdev.node;
+          node.stream_ops = MEMFS.ops_table.chrdev.stream;
         }
         node.timestamp = Date.now();
         // add the new node to the parent
@@ -1373,6 +1576,12 @@ function copyTempDouble(ptr) {
           parent.contents[name] = node;
         }
         return node;
+      },ensureFlexible:function (node) {
+        if (node.contentMode !== MEMFS.CONTENT_FLEXIBLE) {
+          var contents = node.contents;
+          node.contents = Array.prototype.slice.call(contents);
+          node.contentMode = MEMFS.CONTENT_FLEXIBLE;
+        }
       },node_ops:{getattr:function (node) {
           var attr = {};
           // device numbers reuse inode numbers.
@@ -1414,9 +1623,9 @@ function copyTempDouble(ptr) {
             else while (attr.size > contents.length) contents.push(0);
           }
         },lookup:function (parent, name) {
-          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOENT));
+          throw ensureExc(FS.genericErrors[ERRNO_CODES.ENOENT]);
         },mknod:function (parent, name, mode, dev) {
-          return MEMFS.create_node(parent, name, mode, dev);
+          return MEMFS.createNode(parent, name, mode, dev);
         },rename:function (old_node, new_dir, new_name) {
           // if we're overwriting a directory at new_name, make sure it's empty.
           if (FS.isDir(old_node.mode)) {
@@ -1435,6 +1644,7 @@ function copyTempDouble(ptr) {
           delete old_node.parent.contents[old_node.name];
           old_node.name = new_name;
           new_dir.contents[new_name] = old_node;
+          old_node.parent = new_dir;
         },unlink:function (parent, name) {
           delete parent.contents[name];
         },rmdir:function (parent, name) {
@@ -1453,7 +1663,7 @@ function copyTempDouble(ptr) {
           }
           return entries;
         },symlink:function (parent, newname, oldpath) {
-          var node = MEMFS.create_node(parent, newname, 0777 | 40960, 0);
+          var node = MEMFS.createNode(parent, newname, 0777 | 40960, 0);
           node.link = oldpath;
           return node;
         },readlink:function (node) {
@@ -1463,7 +1673,10 @@ function copyTempDouble(ptr) {
           return node.link;
         }},stream_ops:{read:function (stream, buffer, offset, length, position) {
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (size > 8 && contents.subarray) { // non-trivial, and typed array
             buffer.set(contents.subarray(position, position + size), offset);
           } else
@@ -1480,9 +1693,9 @@ function copyTempDouble(ptr) {
           if (length && contents.length === 0 && position === 0 && buffer.subarray) {
             // just replace it with the new data
             assert(buffer.length);
-            if (canOwn && buffer.buffer === HEAP8.buffer && offset === 0) {
-              node.contents = buffer; // this is a subarray of the heap, and we can own it
-              node.contentMode = MEMFS.CONTENT_OWNING;
+            if (canOwn && offset === 0) {
+              node.contents = buffer; // this could be a subarray of Emscripten HEAP, or allocated from some other source.
+              node.contentMode = (buffer.buffer === HEAP8.buffer) ? MEMFS.CONTENT_OWNING : MEMFS.CONTENT_FIXED;
             } else {
               node.contents = new Uint8Array(buffer.subarray(offset, offset+length));
               node.contentMode = MEMFS.CONTENT_FIXED;
@@ -1548,6 +1761,407 @@ function copyTempDouble(ptr) {
           }
           return { ptr: ptr, allocated: allocated };
         }}};
+  var IDBFS={dbs:{},indexedDB:function () {
+        return window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+      },DB_VERSION:20,DB_STORE_NAME:"FILE_DATA",mount:function (mount) {
+        return MEMFS.mount.apply(null, arguments);
+      },syncfs:function (mount, populate, callback) {
+        IDBFS.getLocalSet(mount, function(err, local) {
+          if (err) return callback(err);
+          IDBFS.getRemoteSet(mount, function(err, remote) {
+            if (err) return callback(err);
+            var src = populate ? remote : local;
+            var dst = populate ? local : remote;
+            IDBFS.reconcile(src, dst, callback);
+          });
+        });
+      },reconcile:function (src, dst, callback) {
+        var total = 0;
+        var create = {};
+        for (var key in src.files) {
+          if (!src.files.hasOwnProperty(key)) continue;
+          var e = src.files[key];
+          var e2 = dst.files[key];
+          if (!e2 || e.timestamp > e2.timestamp) {
+            create[key] = e;
+            total++;
+          }
+        }
+        var remove = {};
+        for (var key in dst.files) {
+          if (!dst.files.hasOwnProperty(key)) continue;
+          var e = dst.files[key];
+          var e2 = src.files[key];
+          if (!e2) {
+            remove[key] = e;
+            total++;
+          }
+        }
+        if (!total) {
+          // early out
+          return callback(null);
+        }
+        var completed = 0;
+        function done(err) {
+          if (err) return callback(err);
+          if (++completed >= total) {
+            return callback(null);
+          }
+        };
+        // create a single transaction to handle and IDB reads / writes we'll need to do
+        var db = src.type === 'remote' ? src.db : dst.db;
+        var transaction = db.transaction([IDBFS.DB_STORE_NAME], 'readwrite');
+        transaction.onerror = function transaction_onerror() { callback(this.error); };
+        var store = transaction.objectStore(IDBFS.DB_STORE_NAME);
+        for (var path in create) {
+          if (!create.hasOwnProperty(path)) continue;
+          var entry = create[path];
+          if (dst.type === 'local') {
+            // save file to local
+            try {
+              if (FS.isDir(entry.mode)) {
+                FS.mkdir(path, entry.mode);
+              } else if (FS.isFile(entry.mode)) {
+                var stream = FS.open(path, 'w+', 0666);
+                FS.write(stream, entry.contents, 0, entry.contents.length, 0, true /* canOwn */);
+                FS.close(stream);
+              }
+              done(null);
+            } catch (e) {
+              return done(e);
+            }
+          } else {
+            // save file to IDB
+            var req = store.put(entry, path);
+            req.onsuccess = function req_onsuccess() { done(null); };
+            req.onerror = function req_onerror() { done(this.error); };
+          }
+        }
+        for (var path in remove) {
+          if (!remove.hasOwnProperty(path)) continue;
+          var entry = remove[path];
+          if (dst.type === 'local') {
+            // delete file from local
+            try {
+              if (FS.isDir(entry.mode)) {
+                // TODO recursive delete?
+                FS.rmdir(path);
+              } else if (FS.isFile(entry.mode)) {
+                FS.unlink(path);
+              }
+              done(null);
+            } catch (e) {
+              return done(e);
+            }
+          } else {
+            // delete file from IDB
+            var req = store.delete(path);
+            req.onsuccess = function req_onsuccess() { done(null); };
+            req.onerror = function req_onerror() { done(this.error); };
+          }
+        }
+      },getLocalSet:function (mount, callback) {
+        var files = {};
+        function isRealDir(p) {
+          return p !== '.' && p !== '..';
+        };
+        function toAbsolute(root) {
+          return function(p) {
+            return PATH.join2(root, p);
+          }
+        };
+        var check = FS.readdir(mount.mountpoint)
+          .filter(isRealDir)
+          .map(toAbsolute(mount.mountpoint));
+        while (check.length) {
+          var path = check.pop();
+          var stat, node;
+          try {
+            var lookup = FS.lookupPath(path);
+            node = lookup.node;
+            stat = FS.stat(path);
+          } catch (e) {
+            return callback(e);
+          }
+          if (FS.isDir(stat.mode)) {
+            check.push.apply(check, FS.readdir(path)
+              .filter(isRealDir)
+              .map(toAbsolute(path)));
+            files[path] = { mode: stat.mode, timestamp: stat.mtime };
+          } else if (FS.isFile(stat.mode)) {
+            files[path] = { contents: node.contents, mode: stat.mode, timestamp: stat.mtime };
+          } else {
+            return callback(new Error('node type not supported'));
+          }
+        }
+        return callback(null, { type: 'local', files: files });
+      },getDB:function (name, callback) {
+        // look it up in the cache
+        var db = IDBFS.dbs[name];
+        if (db) {
+          return callback(null, db);
+        }
+        var req;
+        try {
+          req = IDBFS.indexedDB().open(name, IDBFS.DB_VERSION);
+        } catch (e) {
+          return onerror(e);
+        }
+        req.onupgradeneeded = function req_onupgradeneeded() {
+          db = req.result;
+          db.createObjectStore(IDBFS.DB_STORE_NAME);
+        };
+        req.onsuccess = function req_onsuccess() {
+          db = req.result;
+          // add to the cache
+          IDBFS.dbs[name] = db;
+          callback(null, db);
+        };
+        req.onerror = function req_onerror() {
+          callback(this.error);
+        };
+      },getRemoteSet:function (mount, callback) {
+        var files = {};
+        IDBFS.getDB(mount.mountpoint, function(err, db) {
+          if (err) return callback(err);
+          var transaction = db.transaction([IDBFS.DB_STORE_NAME], 'readonly');
+          transaction.onerror = function transaction_onerror() { callback(this.error); };
+          var store = transaction.objectStore(IDBFS.DB_STORE_NAME);
+          store.openCursor().onsuccess = function store_openCursor_onsuccess(event) {
+            var cursor = event.target.result;
+            if (!cursor) {
+              return callback(null, { type: 'remote', db: db, files: files });
+            }
+            files[cursor.key] = cursor.value;
+            cursor.continue();
+          };
+        });
+      }};
+  var NODEFS={isWindows:false,staticInit:function () {
+        NODEFS.isWindows = !!process.platform.match(/^win/);
+      },mount:function (mount) {
+        assert(ENVIRONMENT_IS_NODE);
+        return NODEFS.createNode(null, '/', NODEFS.getMode(mount.opts.root), 0);
+      },createNode:function (parent, name, mode, dev) {
+        if (!FS.isDir(mode) && !FS.isFile(mode) && !FS.isLink(mode)) {
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
+        }
+        var node = FS.createNode(parent, name, mode);
+        node.node_ops = NODEFS.node_ops;
+        node.stream_ops = NODEFS.stream_ops;
+        return node;
+      },getMode:function (path) {
+        var stat;
+        try {
+          stat = fs.lstatSync(path);
+          if (NODEFS.isWindows) {
+            // On Windows, directories return permission bits 'rw-rw-rw-', even though they have 'rwxrwxrwx', so 
+            // propagate write bits to execute bits.
+            stat.mode = stat.mode | ((stat.mode & 146) >> 1);
+          }
+        } catch (e) {
+          if (!e.code) throw ensureExc(e);
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+        }
+        return stat.mode;
+      },realPath:function (node) {
+        var parts = [];
+        while (node.parent !== node) {
+          parts.push(node.name);
+          node = node.parent;
+        }
+        parts.push(node.mount.opts.root);
+        parts.reverse();
+        return PATH.join.apply(null, parts);
+      },flagsToPermissionStringMap:{0:"r",1:"r+",2:"r+",64:"r",65:"r+",66:"r+",129:"rx+",193:"rx+",514:"w+",577:"w",578:"w+",705:"wx",706:"wx+",1024:"a",1025:"a",1026:"a+",1089:"a",1090:"a+",1153:"ax",1154:"ax+",1217:"ax",1218:"ax+",4096:"rs",4098:"rs+"},flagsToPermissionString:function (flags) {
+        if (flags in NODEFS.flagsToPermissionStringMap) {
+          return NODEFS.flagsToPermissionStringMap[flags];
+        } else {
+          return flags;
+        }
+      },node_ops:{getattr:function (node) {
+          var path = NODEFS.realPath(node);
+          var stat;
+          try {
+            stat = fs.lstatSync(path);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+          // node.js v0.10.20 doesn't report blksize and blocks on Windows. Fake them with default blksize of 4096.
+          // See http://support.microsoft.com/kb/140365
+          if (NODEFS.isWindows && !stat.blksize) {
+            stat.blksize = 4096;
+          }
+          if (NODEFS.isWindows && !stat.blocks) {
+            stat.blocks = (stat.size+stat.blksize-1)/stat.blksize|0;
+          }
+          return {
+            dev: stat.dev,
+            ino: stat.ino,
+            mode: stat.mode,
+            nlink: stat.nlink,
+            uid: stat.uid,
+            gid: stat.gid,
+            rdev: stat.rdev,
+            size: stat.size,
+            atime: stat.atime,
+            mtime: stat.mtime,
+            ctime: stat.ctime,
+            blksize: stat.blksize,
+            blocks: stat.blocks
+          };
+        },setattr:function (node, attr) {
+          var path = NODEFS.realPath(node);
+          try {
+            if (attr.mode !== undefined) {
+              fs.chmodSync(path, attr.mode);
+              // update the common node structure mode as well
+              node.mode = attr.mode;
+            }
+            if (attr.timestamp !== undefined) {
+              var date = new Date(attr.timestamp);
+              fs.utimesSync(path, date, date);
+            }
+            if (attr.size !== undefined) {
+              fs.truncateSync(path, attr.size);
+            }
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },lookup:function (parent, name) {
+          var path = PATH.join2(NODEFS.realPath(parent), name);
+          var mode = NODEFS.getMode(path);
+          return NODEFS.createNode(parent, name, mode);
+        },mknod:function (parent, name, mode, dev) {
+          var node = NODEFS.createNode(parent, name, mode, dev);
+          // create the backing node for this in the fs root as well
+          var path = NODEFS.realPath(node);
+          try {
+            if (FS.isDir(node.mode)) {
+              fs.mkdirSync(path, node.mode);
+            } else {
+              fs.writeFileSync(path, '', { mode: node.mode });
+            }
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+          return node;
+        },rename:function (oldNode, newDir, newName) {
+          var oldPath = NODEFS.realPath(oldNode);
+          var newPath = PATH.join2(NODEFS.realPath(newDir), newName);
+          try {
+            fs.renameSync(oldPath, newPath);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },unlink:function (parent, name) {
+          var path = PATH.join2(NODEFS.realPath(parent), name);
+          try {
+            fs.unlinkSync(path);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },rmdir:function (parent, name) {
+          var path = PATH.join2(NODEFS.realPath(parent), name);
+          try {
+            fs.rmdirSync(path);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },readdir:function (node) {
+          var path = NODEFS.realPath(node);
+          try {
+            return fs.readdirSync(path);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },symlink:function (parent, newName, oldPath) {
+          var newPath = PATH.join2(NODEFS.realPath(parent), newName);
+          try {
+            fs.symlinkSync(oldPath, newPath);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },readlink:function (node) {
+          var path = NODEFS.realPath(node);
+          try {
+            return fs.readlinkSync(path);
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        }},stream_ops:{open:function (stream) {
+          var path = NODEFS.realPath(stream.node);
+          try {
+            if (FS.isFile(stream.node.mode)) {
+              stream.nfd = fs.openSync(path, NODEFS.flagsToPermissionString(stream.flags));
+            }
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },close:function (stream) {
+          try {
+            if (FS.isFile(stream.node.mode) && stream.nfd) {
+              fs.closeSync(stream.nfd);
+            }
+          } catch (e) {
+            if (!e.code) throw ensureExc(e);
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+        },read:function (stream, buffer, offset, length, position) {
+          // FIXME this is terrible.
+          var nbuffer = new Buffer(length);
+          var res;
+          try {
+            res = fs.readSync(stream.nfd, nbuffer, 0, length, position);
+          } catch (e) {
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+          if (res > 0) {
+            for (var i = 0; i < res; i++) {
+              buffer[offset + i] = nbuffer[i];
+            }
+          }
+          return res;
+        },write:function (stream, buffer, offset, length, position) {
+          // FIXME this is terrible.
+          var nbuffer = new Buffer(buffer.subarray(offset, offset + length));
+          var res;
+          try {
+            res = fs.writeSync(stream.nfd, nbuffer, 0, length, position);
+          } catch (e) {
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+          }
+          return res;
+        },llseek:function (stream, offset, whence) {
+          var position = offset;
+          if (whence === 1) {  // SEEK_CUR.
+            position += stream.position;
+          } else if (whence === 2) {  // SEEK_END.
+            if (FS.isFile(stream.node.mode)) {
+              try {
+                var stat = fs.fstatSync(stream.nfd);
+                position += stat.size;
+              } catch (e) {
+                throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
+              }
+            }
+          }
+          if (position < 0) {
+            throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EINVAL));
+          }
+          stream.position = position;
+          return position;
+        }}};
   var _stdin=allocate(1, "i32*", ALLOC_STATIC);
   var _stdout=allocate(1, "i32*", ALLOC_STATIC);
   var _stderr=allocate(1, "i32*", ALLOC_STATIC);
@@ -1555,22 +2169,11 @@ function copyTempDouble(ptr) {
       // int fflush(FILE *stream);
       // http://pubs.opengroup.org/onlinepubs/000095399/functions/fflush.html
       // we don't currently perform any user-space buffering of data
-    }var FS={root:null,devices:[null],streams:[null],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:function ErrnoError(errno) {
-          this.errno = errno;
-          for (var key in ERRNO_CODES) {
-            if (ERRNO_CODES[key] === errno) {
-              this.code = key;
-              break;
-            }
-          }
-          this.message = ERRNO_MESSAGES[errno];
-        },handleFSError:function (e) {
-        if (!(e instanceof FS.ErrnoError)) throw e + ' : ' + new Error().stack;
+    }var FS={root:null,mounts:[],devices:[null],streams:[null],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:null,genericErrors:{},handleFSError:function (e) {
+        if (!(e instanceof FS.ErrnoError)) throw ensureExc(e + ' : ' + stackTrace());
         return ___setErrNo(e.errno);
-      },cwd:function () {
-        return FS.currentPath;
       },lookupPath:function (path, opts) {
-        path = PATH.resolve(FS.currentPath, path);
+        path = PATH.resolve(FS.cwd(), path);
         opts = opts || { recurse_count: 0 };
         if (opts.recurse_count > 8) {  // max recursive lookup of 8
           throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ELOOP));
@@ -1589,7 +2192,7 @@ function copyTempDouble(ptr) {
             break;
           }
           current = FS.lookupNode(current, parts[i]);
-          current_path = PATH.join(current_path, parts[i]);
+          current_path = PATH.join2(current_path, parts[i]);
           // jump to the mount's root node if this is a mountpoint
           if (FS.isMountpoint(current)) {
             current = current.mount.root;
@@ -1615,9 +2218,11 @@ function copyTempDouble(ptr) {
         var path;
         while (true) {
           if (FS.isRoot(node)) {
-            return path ? PATH.join(node.mount.mountpoint, path) : node.mount.mountpoint;
+            var mount = node.mount.mountpoint;
+            if (!path) return mount;
+            return mount[mount.length-1] !== '/' ? mount + '/' + path : mount + path;
           }
-          path = path ? PATH.join(node.name, path) : node.name;
+          path = path ? node.name + '/' + path : node.name;
           node = node.parent;
         }
       },hashName:function (parentid, name) {
@@ -1651,51 +2256,55 @@ function copyTempDouble(ptr) {
         }
         var hash = FS.hashName(parent.id, name);
         for (var node = FS.nameTable[hash]; node; node = node.name_next) {
-          if (node.parent.id === parent.id && node.name === name) {
+          var nodeName = node.name;
+          if (node.parent.id === parent.id && nodeName === name) {
             return node;
           }
         }
         // if we failed to find it in the cache, call into the VFS
         return FS.lookup(parent, name);
       },createNode:function (parent, name, mode, rdev) {
-        var node = {
-          id: FS.nextInode++,
-          name: name,
-          mode: mode,
-          node_ops: {},
-          stream_ops: {},
-          rdev: rdev,
-          parent: null,
-          mount: null
-        };
-        if (!parent) {
-          parent = node;  // root node sets parent to itself
+        if (!FS.FSNode) {
+          FS.FSNode = function(parent, name, mode, rdev) {
+            this.id = FS.nextInode++;
+            this.name = name;
+            this.mode = mode;
+            this.node_ops = {};
+            this.stream_ops = {};
+            this.rdev = rdev;
+            this.parent = null;
+            this.mount = null;
+            if (!parent) {
+              parent = this;  // root node sets parent to itself
+            }
+            this.parent = parent;
+            this.mount = parent.mount;
+            FS.hashAddNode(this);
+          };
+          // compatibility
+          var readMode = 292 | 73;
+          var writeMode = 146;
+          FS.FSNode.prototype = {};
+          // NOTE we must use Object.defineProperties instead of individual calls to
+          // Object.defineProperty in order to make closure compiler happy
+          Object.defineProperties(FS.FSNode.prototype, {
+            read: {
+              get: function() { return (this.mode & readMode) === readMode; },
+              set: function(val) { val ? this.mode |= readMode : this.mode &= ~readMode; }
+            },
+            write: {
+              get: function() { return (this.mode & writeMode) === writeMode; },
+              set: function(val) { val ? this.mode |= writeMode : this.mode &= ~writeMode; }
+            },
+            isFolder: {
+              get: function() { return FS.isDir(this.mode); },
+            },
+            isDevice: {
+              get: function() { return FS.isChrdev(this.mode); },
+            },
+          });
         }
-        node.parent = parent;
-        node.mount = parent.mount;
-        // compatibility
-        var readMode = 292 | 73;
-        var writeMode = 146;
-        // NOTE we must use Object.defineProperties instead of individual calls to
-        // Object.defineProperty in order to make closure compiler happy
-        Object.defineProperties(node, {
-          read: {
-            get: function() { return (node.mode & readMode) === readMode; },
-            set: function(val) { val ? node.mode |= readMode : node.mode &= ~readMode; }
-          },
-          write: {
-            get: function() { return (node.mode & writeMode) === writeMode; },
-            set: function(val) { val ? node.mode |= writeMode : node.mode &= ~writeMode; }
-          },
-          isFolder: {
-            get: function() { return FS.isDir(node.mode); },
-          },
-          isDevice: {
-            get: function() { return FS.isChrdev(node.mode); },
-          },
-        });
-        FS.hashAddNode(node);
-        return node;
+        return new FS.FSNode(parent, name, mode, rdev);
       },destroyNode:function (node) {
         FS.hashRemoveNode(node);
       },isRoot:function (node) {
@@ -1766,7 +2375,7 @@ function copyTempDouble(ptr) {
           if (!FS.isDir(node.mode)) {
             return ERRNO_CODES.ENOTDIR;
           }
-          if (FS.isRoot(node) || FS.getPath(node) === FS.currentPath) {
+          if (FS.isRoot(node) || FS.getPath(node) === FS.cwd()) {
             return ERRNO_CODES.EBUSY;
           }
         } else {
@@ -1800,24 +2409,38 @@ function copyTempDouble(ptr) {
       },getStream:function (fd) {
         return FS.streams[fd];
       },createStream:function (stream, fd_start, fd_end) {
+        if (!FS.FSStream) {
+          FS.FSStream = function(){};
+          FS.FSStream.prototype = {};
+          // compatibility
+          Object.defineProperties(FS.FSStream.prototype, {
+            object: {
+              get: function() { return this.node; },
+              set: function(val) { this.node = val; }
+            },
+            isRead: {
+              get: function() { return (this.flags & 2097155) !== 1; }
+            },
+            isWrite: {
+              get: function() { return (this.flags & 2097155) !== 0; }
+            },
+            isAppend: {
+              get: function() { return (this.flags & 1024); }
+            }
+          });
+        }
+        if (stream.__proto__) {
+          // reuse the object
+          stream.__proto__ = FS.FSStream.prototype;
+        } else {
+          var newStream = new FS.FSStream();
+          for (var p in stream) {
+            newStream[p] = stream[p];
+          }
+          stream = newStream;
+        }
         var fd = FS.nextfd(fd_start, fd_end);
         stream.fd = fd;
-        // compatibility
-        Object.defineProperties(stream, {
-          object: {
-            get: function() { return stream.node; },
-            set: function(val) { stream.node = val; }
-          },
-          isRead: {
-            get: function() { return (stream.flags & 2097155) !== 1; }
-          },
-          isWrite: {
-            get: function() { return (stream.flags & 2097155) !== 0; }
-          },
-          isAppend: {
-            get: function() { return (stream.flags & 1024); }
-          }
-        });
         FS.streams[fd] = stream;
         return stream;
       },closeStream:function (fd) {
@@ -1842,17 +2465,42 @@ function copyTempDouble(ptr) {
         FS.devices[dev] = { stream_ops: ops };
       },getDevice:function (dev) {
         return FS.devices[dev];
+      },syncfs:function (populate, callback) {
+        if (typeof(populate) === 'function') {
+          callback = populate;
+          populate = false;
+        }
+        var completed = 0;
+        var total = FS.mounts.length;
+        function done(err) {
+          if (err) {
+            return callback(err);
+          }
+          if (++completed >= total) {
+            callback(null);
+          }
+        };
+        // sync all mounts
+        for (var i = 0; i < FS.mounts.length; i++) {
+          var mount = FS.mounts[i];
+          if (!mount.type.syncfs) {
+            done(null);
+            continue;
+          }
+          mount.type.syncfs(mount, populate, done);
+        }
       },mount:function (type, opts, mountpoint) {
+        var lookup;
+        if (mountpoint) {
+          lookup = FS.lookupPath(mountpoint, { follow: false });
+          mountpoint = lookup.path;  // use the absolute path
+        }
         var mount = {
           type: type,
           opts: opts,
           mountpoint: mountpoint,
           root: null
         };
-        var lookup;
-        if (mountpoint) {
-          lookup = FS.lookupPath(mountpoint, { follow: false });
-        }
         // create a root node for the fs
         var root = type.mount(mount);
         root.mount = mount;
@@ -1866,6 +2514,8 @@ function copyTempDouble(ptr) {
             FS.root = mount.root;
           }
         }
+        // add to our cached list of mounts
+        FS.mounts.push(mount);
         return root;
       },lookup:function (parent, name) {
         return parent.node_ops.lookup(parent, name);
@@ -1985,7 +2635,7 @@ function copyTempDouble(ptr) {
         try {
           old_dir.node_ops.rename(old_node, new_dir, new_name);
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           // add the node back to the hash (in case node_ops.rename
           // changed its name)
@@ -2140,7 +2790,6 @@ function copyTempDouble(ptr) {
           timestamp: Math.max(atime, mtime)
         });
       },open:function (path, flags, mode, fd_start, fd_end) {
-        path = PATH.normalize(path);
         flags = typeof flags === 'string' ? FS.modeStringToFlags(flags) : flags;
         mode = typeof mode === 'undefined' ? 0666 : mode;
         if ((flags & 64)) {
@@ -2149,14 +2798,18 @@ function copyTempDouble(ptr) {
           mode = 0;
         }
         var node;
-        try {
-          var lookup = FS.lookupPath(path, {
-            follow: !(flags & 131072)
-          });
-          node = lookup.node;
-          path = lookup.path;
-        } catch (e) {
-          // ignore
+        if (typeof path === 'object') {
+          node = path;
+        } else {
+          path = PATH.normalize(path);
+          try {
+            var lookup = FS.lookupPath(path, {
+              follow: !(flags & 131072)
+            });
+            node = lookup.node;
+          } catch (e) {
+            // ignore
+          }
         }
         // perhaps we need to create the node
         if ((flags & 64)) {
@@ -2186,10 +2839,12 @@ function copyTempDouble(ptr) {
         if ((flags & 512)) {
           FS.truncate(node, 0);
         }
+        // we've already handled these, don't pass down to the underlying vfs
+        flags &= ~(128 | 512);
         // register the stream with the filesystem
         var stream = FS.createStream({
-          path: path,
           node: node,
+          path: FS.getPath(node),  // we want the absolute path to the node
           flags: flags,
           seekable: true,
           position: 0,
@@ -2216,7 +2871,7 @@ function copyTempDouble(ptr) {
             stream.stream_ops.close(stream);
           }
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           FS.closeStream(stream.fd);
         }
@@ -2341,6 +2996,18 @@ function copyTempDouble(ptr) {
           throw ensureExc(new Error('Invalid encoding type "' + opts.encoding + '"'));
         }
         FS.close(stream);
+      },cwd:function () {
+        return FS.currentPath;
+      },chdir:function (path) {
+        var lookup = FS.lookupPath(path, { follow: true });
+        if (!FS.isDir(lookup.node.mode)) {
+          throw ensureExc(new FS.ErrnoError(ERRNO_CODES.ENOTDIR));
+        }
+        var err = FS.nodePermissions(lookup.node, 'x');
+        if (err) {
+          throw ensureExc(new FS.ErrnoError(err));
+        }
+        FS.currentPath = lookup.path;
       },createDefaultDirectories:function () {
         FS.mkdir('/tmp');
       },createDefaultDevices:function () {
@@ -2396,7 +3063,28 @@ function copyTempDouble(ptr) {
         var stderr = FS.open('/dev/stderr', 'w');
         HEAP32[((_stderr)>>2)]=stderr.fd;
         assert(stderr.fd === 3, 'invalid handle for stderr (' + stderr.fd + ')');
+      },ensureErrnoError:function () {
+        if (FS.ErrnoError) return;
+        FS.ErrnoError = function ErrnoError(errno) {
+          this.errno = errno;
+          for (var key in ERRNO_CODES) {
+            if (ERRNO_CODES[key] === errno) {
+              this.code = key;
+              break;
+            }
+          }
+          this.message = ERRNO_MESSAGES[errno];
+          this.stack = stackTrace();
+        };
+        FS.ErrnoError.prototype = new Error();
+        FS.ErrnoError.prototype.constructor = FS.ErrnoError;
+        // Some errors may happen quite a bit, to avoid overhead we reuse them (and suffer a lack of stack info)
+        [ERRNO_CODES.ENOENT].forEach(function(code) {
+          FS.genericErrors[code] = new FS.ErrnoError(code);
+          FS.genericErrors[code].stack = '<generic error, no stack>';
+        });
       },staticInit:function () {
+        FS.ensureErrnoError();
         FS.nameTable = new Array(4096);
         FS.root = FS.createNode(null, '/', 16384 | 0777, 0);
         FS.mount(MEMFS, {}, '/');
@@ -2405,6 +3093,7 @@ function copyTempDouble(ptr) {
       },init:function (input, output, error) {
         assert(!FS.init.initialized, 'FS.init was previously called. If you want to initialize later with custom parameters, remove any earlier calls (note that one is automatically added to the generated code)');
         FS.init.initialized = true;
+        FS.ensureErrnoError();
         // Allow Module.stdin etc. to provide defaults, if none explicitly passed to us here
         Module['stdin'] = input || Module['stdin'];
         Module['stdout'] = output || Module['stdout'];
@@ -2468,7 +3157,7 @@ function copyTempDouble(ptr) {
         };
         return ret;
       },createFolder:function (parent, name, canRead, canWrite) {
-        var path = PATH.join(typeof parent === 'string' ? parent : FS.getPath(parent), name);
+        var path = PATH.join2(typeof parent === 'string' ? parent : FS.getPath(parent), name);
         var mode = FS.getMode(canRead, canWrite);
         return FS.mkdir(path, mode);
       },createPath:function (parent, path, canRead, canWrite) {
@@ -2477,7 +3166,7 @@ function copyTempDouble(ptr) {
         while (parts.length) {
           var part = parts.pop();
           if (!part) continue;
-          var current = PATH.join(parent, part);
+          var current = PATH.join2(parent, part);
           try {
             FS.mkdir(current);
           } catch (e) {
@@ -2487,11 +3176,11 @@ function copyTempDouble(ptr) {
         }
         return current;
       },createFile:function (parent, name, properties, canRead, canWrite) {
-        var path = PATH.join(typeof parent === 'string' ? parent : FS.getPath(parent), name);
+        var path = PATH.join2(typeof parent === 'string' ? parent : FS.getPath(parent), name);
         var mode = FS.getMode(canRead, canWrite);
         return FS.create(path, mode);
       },createDataFile:function (parent, name, data, canRead, canWrite, canOwn) {
-        var path = name ? PATH.join(typeof parent === 'string' ? parent : FS.getPath(parent), name) : parent;
+        var path = name ? PATH.join2(typeof parent === 'string' ? parent : FS.getPath(parent), name) : parent;
         var mode = FS.getMode(canRead, canWrite);
         var node = FS.create(path, mode);
         if (data) {
@@ -2501,15 +3190,15 @@ function copyTempDouble(ptr) {
             data = arr;
           }
           // make sure we can write to the file
-          FS.chmod(path, mode | 146);
-          var stream = FS.open(path, 'w');
+          FS.chmod(node, mode | 146);
+          var stream = FS.open(node, 'w');
           FS.write(stream, data, 0, data.length, 0, canOwn);
           FS.close(stream);
-          FS.chmod(path, mode);
+          FS.chmod(node, mode);
         }
         return node;
       },createDevice:function (parent, name, input, output) {
-        var path = PATH.join(typeof parent === 'string' ? parent : FS.getPath(parent), name);
+        var path = PATH.join2(typeof parent === 'string' ? parent : FS.getPath(parent), name);
         var mode = FS.getMode(!!input, !!output);
         if (!FS.createDevice.major) FS.createDevice.major = 64;
         var dev = FS.makedev(FS.createDevice.major++, 0);
@@ -2562,7 +3251,7 @@ function copyTempDouble(ptr) {
         });
         return FS.mkdev(path, mode, dev);
       },createLink:function (parent, name, target, canRead, canWrite) {
-        var path = PATH.join(typeof parent === 'string' ? parent : FS.getPath(parent), name);
+        var path = PATH.join2(typeof parent === 'string' ? parent : FS.getPath(parent), name);
         return FS.symlink(target, path);
       },forceLoadFile:function (obj) {
         if (obj.isDevice || obj.isFolder || obj.link || obj.contents) return true;
@@ -2587,11 +3276,11 @@ function copyTempDouble(ptr) {
         if (typeof XMLHttpRequest !== 'undefined') {
           if (!ENVIRONMENT_IS_WORKER) throw ensureExc('Cannot do synchronous binary XHRs outside webworkers in modern browsers. Use --embed-file or --preload-file in emcc');
           // Lazy chunked Uint8Array (implements get and length from Uint8Array). Actual getting is abstracted away for eventual reuse.
-          var LazyUint8Array = function() {
+          function LazyUint8Array() {
             this.lengthKnown = false;
             this.chunks = []; // Loaded chunks. Index is the chunk number
           }
-          LazyUint8Array.prototype.get = function(idx) {
+          LazyUint8Array.prototype.get = function LazyUint8Array_get(idx) {
             if (idx > this.length-1 || idx < 0) {
               return undefined;
             }
@@ -2599,10 +3288,10 @@ function copyTempDouble(ptr) {
             var chunkNum = Math.floor(idx / this.chunkSize);
             return this.getter(chunkNum)[chunkOffset];
           }
-          LazyUint8Array.prototype.setDataGetter = function(getter) {
+          LazyUint8Array.prototype.setDataGetter = function LazyUint8Array_setDataGetter(getter) {
             this.getter = getter;
           }
-          LazyUint8Array.prototype.cacheLength = function() {
+          LazyUint8Array.prototype.cacheLength = function LazyUint8Array_cacheLength() {
               // Find length
               var xhr = new XMLHttpRequest();
               xhr.open('HEAD', url, false);
@@ -2685,7 +3374,7 @@ function copyTempDouble(ptr) {
         var keys = Object.keys(node.stream_ops);
         keys.forEach(function(key) {
           var fn = node.stream_ops[key];
-          stream_ops[key] = function() {
+          stream_ops[key] = function forceLoadLazyFile() {
             if (!FS.forceLoadFile(node)) {
               throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
             }
@@ -2693,12 +3382,15 @@ function copyTempDouble(ptr) {
           };
         });
         // use a custom read function
-        stream_ops.read = function(stream, buffer, offset, length, position) {
+        stream_ops.read = function stream_ops_read(stream, buffer, offset, length, position) {
           if (!FS.forceLoadFile(node)) {
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES.EIO));
           }
           var contents = stream.node.contents;
+          if (position >= contents.length)
+            return 0;
           var size = Math.min(contents.length - position, length);
+          assert(size >= 0);
           if (contents.slice) { // normal array
             for (var i = 0; i < size; i++) {
               buffer[offset + i] = contents[position + i];
@@ -2716,7 +3408,7 @@ function copyTempDouble(ptr) {
         Browser.init();
         // TODO we should allow people to just pass in a complete filename instead
         // of parent and name being that we just join them anyways
-        var fullname = name ? PATH.resolve(PATH.join(parent, name)) : parent;
+        var fullname = name ? PATH.resolve(PATH.join2(parent, name)) : parent;
         function processData(byteArray) {
           function finish(byteArray) {
             if (!dontCreateFile) {
@@ -2759,12 +3451,12 @@ function copyTempDouble(ptr) {
         } catch (e) {
           return onerror(e);
         }
-        openRequest.onupgradeneeded = function() {
+        openRequest.onupgradeneeded = function openRequest_onupgradeneeded() {
           console.log('creating db');
           var db = openRequest.result;
           db.createObjectStore(FS.DB_STORE_NAME);
         };
-        openRequest.onsuccess = function() {
+        openRequest.onsuccess = function openRequest_onsuccess() {
           var db = openRequest.result;
           var transaction = db.transaction([FS.DB_STORE_NAME], 'readwrite');
           var files = transaction.objectStore(FS.DB_STORE_NAME);
@@ -2774,8 +3466,8 @@ function copyTempDouble(ptr) {
           }
           paths.forEach(function(path) {
             var putRequest = files.put(FS.analyzePath(path).object.contents, path);
-            putRequest.onsuccess = function() { ok++; if (ok + fail == total) finish() };
-            putRequest.onerror = function() { fail++; if (ok + fail == total) finish() };
+            putRequest.onsuccess = function putRequest_onsuccess() { ok++; if (ok + fail == total) finish() };
+            putRequest.onerror = function putRequest_onerror() { fail++; if (ok + fail == total) finish() };
           });
           transaction.onerror = onerror;
         };
@@ -2790,7 +3482,7 @@ function copyTempDouble(ptr) {
           return onerror(e);
         }
         openRequest.onupgradeneeded = onerror; // no database to load from
-        openRequest.onsuccess = function() {
+        openRequest.onsuccess = function openRequest_onsuccess() {
           var db = openRequest.result;
           try {
             var transaction = db.transaction([FS.DB_STORE_NAME], 'readonly');
@@ -2805,7 +3497,7 @@ function copyTempDouble(ptr) {
           }
           paths.forEach(function(path) {
             var getRequest = files.get(path);
-            getRequest.onsuccess = function() {
+            getRequest.onsuccess = function getRequest_onsuccess() {
               if (FS.analyzePath(path).exists) {
                 FS.unlink(path);
               }
@@ -2813,7 +3505,7 @@ function copyTempDouble(ptr) {
               ok++;
               if (ok + fail == total) finish();
             };
-            getRequest.onerror = function() { fail++; if (ok + fail == total) finish() };
+            getRequest.onerror = function getRequest_onerror() { fail++; if (ok + fail == total) finish() };
           });
           transaction.onerror = onerror;
         };
@@ -2867,10 +3559,10 @@ function copyTempDouble(ptr) {
         // (possibly modified) data. For example, a plugin might decompress a file, or it
         // might create some side data structure for use later (like an Image element, etc.).
         var imagePlugin = {};
-        imagePlugin['canHandle'] = function(name) {
+        imagePlugin['canHandle'] = function imagePlugin_canHandle(name) {
           return !Module.noImageDecoding && /\.(jpg|jpeg|png|bmp)$/i.test(name);
         };
-        imagePlugin['handle'] = function(byteArray, name, onload, onerror) {
+        imagePlugin['handle'] = function imagePlugin_handle(byteArray, name, onload, onerror) {
           var b = null;
           if (Browser.hasBlobConstructor) {
             try {
@@ -2891,7 +3583,7 @@ function copyTempDouble(ptr) {
           var url = Browser.URLObject.createObjectURL(b);
           assert(typeof url == 'string', 'createObjectURL must return a url as a string');
           var img = new Image();
-          img.onload = function() {
+          img.onload = function img_onload() {
             assert(img.complete, 'Image ' + name + ' could not be decoded');
             var canvas = document.createElement('canvas');
             canvas.width = img.width;
@@ -2902,7 +3594,7 @@ function copyTempDouble(ptr) {
             Browser.URLObject.revokeObjectURL(url);
             if (onload) onload(byteArray);
           };
-          img.onerror = function(event) {
+          img.onerror = function img_onerror(event) {
             console.log('Image ' + url + ' could not be decoded');
             if (onerror) onerror();
           };
@@ -2910,10 +3602,10 @@ function copyTempDouble(ptr) {
         };
         Module['preloadPlugins'].push(imagePlugin);
         var audioPlugin = {};
-        audioPlugin['canHandle'] = function(name) {
+        audioPlugin['canHandle'] = function audioPlugin_canHandle(name) {
           return !Module.noAudioDecoding && name.substr(-4) in { '.ogg': 1, '.wav': 1, '.mp3': 1 };
         };
-        audioPlugin['handle'] = function(byteArray, name, onload, onerror) {
+        audioPlugin['handle'] = function audioPlugin_handle(byteArray, name, onload, onerror) {
           var done = false;
           function finish(audio) {
             if (done) return;
@@ -2937,7 +3629,7 @@ function copyTempDouble(ptr) {
             assert(typeof url == 'string', 'createObjectURL must return a url as a string');
             var audio = new Audio();
             audio.addEventListener('canplaythrough', function() { finish(audio) }, false); // use addEventListener due to chromium bug 124926
-            audio.onerror = function(event) {
+            audio.onerror = function audio_onerror(event) {
               if (done) return;
               console.log('warning: browser could not fully decode audio ' + name + ', trying slower base64 approach');
               function encode64(data) {
@@ -3003,19 +3695,37 @@ function copyTempDouble(ptr) {
             }
           }, false);
         }
-      },createContext:function (canvas, useWebGL, setInModule) {
+      },createContext:function (canvas, useWebGL, setInModule, webGLContextAttributes) {
         var ctx;
         try {
           if (useWebGL) {
-            ctx = canvas.getContext('experimental-webgl', {
+            var contextAttributes = {
+              antialias: false,
               alpha: false
-            });
+            };
+            if (webGLContextAttributes) {
+              for (var attribute in webGLContextAttributes) {
+                contextAttributes[attribute] = webGLContextAttributes[attribute];
+              }
+            }
+            var errorInfo = '?';
+            function onContextCreationError(event) {
+              errorInfo = event.statusMessage || errorInfo;
+            }
+            canvas.addEventListener('webglcontextcreationerror', onContextCreationError, false);
+            try {
+              ['experimental-webgl', 'webgl'].some(function(webglId) {
+                return ctx = canvas.getContext(webglId, contextAttributes);
+              });
+            } finally {
+              canvas.removeEventListener('webglcontextcreationerror', onContextCreationError, false);
+            }
           } else {
             ctx = canvas.getContext('2d');
           }
           if (!ctx) throw ensureExc(':(');
         } catch (e) {
-          Module.print('Could not create canvas - ' + e);
+          Module.print('Could not create canvas: ' + [errorInfo, e]);
           return null;
         }
         if (useWebGL) {
@@ -3066,16 +3776,20 @@ function copyTempDouble(ptr) {
                                    canvas['mozRequestFullScreen'] ||
                                    (canvas['webkitRequestFullScreen'] ? function() { canvas['webkitRequestFullScreen'](Element['ALLOW_KEYBOARD_INPUT']) } : null);
         canvas.requestFullScreen();
-      },requestAnimationFrame:function (func) {
-        if (!window.requestAnimationFrame) {
-          window.requestAnimationFrame = window['requestAnimationFrame'] ||
-                                         window['mozRequestAnimationFrame'] ||
-                                         window['webkitRequestAnimationFrame'] ||
-                                         window['msRequestAnimationFrame'] ||
-                                         window['oRequestAnimationFrame'] ||
-                                         window['setTimeout'];
+      },requestAnimationFrame:function requestAnimationFrame(func) {
+        if (typeof window === 'undefined') { // Provide fallback to setTimeout if window is undefined (e.g. in Node.js)
+          setTimeout(func, 1000/60);
+        } else {
+          if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = window['requestAnimationFrame'] ||
+                                           window['mozRequestAnimationFrame'] ||
+                                           window['webkitRequestAnimationFrame'] ||
+                                           window['msRequestAnimationFrame'] ||
+                                           window['oRequestAnimationFrame'] ||
+                                           window['setTimeout'];
+          }
+          window.requestAnimationFrame(func);
         }
-        window.requestAnimationFrame(func);
       },safeCallback:function (func) {
         return function() {
           if (!ABORT) return func.apply(null, arguments);
@@ -3175,7 +3889,7 @@ function copyTempDouble(ptr) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.responseType = 'arraybuffer';
-        xhr.onload = function() {
+        xhr.onload = function xhr_onload() {
           if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
             onload(xhr.response);
           } else {
@@ -3231,7 +3945,7 @@ function copyTempDouble(ptr) {
         	HEAP32[((SDL.screen+Runtime.QUANTUM_SIZE*0)>>2)]=flags
         }
         Browser.updateResizeListeners();
-      }};var SDL={defaults:{width:320,height:200,copyOnLock:true},version:null,surfaces:{},cursors:{},canvasPool:[],events:[],fonts:[null],timers:["reserved"],audios:[null],rwops:[null],music:{audio:null,volume:1},mixerFrequency:22050,mixerFormat:32784,mixerNumChannels:2,mixerChunkSize:1024,channelMinimumNumber:0,GL:false,keyboardState:null,keyboardMap:{},canRequestFullscreen:false,isRequestingFullscreen:false,windowTitle:null,windowIcon:null,textInput:false,startTime:null,buttonState:0,modState:0,DOMButtons:[0,0,0],DOMEventToSDLEvent:{},keyCodes:{16:1249,17:1248,18:1250,33:1099,34:1102,37:1104,38:1106,39:1103,40:1105,46:127,96:1112,97:1113,98:1114,99:1115,100:1116,101:1117,102:1118,103:1119,104:1120,105:1121,112:1082,113:1083,114:1084,115:1085,116:1086,117:1087,118:1088,119:1089,120:1090,121:1091,122:1092,123:1093,173:45,188:44,190:46,191:47,192:96},scanCodes:{9:43,13:40,27:41,32:44,44:54,46:55,47:56,48:39,49:30,50:31,51:32,52:33,53:34,54:35,55:36,56:37,57:38,92:49,97:4,98:5,99:6,100:7,101:8,102:9,103:10,104:11,105:12,106:13,107:14,108:15,109:16,110:17,111:18,112:19,113:20,114:21,115:22,116:23,117:24,118:25,119:26,120:27,121:28,122:29,305:224,308:226},loadRect:function (rect) {
+      }};var SDL={defaults:{width:320,height:200,copyOnLock:true},version:null,surfaces:{},cursors:{},canvasPool:[],events:[],fonts:[null],timers:["reserved"],audios:[null],rwops:[null],music:{audio:null,volume:1},mixerFrequency:22050,mixerFormat:32784,mixerNumChannels:2,mixerChunkSize:1024,channelMinimumNumber:0,GL:false,glAttributes:{0:3,1:3,2:2,3:0,4:0,5:1,6:16,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0,15:1,16:0,17:0,18:0},keyboardState:null,keyboardMap:{},canRequestFullscreen:false,isRequestingFullscreen:false,windowTitle:null,windowIcon:null,textInput:false,startTime:null,initFlags:0,buttonState:0,modState:0,DOMButtons:[0,0,0],DOMEventToSDLEvent:{},keyCodes:{16:1249,17:1248,18:1250,33:1099,34:1102,37:1104,38:1106,39:1103,40:1105,46:127,96:1112,97:1113,98:1114,99:1115,100:1116,101:1117,102:1118,103:1119,104:1120,105:1121,112:1082,113:1083,114:1084,115:1085,116:1086,117:1087,118:1088,119:1089,120:1090,121:1091,122:1092,123:1093,173:45,188:44,190:46,191:47,192:96},scanCodes:{8:42,9:43,13:40,27:41,32:44,44:54,46:55,47:56,48:39,49:30,50:31,51:32,52:33,53:34,54:35,55:36,56:37,57:38,59:51,61:46,91:47,92:49,93:48,96:52,97:4,98:5,99:6,100:7,101:8,102:9,103:10,104:11,105:12,106:13,107:14,108:15,109:16,110:17,111:18,112:19,113:20,114:21,115:22,116:23,117:24,118:25,119:26,120:27,121:28,122:29,305:224,308:226},loadRect:function (rect) {
         return {
           x: HEAP32[((rect + 0)>>2)],
           y: HEAP32[((rect + 4)>>2)],
@@ -3292,7 +4006,12 @@ function copyTempDouble(ptr) {
         } else {
           canvas = Module['canvas'];
         }
-        var ctx = Browser.createContext(canvas, useWebGL, usePageCanvas);
+        var webGLContextAttributes = {
+          antialias: ((SDL.glAttributes[13 /*SDL_GL_MULTISAMPLEBUFFERS*/] != 0) && (SDL.glAttributes[14 /*SDL_GL_MULTISAMPLESAMPLES*/] > 1)),
+          depth: (SDL.glAttributes[6 /*SDL_GL_DEPTH_SIZE*/] > 0),
+          stencil: (SDL.glAttributes[7 /*SDL_GL_STENCIL_SIZE*/] > 0)
+        };
+        var ctx = Browser.createContext(canvas, useWebGL, usePageCanvas, webGLContextAttributes);
         SDL.surfaces[surf] = {
           width: width,
           height: height,
@@ -3628,6 +4347,21 @@ function copyTempDouble(ptr) {
             HEAP32[(((ptr)+(8))>>2)]=event.h;
             break;
           }
+          case 'joystick_button_up': case 'joystick_button_down': {
+            var state = event.type === 'joystick_button_up' ? 0 : 1;
+            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
+            HEAP8[(((ptr)+(4))|0)]=event.index;
+            HEAP8[(((ptr)+(5))|0)]=event.button;
+            HEAP8[(((ptr)+(6))|0)]=state;
+            break;
+          }
+          case 'joystick_axis_motion': {
+            HEAP32[((ptr)>>2)]=SDL.DOMEventToSDLEvent[event.type];
+            HEAP8[(((ptr)+(4))|0)]=event.index;
+            HEAP8[(((ptr)+(5))|0)]=event.axis;
+            HEAP32[(((ptr)+(8))>>2)]=SDL.joystickAxisValueConversion(event.value);
+            break;
+          }
           default: throw ensureExc('Unhandled SDL event: ' + event.type);
         }
       },estimateTextWidth:function (fontData, text) {
@@ -3641,7 +4375,7 @@ function copyTempDouble(ptr) {
         tempCtx.restore();
         return ret;
       },allocateChannels:function (num) { // called from Mix_AllocateChannels and init
-        if (SDL.numChannels && SDL.numChannels >= num) return;
+        if (SDL.numChannels && SDL.numChannels >= num && num != 0) return;
         SDL.numChannels = num;
         SDL.channels = [];
         for (var i = 0; i < num; i++) {
@@ -3666,6 +4400,83 @@ function copyTempDouble(ptr) {
         for (var i = 0; i < num; i++) {
           console.log('   diagonal ' + i + ':' + [data[i*surfData.width*4 + i*4 + 0], data[i*surfData.width*4 + i*4 + 1], data[i*surfData.width*4 + i*4 + 2], data[i*surfData.width*4 + i*4 + 3]]);
         }
+      },joystickEventState:1,lastJoystickState:{},joystickNamePool:{},recordJoystickState:function (joystick, state) {
+        // Standardize button state.
+        var buttons = new Array(state.buttons.length);
+        for (var i = 0; i < state.buttons.length; i++) {
+          buttons[i] = SDL.getJoystickButtonState(state.buttons[i]);
+        }
+        SDL.lastJoystickState[joystick] = {
+          buttons: buttons,
+          axes: state.axes.slice(0),
+          timestamp: state.timestamp,
+          index: state.index,
+          id: state.id
+        };
+      },getJoystickButtonState:function (button) {
+        if (typeof button === 'object') {
+          // Current gamepad API editor's draft (Firefox Nightly)
+          // https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html#idl-def-GamepadButton
+          return button.pressed;
+        } else {
+          // Current gamepad API working draft (Firefox / Chrome Stable)
+          // http://www.w3.org/TR/2012/WD-gamepad-20120529/#gamepad-interface
+          return button > 0;
+        }
+      },queryJoysticks:function () {
+        for (var joystick in SDL.lastJoystickState) {
+          var state = SDL.getGamepad(joystick - 1);
+          var prevState = SDL.lastJoystickState[joystick];
+          // Check only if the timestamp has differed.
+          // NOTE: Timestamp is not available in Firefox.
+          if (typeof state.timestamp !== 'number' || state.timestamp !== prevState.timestamp) {
+            var i;
+            for (i = 0; i < state.buttons.length; i++) {
+              var buttonState = SDL.getJoystickButtonState(state.buttons[i]);
+              // NOTE: The previous state already has a boolean representation of
+              //       its button, so no need to standardize its button state here.
+              if (buttonState !== prevState.buttons[i]) {
+                // Insert button-press event.
+                SDL.events.push({
+                  type: buttonState ? 'joystick_button_down' : 'joystick_button_up',
+                  joystick: joystick,
+                  index: joystick - 1,
+                  button: i
+                });
+              }
+            }
+            for (i = 0; i < state.axes.length; i++) {
+              if (state.axes[i] !== prevState.axes[i]) {
+                // Insert axes-change event.
+                SDL.events.push({
+                  type: 'joystick_axis_motion',
+                  joystick: joystick,
+                  index: joystick - 1,
+                  axis: i,
+                  value: state.axes[i]
+                });
+              }
+            }
+            SDL.recordJoystickState(joystick, state);
+          }
+        }
+      },joystickAxisValueConversion:function (value) {
+        // Ensures that 0 is 0, 1 is 32767, and -1 is 32768.
+        return Math.ceil(((value+1) * 32767.5) - 32768);
+      },getGamepads:function () {
+        var fcn = navigator.getGamepads || navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads || navigator.webkitGetGamepads;
+        if (fcn !== undefined) {
+          // The function must be applied on the navigator object.
+          return fcn.apply(navigator);
+        } else {
+          return [];
+        }
+      },getGamepad:function (deviceIndex) {
+        var gamepads = SDL.getGamepads();
+        if (gamepads.length > deviceIndex && deviceIndex >= 0) {
+          return gamepads[deviceIndex];
+        }
+        return null;
       }};function _SDL_RWFromFile(_name, mode) {
       var id = SDL.rwops.length; // TODO: recycle ids when they are null
       var name = Pointer_stringify(_name)
@@ -3674,11 +4485,6 @@ function copyTempDouble(ptr) {
     }
   var SOCKFS={mount:function (mount) {
         return FS.createNode(null, '/', 16384 | 0777, 0);
-      },nextname:function () {
-        if (!SOCKFS.nextname.current) {
-          SOCKFS.nextname.current = 0;
-        }
-        return 'socket[' + (SOCKFS.nextname.current++) + ']';
       },createSocket:function (family, type, protocol) {
         var streaming = type == 1;
         if (protocol) {
@@ -3739,7 +4545,12 @@ function copyTempDouble(ptr) {
         },close:function (stream) {
           var sock = stream.node.sock;
           sock.sock_ops.close(sock);
-        }},websocket_sock_ops:{createPeer:function (sock, addr, port) {
+        }},nextname:function () {
+        if (!SOCKFS.nextname.current) {
+          SOCKFS.nextname.current = 0;
+        }
+        return 'socket[' + (SOCKFS.nextname.current++) + ']';
+      },websocket_sock_ops:{createPeer:function (sock, addr, port) {
           var ws;
           if (typeof addr === 'object') {
             ws = addr;
@@ -3768,7 +4579,9 @@ function copyTempDouble(ptr) {
             try {
               var url = 'ws://' + addr + ':' + port;
               // the node ws library API is slightly different than the browser's
-              var opts = ENVIRONMENT_IS_NODE ? {} : ['binary'];
+              var opts = ENVIRONMENT_IS_NODE ? {headers: {'websocket-protocol': ['binary']}} : ['binary'];
+              // If node we use the ws library.
+              var WebSocket = ENVIRONMENT_IS_NODE ? require('ws') : window['WebSocket'];
               ws = new WebSocket(url, opts);
               ws.binaryType = 'arraybuffer';
             } catch (e) {
@@ -3815,7 +4628,7 @@ function copyTempDouble(ptr) {
               peer.socket.close();
             }
           };
-          var handleMessage = function(data) {
+          function handleMessage(data) {
             assert(typeof data !== 'string' && data.byteLength !== undefined);  // must receive an ArrayBuffer
             data = new Uint8Array(data);  // make a typed array view on the array buffer
             // if this is the port message, override the peer's port with it
@@ -3847,7 +4660,7 @@ function copyTempDouble(ptr) {
             });
           } else {
             peer.socket.onopen = handleOpen;
-            peer.socket.onmessage = function(event) {
+            peer.socket.onmessage = function peer_socket_onmessage(event) {
               handleMessage(event.data);
             };
           }
@@ -3928,8 +4741,8 @@ function copyTempDouble(ptr) {
             try {
               sock.sock_ops.listen(sock, 0);
             } catch (e) {
-              if (!(e instanceof FS.ErrnoError)) throw e;
-              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              if (!(e instanceof FS.ErrnoError)) throw ensureExc(e);
+              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw ensureExc(e);
             }
           }
         },connect:function (sock, addr, port) {
@@ -4212,6 +5025,7 @@ function copyTempDouble(ptr) {
           var flagLeftAlign = false;
           var flagAlternative = false;
           var flagZeroPad = false;
+          var flagPadSign = false;
           flagsLoop: while (1) {
             switch (next) {
               case 43:
@@ -4230,6 +5044,9 @@ function copyTempDouble(ptr) {
                   flagZeroPad = true;
                   break;
                 }
+              case 32:
+                flagPadSign = true;
+                break;
               default:
                 break flagsLoop;
             }
@@ -4381,12 +5198,17 @@ function copyTempDouble(ptr) {
                 }
               }
               // Add sign if needed
-              if (flagAlwaysSigned) {
-                if (currArg < 0) {
-                  prefix = '-' + prefix;
-                } else {
+              if (currArg >= 0) {
+                if (flagAlwaysSigned) {
                   prefix = '+' + prefix;
+                } else if (flagPadSign) {
+                  prefix = ' ' + prefix;
                 }
+              }
+              // Move sign to prefix so we zero-pad after the sign
+              if (argText.charAt(0) == '-') {
+                prefix = '-' + prefix;
+                argText = argText.substr(1);
               }
               // Add padding.
               while (prefix.length + argText.length < width) {
@@ -4464,8 +5286,12 @@ function copyTempDouble(ptr) {
                 // Capitalize 'E' if needed.
                 if (next == 69) argText = argText.toUpperCase();
                 // Add sign.
-                if (flagAlwaysSigned && currArg >= 0) {
-                  argText = '+' + argText;
+                if (currArg >= 0) {
+                  if (flagAlwaysSigned) {
+                    argText = '+' + argText;
+                  } else if (flagPadSign) {
+                    argText = ' ' + argText;
+                  }
                 }
               }
               // Add padding.
@@ -4578,7 +5404,6 @@ function copyTempDouble(ptr) {
   function __exit(status) {
       // void _exit(int status);
       // http://pubs.opengroup.org/onlinepubs/000095399/functions/exit.html
-      Module.print('exit(' + status + ') called');
       Module['exit'](status);
     }function _exit(status) {
       __exit(status);
@@ -4653,12 +5478,13 @@ function copyTempDouble(ptr) {
 FS.staticInit();__ATINIT__.unshift({ func: function() { if (!Module["noFSInit"] && !FS.init.initialized) FS.init() } });__ATMAIN__.push({ func: function() { FS.ignorePermissions = false } });__ATEXIT__.push({ func: function() { FS.quit() } });Module["FS_createFolder"] = FS.createFolder;Module["FS_createPath"] = FS.createPath;Module["FS_createDataFile"] = FS.createDataFile;Module["FS_createPreloadedFile"] = FS.createPreloadedFile;Module["FS_createLazyFile"] = FS.createLazyFile;Module["FS_createLink"] = FS.createLink;Module["FS_createDevice"] = FS.createDevice;
 ___errno_state = Runtime.staticAlloc(4); HEAP32[((___errno_state)>>2)]=0;
 __ATINIT__.unshift({ func: function() { TTY.init() } });__ATEXIT__.push({ func: function() { TTY.shutdown() } });TTY.utf8 = new Runtime.UTF8Processor();
-Module["requestFullScreen"] = function(lockPointer, resizeCanvas) { Browser.requestFullScreen(lockPointer, resizeCanvas) };
-  Module["requestAnimationFrame"] = function(func) { Browser.requestAnimationFrame(func) };
-  Module["setCanvasSize"] = function(width, height, noUpdates) { Browser.setCanvasSize(width, height, noUpdates) };
-  Module["pauseMainLoop"] = function() { Browser.mainLoop.pause() };
-  Module["resumeMainLoop"] = function() { Browser.mainLoop.resume() };
-  Module["getUserMedia"] = function() { Browser.getUserMedia() }
+if (ENVIRONMENT_IS_NODE) { var fs = require("fs"); NODEFS.staticInit(); }
+Module["requestFullScreen"] = function Module_requestFullScreen(lockPointer, resizeCanvas) { Browser.requestFullScreen(lockPointer, resizeCanvas) };
+  Module["requestAnimationFrame"] = function Module_requestAnimationFrame(func) { Browser.requestAnimationFrame(func) };
+  Module["setCanvasSize"] = function Module_setCanvasSize(width, height, noUpdates) { Browser.setCanvasSize(width, height, noUpdates) };
+  Module["pauseMainLoop"] = function Module_pauseMainLoop() { Browser.mainLoop.pause() };
+  Module["resumeMainLoop"] = function Module_resumeMainLoop() { Browser.mainLoop.resume() };
+  Module["getUserMedia"] = function Module_getUserMedia() { Browser.getUserMedia() }
 __ATINIT__.push({ func: function() { SOCKFS.root = FS.mount(SOCKFS, {}, null); } });
 STACK_BASE = STACKTOP = Runtime.alignMemory(STATICTOP);
 staticSealed = true; // seal the static portion of memory
@@ -4667,972 +5493,970 @@ DYNAMIC_BASE = DYNAMICTOP = Runtime.alignMemory(STACK_MAX);
 assert(DYNAMIC_BASE < TOTAL_MEMORY); // Stack must fit in TOTAL_MEMORY; allocations from here on may enlarge TOTAL_MEMORY
 var FUNCTION_TABLE = [0, 0];
 // EMSCRIPTEN_START_FUNCS
-function _main($argc, $argv) {
- var label = 0;
- var tempVarArgs = 0;
- var sp  = STACKTOP; STACKTOP = (STACKTOP + 32)|0; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
+function _main($argc,$argv){
+ var label=0;
+ var tempVarArgs=0;
+ var sp=STACKTOP;STACKTOP=(STACKTOP+32)|0; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
  label = 1; 
- while(1) switch(label) {
-  case 1: 
-   var $1;
-   var $2;
-   var $3;
-   var $rwops;
-   var $test_buf=sp;
-   $1=0;
-   $2=$argc;
-   $3=$argv;
-   $rwops=0;
-   _cleanup();
-   var $4=_SDL_RWFromFile(0, 0);
-   $rwops=$4;
-   var $5=$rwops;
-   var $6=(($5)|(0))!=0;
-   if ($6) { label = 2; break; } else { label = 3; break; }
-  case 2: 
-   var $8=$rwops;
-   _rwops_error_quit(55, $8);
-   label = 3; break;
-  case 3: 
-   var $10=_SDL_RWFromFile(0, ((296)|0));
-   $rwops=$10;
-   var $11=$rwops;
-   var $12=(($11)|(0))!=0;
-   if ($12) { label = 4; break; } else { label = 5; break; }
-  case 4: 
-   var $14=$rwops;
-   _rwops_error_quit(57, $14);
-   label = 5; break;
-  case 5: 
-   var $16=_SDL_RWFromFile(0, ((280)|0));
-   $rwops=$16;
-   var $17=$rwops;
-   var $18=(($17)|(0))!=0;
-   if ($18) { label = 6; break; } else { label = 7; break; }
-  case 6: 
-   var $20=$rwops;
-   _rwops_error_quit(59, $20);
-   label = 7; break;
-  case 7: 
-   var $22=_SDL_RWFromFile(((96)|0), ((304)|0));
-   $rwops=$22;
-   var $23=$rwops;
-   var $24=(($23)|(0))!=0;
-   if ($24) { label = 8; break; } else { label = 9; break; }
-  case 8: 
-   var $26=$rwops;
-   _rwops_error_quit(61, $26);
-   label = 9; break;
-  case 9: 
-   var $28=_SDL_RWFromFile(((96)|0), 0);
-   $rwops=$28;
-   var $29=$rwops;
-   var $30=(($29)|(0))!=0;
-   if ($30) { label = 10; break; } else { label = 11; break; }
-  case 10: 
-   var $32=$rwops;
-   _rwops_error_quit(63, $32);
-   label = 11; break;
-  case 11: 
-   var $34=_printf(((56)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = ((((STACKTOP)+7)>>3)<<3),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
-   var $35=_SDL_RWFromFile(((40)|0), ((32)|0));
-   $rwops=$35;
-   var $36=$rwops;
-   var $37=(($36)|(0))!=0;
-   if ($37) { label = 12; break; } else { label = 13; break; }
-  case 12: 
-   var $39=$rwops;
-   _rwops_error_quit(72, $39);
-   label = 13; break;
-  case 13: 
-   var $41=_SDL_RWFromFile(((40)|0), ((24)|0));
-   $rwops=$41;
-   var $42=$rwops;
-   var $43=(($42)|(0))!=0;
-   if ($43) { label = 14; break; } else { label = 15; break; }
-  case 14: 
-   var $45=$rwops;
-   _rwops_error_quit(74, $45);
-   label = 15; break;
-  case 15: 
-   var $47=_SDL_RWFromFile(((40)|0), ((16)|0));
-   $rwops=$47;
-   var $48=$rwops;
-   var $49=(($48)|(0))!=0;
-   if ($49) { label = 17; break; } else { label = 16; break; }
-  case 16: 
-   var $51=$rwops;
-   _rwops_error_quit(76, $51);
-   label = 17; break;
-  case 17: 
-   var $53=$rwops;
-   var $54=(($53+12)|0);
-   var $55=HEAP32[(($54)>>2)];
-   var $56=$rwops;
-   var $57=FUNCTION_TABLE[$55]($56);
-   var $58=_unlink(((40)|0));
-   var $59=_SDL_RWFromFile(((40)|0), ((8)|0));
-   $rwops=$59;
-   var $60=$rwops;
-   var $61=(($60)|(0))!=0;
-   if ($61) { label = 19; break; } else { label = 18; break; }
-  case 18: 
-   var $63=$rwops;
-   _rwops_error_quit(79, $63);
-   label = 19; break;
-  case 19: 
-   var $65=$rwops;
-   var $66=(($65+12)|0);
-   var $67=HEAP32[(($66)>>2)];
-   var $68=$rwops;
-   var $69=FUNCTION_TABLE[$67]($68);
-   var $70=_unlink(((40)|0));
-   var $71=_SDL_RWFromFile(((40)|0), ((272)|0));
-   $rwops=$71;
-   var $72=$rwops;
-   var $73=(($72)|(0))!=0;
-   if ($73) { label = 21; break; } else { label = 20; break; }
-  case 20: 
-   var $75=$rwops;
-   _rwops_error_quit(82, $75);
-   label = 21; break;
-  case 21: 
-   var $77=$rwops;
-   var $78=(($77+12)|0);
-   var $79=HEAP32[(($78)>>2)];
-   var $80=$rwops;
-   var $81=FUNCTION_TABLE[$79]($80);
-   var $82=_unlink(((40)|0));
-   var $83=_SDL_RWFromFile(((40)|0), ((296)|0));
-   $rwops=$83;
-   var $84=$rwops;
-   var $85=(($84)|(0))!=0;
-   if ($85) { label = 23; break; } else { label = 22; break; }
-  case 22: 
-   var $87=$rwops;
-   _rwops_error_quit(85, $87);
-   label = 23; break;
-  case 23: 
-   var $89=$rwops;
-   var $90=(($89+12)|0);
-   var $91=HEAP32[(($90)>>2)];
-   var $92=$rwops;
-   var $93=FUNCTION_TABLE[$91]($92);
-   var $94=_unlink(((40)|0));
-   var $95=_printf(((256)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = ((((STACKTOP)+7)>>3)<<3),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
-   var $96=_SDL_RWFromFile(((240)|0), ((16)|0));
-   $rwops=$96;
-   var $97=$rwops;
-   var $98=(($97)|(0))!=0;
-   if ($98) { label = 25; break; } else { label = 24; break; }
-  case 24: 
-   var $100=$rwops;
-   _rwops_error_quit(93, $100);
-   label = 25; break;
-  case 25: 
-   var $102=$rwops;
-   var $103=(($102+8)|0);
-   var $104=HEAP32[(($103)>>2)];
-   var $105=$rwops;
-   var $106=FUNCTION_TABLE[$104]($105, ((224)|0), 10, 1);
-   var $107=1!=(($106)|(0));
-   if ($107) { label = 26; break; } else { label = 27; break; }
-  case 26: 
-   var $109=$rwops;
-   _rwops_error_quit(94, $109);
-   label = 27; break;
-  case 27: 
-   var $111=$rwops;
-   var $112=(($111+8)|0);
-   var $113=HEAP32[(($112)>>2)];
-   var $114=$rwops;
-   var $115=FUNCTION_TABLE[$113]($114, ((224)|0), 1, 10);
-   var $116=10!=(($115)|(0));
-   if ($116) { label = 28; break; } else { label = 29; break; }
-  case 28: 
-   var $118=$rwops;
-   _rwops_error_quit(95, $118);
-   label = 29; break;
-  case 29: 
-   var $120=$rwops;
-   var $121=(($120+8)|0);
-   var $122=HEAP32[(($121)>>2)];
-   var $123=$rwops;
-   var $124=FUNCTION_TABLE[$122]($123, ((216)|0), 1, 7);
-   var $125=7!=(($124)|(0));
-   if ($125) { label = 30; break; } else { label = 31; break; }
-  case 30: 
-   var $127=$rwops;
-   _rwops_error_quit(96, $127);
-   label = 31; break;
-  case 31: 
-   var $129=$rwops;
-   var $130=(($129)|0);
-   var $131=HEAP32[(($130)>>2)];
-   var $132=$rwops;
-   var $133=FUNCTION_TABLE[$131]($132, 0, 0);
-   var $134=0!=(($133)|(0));
-   if ($134) { label = 32; break; } else { label = 33; break; }
-  case 32: 
-   var $136=$rwops;
-   _rwops_error_quit(97, $136);
-   label = 33; break;
-  case 33: 
-   var $138=$rwops;
-   var $139=(($138+4)|0);
-   var $140=HEAP32[(($139)>>2)];
-   var $141=$rwops;
-   var $142=(($test_buf)|0);
-   var $143=FUNCTION_TABLE[$140]($141, $142, 1, 1);
-   var $144=0!=(($143)|(0));
-   if ($144) { label = 34; break; } else { label = 35; break; }
-  case 34: 
-   var $146=$rwops;
-   _rwops_error_quit(98, $146);
-   label = 35; break;
-  case 35: 
-   var $148=$rwops;
-   var $149=(($148+12)|0);
-   var $150=HEAP32[(($149)>>2)];
-   var $151=$rwops;
-   var $152=FUNCTION_TABLE[$150]($151);
-   var $153=_SDL_RWFromFile(((240)|0), ((32)|0));
-   $rwops=$153;
-   var $154=$rwops;
-   var $155=(($154)|(0))!=0;
-   if ($155) { label = 37; break; } else { label = 36; break; }
-  case 36: 
-   var $157=$rwops;
-   _rwops_error_quit(102, $157);
-   label = 37; break;
-  case 37: 
-   var $159=$rwops;
-   var $160=(($159)|0);
-   var $161=HEAP32[(($160)>>2)];
-   var $162=$rwops;
-   var $163=FUNCTION_TABLE[$161]($162, 0, 0);
-   var $164=0!=(($163)|(0));
-   if ($164) { label = 38; break; } else { label = 39; break; }
-  case 38: 
-   var $166=$rwops;
-   _rwops_error_quit(103, $166);
-   label = 39; break;
-  case 39: 
-   var $168=$rwops;
-   var $169=(($168)|0);
-   var $170=HEAP32[(($169)>>2)];
-   var $171=$rwops;
-   var $172=FUNCTION_TABLE[$170]($171, -7, 2);
-   var $173=20!=(($172)|(0));
-   if ($173) { label = 40; break; } else { label = 41; break; }
-  case 40: 
-   var $175=$rwops;
-   _rwops_error_quit(104, $175);
-   label = 41; break;
-  case 41: 
-   var $177=$rwops;
-   var $178=(($177+4)|0);
-   var $179=HEAP32[(($178)>>2)];
-   var $180=$rwops;
-   var $181=(($test_buf)|0);
-   var $182=FUNCTION_TABLE[$179]($180, $181, 1, 7);
-   var $183=7!=(($182)|(0));
-   if ($183) { label = 42; break; } else { label = 43; break; }
-  case 42: 
-   var $185=$rwops;
-   _rwops_error_quit(105, $185);
-   label = 43; break;
-  case 43: 
-   var $187=(($test_buf)|0);
-   var $188=_SDL_memcmp($187, ((216)|0), 7);
-   var $189=(($188)|(0))!=0;
-   if ($189) { label = 44; break; } else { label = 45; break; }
-  case 44: 
-   var $191=$rwops;
-   _rwops_error_quit(106, $191);
-   label = 45; break;
-  case 45: 
-   var $193=$rwops;
-   var $194=(($193+4)|0);
-   var $195=HEAP32[(($194)>>2)];
-   var $196=$rwops;
-   var $197=(($test_buf)|0);
-   var $198=FUNCTION_TABLE[$195]($196, $197, 1, 1);
-   var $199=0!=(($198)|(0));
-   if ($199) { label = 46; break; } else { label = 47; break; }
-  case 46: 
-   var $201=$rwops;
-   _rwops_error_quit(107, $201);
-   label = 47; break;
-  case 47: 
-   var $203=$rwops;
-   var $204=(($203+4)|0);
-   var $205=HEAP32[(($204)>>2)];
-   var $206=$rwops;
-   var $207=(($test_buf)|0);
-   var $208=FUNCTION_TABLE[$205]($206, $207, 10, 100);
-   var $209=0!=(($208)|(0));
-   if ($209) { label = 48; break; } else { label = 49; break; }
-  case 48: 
-   var $211=$rwops;
-   _rwops_error_quit(108, $211);
-   label = 49; break;
-  case 49: 
-   var $213=$rwops;
-   var $214=(($213)|0);
-   var $215=HEAP32[(($214)>>2)];
-   var $216=$rwops;
-   var $217=FUNCTION_TABLE[$215]($216, -27, 1);
-   var $218=0!=(($217)|(0));
-   if ($218) { label = 50; break; } else { label = 51; break; }
-  case 50: 
-   var $220=$rwops;
-   _rwops_error_quit(109, $220);
-   label = 51; break;
-  case 51: 
-   var $222=$rwops;
-   var $223=(($222+4)|0);
-   var $224=HEAP32[(($223)>>2)];
-   var $225=$rwops;
-   var $226=(($test_buf)|0);
-   var $227=FUNCTION_TABLE[$224]($225, $226, 10, 3);
-   var $228=2!=(($227)|(0));
-   if ($228) { label = 52; break; } else { label = 53; break; }
-  case 52: 
-   var $230=$rwops;
-   _rwops_error_quit(110, $230);
-   label = 53; break;
-  case 53: 
-   var $232=(($test_buf)|0);
-   var $233=_SDL_memcmp($232, ((192)|0), 20);
-   var $234=(($233)|(0))!=0;
-   if ($234) { label = 54; break; } else { label = 55; break; }
-  case 54: 
-   var $236=$rwops;
-   _rwops_error_quit(111, $236);
-   label = 55; break;
-  case 55: 
-   var $238=$rwops;
-   var $239=(($238+8)|0);
-   var $240=HEAP32[(($239)>>2)];
-   var $241=$rwops;
-   var $242=(($test_buf)|0);
-   var $243=FUNCTION_TABLE[$240]($241, $242, 1, 1);
-   var $244=0!=(($243)|(0));
-   if ($244) { label = 56; break; } else { label = 57; break; }
-  case 56: 
-   var $246=$rwops;
-   _rwops_error_quit(112, $246);
-   label = 57; break;
-  case 57: 
-   var $248=$rwops;
-   var $249=(($248+12)|0);
-   var $250=HEAP32[(($249)>>2)];
-   var $251=$rwops;
-   var $252=FUNCTION_TABLE[$250]($251);
-   var $253=_SDL_RWFromFile(((240)|0), ((8)|0));
-   $rwops=$253;
-   var $254=$rwops;
-   var $255=(($254)|(0))!=0;
-   if ($255) { label = 59; break; } else { label = 58; break; }
-  case 58: 
-   var $257=$rwops;
-   _rwops_error_quit(117, $257);
-   label = 59; break;
-  case 59: 
-   var $259=$rwops;
-   var $260=(($259+8)|0);
-   var $261=HEAP32[(($260)>>2)];
-   var $262=$rwops;
-   var $263=FUNCTION_TABLE[$261]($262, ((224)|0), 10, 1);
-   var $264=1!=(($263)|(0));
-   if ($264) { label = 60; break; } else { label = 61; break; }
-  case 60: 
-   var $266=$rwops;
-   _rwops_error_quit(118, $266);
-   label = 61; break;
-  case 61: 
-   var $268=$rwops;
-   var $269=(($268+8)|0);
-   var $270=HEAP32[(($269)>>2)];
-   var $271=$rwops;
-   var $272=FUNCTION_TABLE[$270]($271, ((224)|0), 1, 10);
-   var $273=10!=(($272)|(0));
-   if ($273) { label = 62; break; } else { label = 63; break; }
-  case 62: 
-   var $275=$rwops;
-   _rwops_error_quit(119, $275);
-   label = 63; break;
-  case 63: 
-   var $277=$rwops;
-   var $278=(($277+8)|0);
-   var $279=HEAP32[(($278)>>2)];
-   var $280=$rwops;
-   var $281=FUNCTION_TABLE[$279]($280, ((216)|0), 1, 7);
-   var $282=7!=(($281)|(0));
-   if ($282) { label = 64; break; } else { label = 65; break; }
-  case 64: 
-   var $284=$rwops;
-   _rwops_error_quit(120, $284);
-   label = 65; break;
-  case 65: 
-   var $286=$rwops;
-   var $287=(($286)|0);
-   var $288=HEAP32[(($287)>>2)];
-   var $289=$rwops;
-   var $290=FUNCTION_TABLE[$288]($289, 0, 0);
-   var $291=0!=(($290)|(0));
-   if ($291) { label = 66; break; } else { label = 67; break; }
-  case 66: 
-   var $293=$rwops;
-   _rwops_error_quit(121, $293);
-   label = 67; break;
-  case 67: 
-   var $295=$rwops;
-   var $296=(($295+4)|0);
-   var $297=HEAP32[(($296)>>2)];
-   var $298=$rwops;
-   var $299=(($test_buf)|0);
-   var $300=FUNCTION_TABLE[$297]($298, $299, 1, 1);
-   var $301=1!=(($300)|(0));
-   if ($301) { label = 68; break; } else { label = 69; break; }
-  case 68: 
-   var $303=$rwops;
-   _rwops_error_quit(122, $303);
-   label = 69; break;
-  case 69: 
-   var $305=$rwops;
-   var $306=(($305)|0);
-   var $307=HEAP32[(($306)>>2)];
-   var $308=$rwops;
-   var $309=FUNCTION_TABLE[$307]($308, 0, 0);
-   var $310=0!=(($309)|(0));
-   if ($310) { label = 70; break; } else { label = 71; break; }
-  case 70: 
-   var $312=$rwops;
-   _rwops_error_quit(123, $312);
-   label = 71; break;
-  case 71: 
-   var $314=$rwops;
-   var $315=(($314)|0);
-   var $316=HEAP32[(($315)>>2)];
-   var $317=$rwops;
-   var $318=FUNCTION_TABLE[$316]($317, -7, 2);
-   var $319=20!=(($318)|(0));
-   if ($319) { label = 72; break; } else { label = 73; break; }
-  case 72: 
-   var $321=$rwops;
-   _rwops_error_quit(124, $321);
-   label = 73; break;
-  case 73: 
-   var $323=$rwops;
-   var $324=(($323+4)|0);
-   var $325=HEAP32[(($324)>>2)];
-   var $326=$rwops;
-   var $327=(($test_buf)|0);
-   var $328=FUNCTION_TABLE[$325]($326, $327, 1, 7);
-   var $329=7!=(($328)|(0));
-   if ($329) { label = 74; break; } else { label = 75; break; }
-  case 74: 
-   var $331=$rwops;
-   _rwops_error_quit(125, $331);
-   label = 75; break;
-  case 75: 
-   var $333=(($test_buf)|0);
-   var $334=_SDL_memcmp($333, ((216)|0), 7);
-   var $335=(($334)|(0))!=0;
-   if ($335) { label = 76; break; } else { label = 77; break; }
-  case 76: 
-   var $337=$rwops;
-   _rwops_error_quit(126, $337);
-   label = 77; break;
-  case 77: 
-   var $339=$rwops;
-   var $340=(($339+4)|0);
-   var $341=HEAP32[(($340)>>2)];
-   var $342=$rwops;
-   var $343=(($test_buf)|0);
-   var $344=FUNCTION_TABLE[$341]($342, $343, 1, 1);
-   var $345=0!=(($344)|(0));
-   if ($345) { label = 78; break; } else { label = 79; break; }
-  case 78: 
-   var $347=$rwops;
-   _rwops_error_quit(127, $347);
-   label = 79; break;
-  case 79: 
-   var $349=$rwops;
-   var $350=(($349+4)|0);
-   var $351=HEAP32[(($350)>>2)];
-   var $352=$rwops;
-   var $353=(($test_buf)|0);
-   var $354=FUNCTION_TABLE[$351]($352, $353, 10, 100);
-   var $355=0!=(($354)|(0));
-   if ($355) { label = 80; break; } else { label = 81; break; }
-  case 80: 
-   var $357=$rwops;
-   _rwops_error_quit(128, $357);
-   label = 81; break;
-  case 81: 
-   var $359=$rwops;
-   var $360=(($359)|0);
-   var $361=HEAP32[(($360)>>2)];
-   var $362=$rwops;
-   var $363=FUNCTION_TABLE[$361]($362, -27, 1);
-   var $364=0!=(($363)|(0));
-   if ($364) { label = 82; break; } else { label = 83; break; }
-  case 82: 
-   var $366=$rwops;
-   _rwops_error_quit(129, $366);
-   label = 83; break;
-  case 83: 
-   var $368=$rwops;
-   var $369=(($368+4)|0);
-   var $370=HEAP32[(($369)>>2)];
-   var $371=$rwops;
-   var $372=(($test_buf)|0);
-   var $373=FUNCTION_TABLE[$370]($371, $372, 10, 3);
-   var $374=2!=(($373)|(0));
-   if ($374) { label = 84; break; } else { label = 85; break; }
-  case 84: 
-   var $376=$rwops;
-   _rwops_error_quit(130, $376);
-   label = 85; break;
-  case 85: 
-   var $378=(($test_buf)|0);
-   var $379=_SDL_memcmp($378, ((192)|0), 20);
-   var $380=(($379)|(0))!=0;
-   if ($380) { label = 86; break; } else { label = 87; break; }
-  case 86: 
-   var $382=$rwops;
-   _rwops_error_quit(131, $382);
-   label = 87; break;
-  case 87: 
-   var $384=$rwops;
-   var $385=(($384+12)|0);
-   var $386=HEAP32[(($385)>>2)];
-   var $387=$rwops;
-   var $388=FUNCTION_TABLE[$386]($387);
-   var $389=_printf(((176)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = ((((STACKTOP)+7)>>3)<<3),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
-   var $390=_SDL_RWFromFile(((240)|0), ((24)|0));
-   $rwops=$390;
-   var $391=$rwops;
-   var $392=(($391)|(0))!=0;
-   if ($392) { label = 89; break; } else { label = 88; break; }
-  case 88: 
-   var $394=$rwops;
-   _rwops_error_quit(137, $394);
-   label = 89; break;
-  case 89: 
-   var $396=$rwops;
-   var $397=(($396+8)|0);
-   var $398=HEAP32[(($397)>>2)];
-   var $399=$rwops;
-   var $400=FUNCTION_TABLE[$398]($399, ((224)|0), 10, 1);
-   var $401=1!=(($400)|(0));
-   if ($401) { label = 90; break; } else { label = 91; break; }
-  case 90: 
-   var $403=$rwops;
-   _rwops_error_quit(138, $403);
-   label = 91; break;
-  case 91: 
-   var $405=$rwops;
-   var $406=(($405+8)|0);
-   var $407=HEAP32[(($406)>>2)];
-   var $408=$rwops;
-   var $409=FUNCTION_TABLE[$407]($408, ((224)|0), 1, 10);
-   var $410=10!=(($409)|(0));
-   if ($410) { label = 92; break; } else { label = 93; break; }
-  case 92: 
-   var $412=$rwops;
-   _rwops_error_quit(139, $412);
-   label = 93; break;
-  case 93: 
-   var $414=$rwops;
-   var $415=(($414+8)|0);
-   var $416=HEAP32[(($415)>>2)];
-   var $417=$rwops;
-   var $418=FUNCTION_TABLE[$416]($417, ((216)|0), 1, 7);
-   var $419=7!=(($418)|(0));
-   if ($419) { label = 94; break; } else { label = 95; break; }
-  case 94: 
-   var $421=$rwops;
-   _rwops_error_quit(140, $421);
-   label = 95; break;
-  case 95: 
-   var $423=$rwops;
-   var $424=(($423)|0);
-   var $425=HEAP32[(($424)>>2)];
-   var $426=$rwops;
-   var $427=FUNCTION_TABLE[$425]($426, 0, 0);
-   var $428=0!=(($427)|(0));
-   if ($428) { label = 96; break; } else { label = 97; break; }
-  case 96: 
-   var $430=$rwops;
-   _rwops_error_quit(141, $430);
-   label = 97; break;
-  case 97: 
-   var $432=$rwops;
-   var $433=(($432+4)|0);
-   var $434=HEAP32[(($433)>>2)];
-   var $435=$rwops;
-   var $436=(($test_buf)|0);
-   var $437=FUNCTION_TABLE[$434]($435, $436, 1, 1);
-   var $438=1!=(($437)|(0));
-   if ($438) { label = 98; break; } else { label = 99; break; }
-  case 98: 
-   var $440=$rwops;
-   _rwops_error_quit(142, $440);
-   label = 99; break;
-  case 99: 
-   var $442=$rwops;
-   var $443=(($442)|0);
-   var $444=HEAP32[(($443)>>2)];
-   var $445=$rwops;
-   var $446=FUNCTION_TABLE[$444]($445, 0, 0);
-   var $447=0!=(($446)|(0));
-   if ($447) { label = 100; break; } else { label = 101; break; }
-  case 100: 
-   var $449=$rwops;
-   _rwops_error_quit(143, $449);
-   label = 101; break;
-  case 101: 
-   var $451=$rwops;
-   var $452=(($451)|0);
-   var $453=HEAP32[(($452)>>2)];
-   var $454=$rwops;
-   var $455=FUNCTION_TABLE[$453]($454, -7, 2);
-   var $456=20!=(($455)|(0));
-   if ($456) { label = 102; break; } else { label = 103; break; }
-  case 102: 
-   var $458=$rwops;
-   _rwops_error_quit(144, $458);
-   label = 103; break;
-  case 103: 
-   var $460=$rwops;
-   var $461=(($460+4)|0);
-   var $462=HEAP32[(($461)>>2)];
-   var $463=$rwops;
-   var $464=(($test_buf)|0);
-   var $465=FUNCTION_TABLE[$462]($463, $464, 1, 7);
-   var $466=7!=(($465)|(0));
-   if ($466) { label = 104; break; } else { label = 105; break; }
-  case 104: 
-   var $468=$rwops;
-   _rwops_error_quit(145, $468);
-   label = 105; break;
-  case 105: 
-   var $470=(($test_buf)|0);
-   var $471=_SDL_memcmp($470, ((216)|0), 7);
-   var $472=(($471)|(0))!=0;
-   if ($472) { label = 106; break; } else { label = 107; break; }
-  case 106: 
-   var $474=$rwops;
-   _rwops_error_quit(146, $474);
-   label = 107; break;
-  case 107: 
-   var $476=$rwops;
-   var $477=(($476+4)|0);
-   var $478=HEAP32[(($477)>>2)];
-   var $479=$rwops;
-   var $480=(($test_buf)|0);
-   var $481=FUNCTION_TABLE[$478]($479, $480, 1, 1);
-   var $482=0!=(($481)|(0));
-   if ($482) { label = 108; break; } else { label = 109; break; }
-  case 108: 
-   var $484=$rwops;
-   _rwops_error_quit(147, $484);
-   label = 109; break;
-  case 109: 
-   var $486=$rwops;
-   var $487=(($486+4)|0);
-   var $488=HEAP32[(($487)>>2)];
-   var $489=$rwops;
-   var $490=(($test_buf)|0);
-   var $491=FUNCTION_TABLE[$488]($489, $490, 10, 100);
-   var $492=0!=(($491)|(0));
-   if ($492) { label = 110; break; } else { label = 111; break; }
-  case 110: 
-   var $494=$rwops;
-   _rwops_error_quit(148, $494);
-   label = 111; break;
-  case 111: 
-   var $496=$rwops;
-   var $497=(($496)|0);
-   var $498=HEAP32[(($497)>>2)];
-   var $499=$rwops;
-   var $500=FUNCTION_TABLE[$498]($499, -27, 1);
-   var $501=0!=(($500)|(0));
-   if ($501) { label = 112; break; } else { label = 113; break; }
-  case 112: 
-   var $503=$rwops;
-   _rwops_error_quit(149, $503);
-   label = 113; break;
-  case 113: 
-   var $505=$rwops;
-   var $506=(($505+4)|0);
-   var $507=HEAP32[(($506)>>2)];
-   var $508=$rwops;
-   var $509=(($test_buf)|0);
-   var $510=FUNCTION_TABLE[$507]($508, $509, 10, 3);
-   var $511=2!=(($510)|(0));
-   if ($511) { label = 114; break; } else { label = 115; break; }
-  case 114: 
-   var $513=$rwops;
-   _rwops_error_quit(150, $513);
-   label = 115; break;
-  case 115: 
-   var $515=(($test_buf)|0);
-   var $516=_SDL_memcmp($515, ((192)|0), 20);
-   var $517=(($516)|(0))!=0;
-   if ($517) { label = 116; break; } else { label = 117; break; }
-  case 116: 
-   var $519=$rwops;
-   _rwops_error_quit(151, $519);
-   label = 117; break;
-  case 117: 
-   var $521=$rwops;
-   var $522=(($521+12)|0);
-   var $523=HEAP32[(($522)>>2)];
-   var $524=$rwops;
-   var $525=FUNCTION_TABLE[$523]($524);
-   var $526=_printf(((160)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = ((((STACKTOP)+7)>>3)<<3),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
-   var $527=_SDL_RWFromFile(((240)|0), ((296)|0));
-   $rwops=$527;
-   var $528=$rwops;
-   var $529=(($528)|(0))!=0;
-   if ($529) { label = 119; break; } else { label = 118; break; }
-  case 118: 
-   var $531=$rwops;
-   _rwops_error_quit(157, $531);
-   label = 119; break;
-  case 119: 
-   var $533=$rwops;
-   var $534=(($533+8)|0);
-   var $535=HEAP32[(($534)>>2)];
-   var $536=$rwops;
-   var $537=FUNCTION_TABLE[$535]($536, ((224)|0), 10, 1);
-   var $538=1!=(($537)|(0));
-   if ($538) { label = 120; break; } else { label = 121; break; }
-  case 120: 
-   var $540=$rwops;
-   _rwops_error_quit(158, $540);
-   label = 121; break;
-  case 121: 
-   var $542=$rwops;
-   var $543=(($542+8)|0);
-   var $544=HEAP32[(($543)>>2)];
-   var $545=$rwops;
-   var $546=FUNCTION_TABLE[$544]($545, ((224)|0), 1, 10);
-   var $547=10!=(($546)|(0));
-   if ($547) { label = 122; break; } else { label = 123; break; }
-  case 122: 
-   var $549=$rwops;
-   _rwops_error_quit(159, $549);
-   label = 123; break;
-  case 123: 
-   var $551=$rwops;
-   var $552=(($551+8)|0);
-   var $553=HEAP32[(($552)>>2)];
-   var $554=$rwops;
-   var $555=FUNCTION_TABLE[$553]($554, ((216)|0), 1, 7);
-   var $556=7!=(($555)|(0));
-   if ($556) { label = 124; break; } else { label = 125; break; }
-  case 124: 
-   var $558=$rwops;
-   _rwops_error_quit(160, $558);
-   label = 125; break;
-  case 125: 
-   var $560=$rwops;
-   var $561=(($560)|0);
-   var $562=HEAP32[(($561)>>2)];
-   var $563=$rwops;
-   var $564=FUNCTION_TABLE[$562]($563, 0, 0);
-   var $565=0!=(($564)|(0));
-   if ($565) { label = 126; break; } else { label = 127; break; }
-  case 126: 
-   var $567=$rwops;
-   _rwops_error_quit(161, $567);
-   label = 127; break;
-  case 127: 
-   var $569=$rwops;
-   var $570=(($569+4)|0);
-   var $571=HEAP32[(($570)>>2)];
-   var $572=$rwops;
-   var $573=(($test_buf)|0);
-   var $574=FUNCTION_TABLE[$571]($572, $573, 1, 1);
-   var $575=1!=(($574)|(0));
-   if ($575) { label = 128; break; } else { label = 129; break; }
-  case 128: 
-   var $577=$rwops;
-   _rwops_error_quit(163, $577);
-   label = 129; break;
-  case 129: 
-   var $579=$rwops;
-   var $580=(($579)|0);
-   var $581=HEAP32[(($580)>>2)];
-   var $582=$rwops;
-   var $583=FUNCTION_TABLE[$581]($582, 0, 0);
-   var $584=0!=(($583)|(0));
-   if ($584) { label = 130; break; } else { label = 131; break; }
-  case 130: 
-   var $586=$rwops;
-   _rwops_error_quit(164, $586);
-   label = 131; break;
-  case 131: 
-   var $588=$rwops;
-   var $589=(($588)|0);
-   var $590=HEAP32[(($589)>>2)];
-   var $591=$rwops;
-   var $592=FUNCTION_TABLE[$590]($591, -7, 2);
-   var $593=47!=(($592)|(0));
-   if ($593) { label = 132; break; } else { label = 133; break; }
-  case 132: 
-   var $595=$rwops;
-   _rwops_error_quit(166, $595);
-   label = 133; break;
-  case 133: 
-   var $597=$rwops;
-   var $598=(($597+4)|0);
-   var $599=HEAP32[(($598)>>2)];
-   var $600=$rwops;
-   var $601=(($test_buf)|0);
-   var $602=FUNCTION_TABLE[$599]($600, $601, 1, 7);
-   var $603=7!=(($602)|(0));
-   if ($603) { label = 134; break; } else { label = 135; break; }
-  case 134: 
-   var $605=$rwops;
-   _rwops_error_quit(167, $605);
-   label = 135; break;
-  case 135: 
-   var $607=(($test_buf)|0);
-   var $608=_SDL_memcmp($607, ((216)|0), 7);
-   var $609=(($608)|(0))!=0;
-   if ($609) { label = 136; break; } else { label = 137; break; }
-  case 136: 
-   var $611=$rwops;
-   _rwops_error_quit(168, $611);
-   label = 137; break;
-  case 137: 
-   var $613=$rwops;
-   var $614=(($613+4)|0);
-   var $615=HEAP32[(($614)>>2)];
-   var $616=$rwops;
-   var $617=(($test_buf)|0);
-   var $618=FUNCTION_TABLE[$615]($616, $617, 1, 1);
-   var $619=0!=(($618)|(0));
-   if ($619) { label = 138; break; } else { label = 139; break; }
-  case 138: 
-   var $621=$rwops;
-   _rwops_error_quit(169, $621);
-   label = 139; break;
-  case 139: 
-   var $623=$rwops;
-   var $624=(($623+4)|0);
-   var $625=HEAP32[(($624)>>2)];
-   var $626=$rwops;
-   var $627=(($test_buf)|0);
-   var $628=FUNCTION_TABLE[$625]($626, $627, 10, 100);
-   var $629=0!=(($628)|(0));
-   if ($629) { label = 140; break; } else { label = 141; break; }
-  case 140: 
-   var $631=$rwops;
-   _rwops_error_quit(170, $631);
-   label = 141; break;
-  case 141: 
-   var $633=$rwops;
-   var $634=(($633)|0);
-   var $635=HEAP32[(($634)>>2)];
-   var $636=$rwops;
-   var $637=FUNCTION_TABLE[$635]($636, -27, 1);
-   var $638=27!=(($637)|(0));
-   if ($638) { label = 142; break; } else { label = 143; break; }
-  case 142: 
-   var $640=$rwops;
-   _rwops_error_quit(172, $640);
-   label = 143; break;
-  case 143: 
-   var $642=$rwops;
-   var $643=(($642)|0);
-   var $644=HEAP32[(($643)>>2)];
-   var $645=$rwops;
-   var $646=FUNCTION_TABLE[$644]($645, 0, 0);
-   var $647=0!=(($646)|(0));
-   if ($647) { label = 144; break; } else { label = 145; break; }
-  case 144: 
-   var $649=$rwops;
-   _rwops_error_quit(174, $649);
-   label = 145; break;
-  case 145: 
-   var $651=$rwops;
-   var $652=(($651+4)|0);
-   var $653=HEAP32[(($652)>>2)];
-   var $654=$rwops;
-   var $655=(($test_buf)|0);
-   var $656=FUNCTION_TABLE[$653]($654, $655, 10, 3);
-   var $657=3!=(($656)|(0));
-   if ($657) { label = 146; break; } else { label = 147; break; }
-  case 146: 
-   var $659=$rwops;
-   _rwops_error_quit(175, $659);
-   label = 147; break;
-  case 147: 
-   var $661=(($test_buf)|0);
-   var $662=_SDL_memcmp($661, ((128)|0), 30);
-   var $663=(($662)|(0))!=0;
-   if ($663) { label = 148; break; } else { label = 149; break; }
-  case 148: 
-   var $665=$rwops;
-   _rwops_error_quit(177, $665);
-   label = 149; break;
-  case 149: 
-   var $667=$rwops;
-   var $668=(($667+12)|0);
-   var $669=HEAP32[(($668)>>2)];
-   var $670=$rwops;
-   var $671=FUNCTION_TABLE[$669]($670);
-   var $672=_printf(((112)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = ((((STACKTOP)+7)>>3)<<3),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
-   _cleanup();
-   STACKTOP = sp;
-   return 0;
+ while(1)switch(label){
+ case 1: 
+ var $1;
+ var $2;
+ var $3;
+ var $rwops;
+ var $test_buf=sp;
+ $1=0;
+ $2=$argc;
+ $3=$argv;
+ $rwops=0;
+ _cleanup();
+ var $4=_SDL_RWFromFile(0,0);
+ $rwops=$4;
+ var $5=$rwops;
+ var $6=($5|0)!=0;
+ if($6){label=2;break;}else{label=3;break;}
+ case 2: 
+ var $8=$rwops;
+ _rwops_error_quit(55,$8);
+ label=3;break;
+ case 3: 
+ var $10=_SDL_RWFromFile(0,296);
+ $rwops=$10;
+ var $11=$rwops;
+ var $12=($11|0)!=0;
+ if($12){label=4;break;}else{label=5;break;}
+ case 4: 
+ var $14=$rwops;
+ _rwops_error_quit(57,$14);
+ label=5;break;
+ case 5: 
+ var $16=_SDL_RWFromFile(0,280);
+ $rwops=$16;
+ var $17=$rwops;
+ var $18=($17|0)!=0;
+ if($18){label=6;break;}else{label=7;break;}
+ case 6: 
+ var $20=$rwops;
+ _rwops_error_quit(59,$20);
+ label=7;break;
+ case 7: 
+ var $22=_SDL_RWFromFile(96,304);
+ $rwops=$22;
+ var $23=$rwops;
+ var $24=($23|0)!=0;
+ if($24){label=8;break;}else{label=9;break;}
+ case 8: 
+ var $26=$rwops;
+ _rwops_error_quit(61,$26);
+ label=9;break;
+ case 9: 
+ var $28=_SDL_RWFromFile(96,0);
+ $rwops=$28;
+ var $29=$rwops;
+ var $30=($29|0)!=0;
+ if($30){label=10;break;}else{label=11;break;}
+ case 10: 
+ var $32=$rwops;
+ _rwops_error_quit(63,$32);
+ label=11;break;
+ case 11: 
+ var $34=_printf(56,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = (((STACKTOP)+7)&-8),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
+ var $35=_SDL_RWFromFile(40,32);
+ $rwops=$35;
+ var $36=$rwops;
+ var $37=($36|0)!=0;
+ if($37){label=12;break;}else{label=13;break;}
+ case 12: 
+ var $39=$rwops;
+ _rwops_error_quit(72,$39);
+ label=13;break;
+ case 13: 
+ var $41=_SDL_RWFromFile(40,24);
+ $rwops=$41;
+ var $42=$rwops;
+ var $43=($42|0)!=0;
+ if($43){label=14;break;}else{label=15;break;}
+ case 14: 
+ var $45=$rwops;
+ _rwops_error_quit(74,$45);
+ label=15;break;
+ case 15: 
+ var $47=_SDL_RWFromFile(40,16);
+ $rwops=$47;
+ var $48=$rwops;
+ var $49=($48|0)!=0;
+ if($49){label=17;break;}else{label=16;break;}
+ case 16: 
+ var $51=$rwops;
+ _rwops_error_quit(76,$51);
+ label=17;break;
+ case 17: 
+ var $53=$rwops;
+ var $54=(($53+12)|0);
+ var $55=HEAP32[(($54)>>2)];
+ var $56=$rwops;
+ var $57=FUNCTION_TABLE[$55]($56);
+ var $58=_unlink(40);
+ var $59=_SDL_RWFromFile(40,8);
+ $rwops=$59;
+ var $60=$rwops;
+ var $61=($60|0)!=0;
+ if($61){label=19;break;}else{label=18;break;}
+ case 18: 
+ var $63=$rwops;
+ _rwops_error_quit(79,$63);
+ label=19;break;
+ case 19: 
+ var $65=$rwops;
+ var $66=(($65+12)|0);
+ var $67=HEAP32[(($66)>>2)];
+ var $68=$rwops;
+ var $69=FUNCTION_TABLE[$67]($68);
+ var $70=_unlink(40);
+ var $71=_SDL_RWFromFile(40,272);
+ $rwops=$71;
+ var $72=$rwops;
+ var $73=($72|0)!=0;
+ if($73){label=21;break;}else{label=20;break;}
+ case 20: 
+ var $75=$rwops;
+ _rwops_error_quit(82,$75);
+ label=21;break;
+ case 21: 
+ var $77=$rwops;
+ var $78=(($77+12)|0);
+ var $79=HEAP32[(($78)>>2)];
+ var $80=$rwops;
+ var $81=FUNCTION_TABLE[$79]($80);
+ var $82=_unlink(40);
+ var $83=_SDL_RWFromFile(40,296);
+ $rwops=$83;
+ var $84=$rwops;
+ var $85=($84|0)!=0;
+ if($85){label=23;break;}else{label=22;break;}
+ case 22: 
+ var $87=$rwops;
+ _rwops_error_quit(85,$87);
+ label=23;break;
+ case 23: 
+ var $89=$rwops;
+ var $90=(($89+12)|0);
+ var $91=HEAP32[(($90)>>2)];
+ var $92=$rwops;
+ var $93=FUNCTION_TABLE[$91]($92);
+ var $94=_unlink(40);
+ var $95=_printf(256,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = (((STACKTOP)+7)&-8),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
+ var $96=_SDL_RWFromFile(240,16);
+ $rwops=$96;
+ var $97=$rwops;
+ var $98=($97|0)!=0;
+ if($98){label=25;break;}else{label=24;break;}
+ case 24: 
+ var $100=$rwops;
+ _rwops_error_quit(93,$100);
+ label=25;break;
+ case 25: 
+ var $102=$rwops;
+ var $103=(($102+8)|0);
+ var $104=HEAP32[(($103)>>2)];
+ var $105=$rwops;
+ var $106=FUNCTION_TABLE[$104]($105,224,10,1);
+ var $107=1!=($106|0);
+ if($107){label=26;break;}else{label=27;break;}
+ case 26: 
+ var $109=$rwops;
+ _rwops_error_quit(94,$109);
+ label=27;break;
+ case 27: 
+ var $111=$rwops;
+ var $112=(($111+8)|0);
+ var $113=HEAP32[(($112)>>2)];
+ var $114=$rwops;
+ var $115=FUNCTION_TABLE[$113]($114,224,1,10);
+ var $116=10!=($115|0);
+ if($116){label=28;break;}else{label=29;break;}
+ case 28: 
+ var $118=$rwops;
+ _rwops_error_quit(95,$118);
+ label=29;break;
+ case 29: 
+ var $120=$rwops;
+ var $121=(($120+8)|0);
+ var $122=HEAP32[(($121)>>2)];
+ var $123=$rwops;
+ var $124=FUNCTION_TABLE[$122]($123,216,1,7);
+ var $125=7!=($124|0);
+ if($125){label=30;break;}else{label=31;break;}
+ case 30: 
+ var $127=$rwops;
+ _rwops_error_quit(96,$127);
+ label=31;break;
+ case 31: 
+ var $129=$rwops;
+ var $130=(($129)|0);
+ var $131=HEAP32[(($130)>>2)];
+ var $132=$rwops;
+ var $133=FUNCTION_TABLE[$131]($132,0,0);
+ var $134=0!=($133|0);
+ if($134){label=32;break;}else{label=33;break;}
+ case 32: 
+ var $136=$rwops;
+ _rwops_error_quit(97,$136);
+ label=33;break;
+ case 33: 
+ var $138=$rwops;
+ var $139=(($138+4)|0);
+ var $140=HEAP32[(($139)>>2)];
+ var $141=$rwops;
+ var $142=(($test_buf)|0);
+ var $143=FUNCTION_TABLE[$140]($141,$142,1,1);
+ var $144=0!=($143|0);
+ if($144){label=34;break;}else{label=35;break;}
+ case 34: 
+ var $146=$rwops;
+ _rwops_error_quit(98,$146);
+ label=35;break;
+ case 35: 
+ var $148=$rwops;
+ var $149=(($148+12)|0);
+ var $150=HEAP32[(($149)>>2)];
+ var $151=$rwops;
+ var $152=FUNCTION_TABLE[$150]($151);
+ var $153=_SDL_RWFromFile(240,32);
+ $rwops=$153;
+ var $154=$rwops;
+ var $155=($154|0)!=0;
+ if($155){label=37;break;}else{label=36;break;}
+ case 36: 
+ var $157=$rwops;
+ _rwops_error_quit(102,$157);
+ label=37;break;
+ case 37: 
+ var $159=$rwops;
+ var $160=(($159)|0);
+ var $161=HEAP32[(($160)>>2)];
+ var $162=$rwops;
+ var $163=FUNCTION_TABLE[$161]($162,0,0);
+ var $164=0!=($163|0);
+ if($164){label=38;break;}else{label=39;break;}
+ case 38: 
+ var $166=$rwops;
+ _rwops_error_quit(103,$166);
+ label=39;break;
+ case 39: 
+ var $168=$rwops;
+ var $169=(($168)|0);
+ var $170=HEAP32[(($169)>>2)];
+ var $171=$rwops;
+ var $172=FUNCTION_TABLE[$170]($171,-7,2);
+ var $173=20!=($172|0);
+ if($173){label=40;break;}else{label=41;break;}
+ case 40: 
+ var $175=$rwops;
+ _rwops_error_quit(104,$175);
+ label=41;break;
+ case 41: 
+ var $177=$rwops;
+ var $178=(($177+4)|0);
+ var $179=HEAP32[(($178)>>2)];
+ var $180=$rwops;
+ var $181=(($test_buf)|0);
+ var $182=FUNCTION_TABLE[$179]($180,$181,1,7);
+ var $183=7!=($182|0);
+ if($183){label=42;break;}else{label=43;break;}
+ case 42: 
+ var $185=$rwops;
+ _rwops_error_quit(105,$185);
+ label=43;break;
+ case 43: 
+ var $187=(($test_buf)|0);
+ var $188=_SDL_memcmp($187,216,7);
+ var $189=($188|0)!=0;
+ if($189){label=44;break;}else{label=45;break;}
+ case 44: 
+ var $191=$rwops;
+ _rwops_error_quit(106,$191);
+ label=45;break;
+ case 45: 
+ var $193=$rwops;
+ var $194=(($193+4)|0);
+ var $195=HEAP32[(($194)>>2)];
+ var $196=$rwops;
+ var $197=(($test_buf)|0);
+ var $198=FUNCTION_TABLE[$195]($196,$197,1,1);
+ var $199=0!=($198|0);
+ if($199){label=46;break;}else{label=47;break;}
+ case 46: 
+ var $201=$rwops;
+ _rwops_error_quit(107,$201);
+ label=47;break;
+ case 47: 
+ var $203=$rwops;
+ var $204=(($203+4)|0);
+ var $205=HEAP32[(($204)>>2)];
+ var $206=$rwops;
+ var $207=(($test_buf)|0);
+ var $208=FUNCTION_TABLE[$205]($206,$207,10,100);
+ var $209=0!=($208|0);
+ if($209){label=48;break;}else{label=49;break;}
+ case 48: 
+ var $211=$rwops;
+ _rwops_error_quit(108,$211);
+ label=49;break;
+ case 49: 
+ var $213=$rwops;
+ var $214=(($213)|0);
+ var $215=HEAP32[(($214)>>2)];
+ var $216=$rwops;
+ var $217=FUNCTION_TABLE[$215]($216,-27,1);
+ var $218=0!=($217|0);
+ if($218){label=50;break;}else{label=51;break;}
+ case 50: 
+ var $220=$rwops;
+ _rwops_error_quit(109,$220);
+ label=51;break;
+ case 51: 
+ var $222=$rwops;
+ var $223=(($222+4)|0);
+ var $224=HEAP32[(($223)>>2)];
+ var $225=$rwops;
+ var $226=(($test_buf)|0);
+ var $227=FUNCTION_TABLE[$224]($225,$226,10,3);
+ var $228=2!=($227|0);
+ if($228){label=52;break;}else{label=53;break;}
+ case 52: 
+ var $230=$rwops;
+ _rwops_error_quit(110,$230);
+ label=53;break;
+ case 53: 
+ var $232=(($test_buf)|0);
+ var $233=_SDL_memcmp($232,192,20);
+ var $234=($233|0)!=0;
+ if($234){label=54;break;}else{label=55;break;}
+ case 54: 
+ var $236=$rwops;
+ _rwops_error_quit(111,$236);
+ label=55;break;
+ case 55: 
+ var $238=$rwops;
+ var $239=(($238+8)|0);
+ var $240=HEAP32[(($239)>>2)];
+ var $241=$rwops;
+ var $242=(($test_buf)|0);
+ var $243=FUNCTION_TABLE[$240]($241,$242,1,1);
+ var $244=0!=($243|0);
+ if($244){label=56;break;}else{label=57;break;}
+ case 56: 
+ var $246=$rwops;
+ _rwops_error_quit(112,$246);
+ label=57;break;
+ case 57: 
+ var $248=$rwops;
+ var $249=(($248+12)|0);
+ var $250=HEAP32[(($249)>>2)];
+ var $251=$rwops;
+ var $252=FUNCTION_TABLE[$250]($251);
+ var $253=_SDL_RWFromFile(240,8);
+ $rwops=$253;
+ var $254=$rwops;
+ var $255=($254|0)!=0;
+ if($255){label=59;break;}else{label=58;break;}
+ case 58: 
+ var $257=$rwops;
+ _rwops_error_quit(117,$257);
+ label=59;break;
+ case 59: 
+ var $259=$rwops;
+ var $260=(($259+8)|0);
+ var $261=HEAP32[(($260)>>2)];
+ var $262=$rwops;
+ var $263=FUNCTION_TABLE[$261]($262,224,10,1);
+ var $264=1!=($263|0);
+ if($264){label=60;break;}else{label=61;break;}
+ case 60: 
+ var $266=$rwops;
+ _rwops_error_quit(118,$266);
+ label=61;break;
+ case 61: 
+ var $268=$rwops;
+ var $269=(($268+8)|0);
+ var $270=HEAP32[(($269)>>2)];
+ var $271=$rwops;
+ var $272=FUNCTION_TABLE[$270]($271,224,1,10);
+ var $273=10!=($272|0);
+ if($273){label=62;break;}else{label=63;break;}
+ case 62: 
+ var $275=$rwops;
+ _rwops_error_quit(119,$275);
+ label=63;break;
+ case 63: 
+ var $277=$rwops;
+ var $278=(($277+8)|0);
+ var $279=HEAP32[(($278)>>2)];
+ var $280=$rwops;
+ var $281=FUNCTION_TABLE[$279]($280,216,1,7);
+ var $282=7!=($281|0);
+ if($282){label=64;break;}else{label=65;break;}
+ case 64: 
+ var $284=$rwops;
+ _rwops_error_quit(120,$284);
+ label=65;break;
+ case 65: 
+ var $286=$rwops;
+ var $287=(($286)|0);
+ var $288=HEAP32[(($287)>>2)];
+ var $289=$rwops;
+ var $290=FUNCTION_TABLE[$288]($289,0,0);
+ var $291=0!=($290|0);
+ if($291){label=66;break;}else{label=67;break;}
+ case 66: 
+ var $293=$rwops;
+ _rwops_error_quit(121,$293);
+ label=67;break;
+ case 67: 
+ var $295=$rwops;
+ var $296=(($295+4)|0);
+ var $297=HEAP32[(($296)>>2)];
+ var $298=$rwops;
+ var $299=(($test_buf)|0);
+ var $300=FUNCTION_TABLE[$297]($298,$299,1,1);
+ var $301=1!=($300|0);
+ if($301){label=68;break;}else{label=69;break;}
+ case 68: 
+ var $303=$rwops;
+ _rwops_error_quit(122,$303);
+ label=69;break;
+ case 69: 
+ var $305=$rwops;
+ var $306=(($305)|0);
+ var $307=HEAP32[(($306)>>2)];
+ var $308=$rwops;
+ var $309=FUNCTION_TABLE[$307]($308,0,0);
+ var $310=0!=($309|0);
+ if($310){label=70;break;}else{label=71;break;}
+ case 70: 
+ var $312=$rwops;
+ _rwops_error_quit(123,$312);
+ label=71;break;
+ case 71: 
+ var $314=$rwops;
+ var $315=(($314)|0);
+ var $316=HEAP32[(($315)>>2)];
+ var $317=$rwops;
+ var $318=FUNCTION_TABLE[$316]($317,-7,2);
+ var $319=20!=($318|0);
+ if($319){label=72;break;}else{label=73;break;}
+ case 72: 
+ var $321=$rwops;
+ _rwops_error_quit(124,$321);
+ label=73;break;
+ case 73: 
+ var $323=$rwops;
+ var $324=(($323+4)|0);
+ var $325=HEAP32[(($324)>>2)];
+ var $326=$rwops;
+ var $327=(($test_buf)|0);
+ var $328=FUNCTION_TABLE[$325]($326,$327,1,7);
+ var $329=7!=($328|0);
+ if($329){label=74;break;}else{label=75;break;}
+ case 74: 
+ var $331=$rwops;
+ _rwops_error_quit(125,$331);
+ label=75;break;
+ case 75: 
+ var $333=(($test_buf)|0);
+ var $334=_SDL_memcmp($333,216,7);
+ var $335=($334|0)!=0;
+ if($335){label=76;break;}else{label=77;break;}
+ case 76: 
+ var $337=$rwops;
+ _rwops_error_quit(126,$337);
+ label=77;break;
+ case 77: 
+ var $339=$rwops;
+ var $340=(($339+4)|0);
+ var $341=HEAP32[(($340)>>2)];
+ var $342=$rwops;
+ var $343=(($test_buf)|0);
+ var $344=FUNCTION_TABLE[$341]($342,$343,1,1);
+ var $345=0!=($344|0);
+ if($345){label=78;break;}else{label=79;break;}
+ case 78: 
+ var $347=$rwops;
+ _rwops_error_quit(127,$347);
+ label=79;break;
+ case 79: 
+ var $349=$rwops;
+ var $350=(($349+4)|0);
+ var $351=HEAP32[(($350)>>2)];
+ var $352=$rwops;
+ var $353=(($test_buf)|0);
+ var $354=FUNCTION_TABLE[$351]($352,$353,10,100);
+ var $355=0!=($354|0);
+ if($355){label=80;break;}else{label=81;break;}
+ case 80: 
+ var $357=$rwops;
+ _rwops_error_quit(128,$357);
+ label=81;break;
+ case 81: 
+ var $359=$rwops;
+ var $360=(($359)|0);
+ var $361=HEAP32[(($360)>>2)];
+ var $362=$rwops;
+ var $363=FUNCTION_TABLE[$361]($362,-27,1);
+ var $364=0!=($363|0);
+ if($364){label=82;break;}else{label=83;break;}
+ case 82: 
+ var $366=$rwops;
+ _rwops_error_quit(129,$366);
+ label=83;break;
+ case 83: 
+ var $368=$rwops;
+ var $369=(($368+4)|0);
+ var $370=HEAP32[(($369)>>2)];
+ var $371=$rwops;
+ var $372=(($test_buf)|0);
+ var $373=FUNCTION_TABLE[$370]($371,$372,10,3);
+ var $374=2!=($373|0);
+ if($374){label=84;break;}else{label=85;break;}
+ case 84: 
+ var $376=$rwops;
+ _rwops_error_quit(130,$376);
+ label=85;break;
+ case 85: 
+ var $378=(($test_buf)|0);
+ var $379=_SDL_memcmp($378,192,20);
+ var $380=($379|0)!=0;
+ if($380){label=86;break;}else{label=87;break;}
+ case 86: 
+ var $382=$rwops;
+ _rwops_error_quit(131,$382);
+ label=87;break;
+ case 87: 
+ var $384=$rwops;
+ var $385=(($384+12)|0);
+ var $386=HEAP32[(($385)>>2)];
+ var $387=$rwops;
+ var $388=FUNCTION_TABLE[$386]($387);
+ var $389=_printf(176,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = (((STACKTOP)+7)&-8),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
+ var $390=_SDL_RWFromFile(240,24);
+ $rwops=$390;
+ var $391=$rwops;
+ var $392=($391|0)!=0;
+ if($392){label=89;break;}else{label=88;break;}
+ case 88: 
+ var $394=$rwops;
+ _rwops_error_quit(137,$394);
+ label=89;break;
+ case 89: 
+ var $396=$rwops;
+ var $397=(($396+8)|0);
+ var $398=HEAP32[(($397)>>2)];
+ var $399=$rwops;
+ var $400=FUNCTION_TABLE[$398]($399,224,10,1);
+ var $401=1!=($400|0);
+ if($401){label=90;break;}else{label=91;break;}
+ case 90: 
+ var $403=$rwops;
+ _rwops_error_quit(138,$403);
+ label=91;break;
+ case 91: 
+ var $405=$rwops;
+ var $406=(($405+8)|0);
+ var $407=HEAP32[(($406)>>2)];
+ var $408=$rwops;
+ var $409=FUNCTION_TABLE[$407]($408,224,1,10);
+ var $410=10!=($409|0);
+ if($410){label=92;break;}else{label=93;break;}
+ case 92: 
+ var $412=$rwops;
+ _rwops_error_quit(139,$412);
+ label=93;break;
+ case 93: 
+ var $414=$rwops;
+ var $415=(($414+8)|0);
+ var $416=HEAP32[(($415)>>2)];
+ var $417=$rwops;
+ var $418=FUNCTION_TABLE[$416]($417,216,1,7);
+ var $419=7!=($418|0);
+ if($419){label=94;break;}else{label=95;break;}
+ case 94: 
+ var $421=$rwops;
+ _rwops_error_quit(140,$421);
+ label=95;break;
+ case 95: 
+ var $423=$rwops;
+ var $424=(($423)|0);
+ var $425=HEAP32[(($424)>>2)];
+ var $426=$rwops;
+ var $427=FUNCTION_TABLE[$425]($426,0,0);
+ var $428=0!=($427|0);
+ if($428){label=96;break;}else{label=97;break;}
+ case 96: 
+ var $430=$rwops;
+ _rwops_error_quit(141,$430);
+ label=97;break;
+ case 97: 
+ var $432=$rwops;
+ var $433=(($432+4)|0);
+ var $434=HEAP32[(($433)>>2)];
+ var $435=$rwops;
+ var $436=(($test_buf)|0);
+ var $437=FUNCTION_TABLE[$434]($435,$436,1,1);
+ var $438=1!=($437|0);
+ if($438){label=98;break;}else{label=99;break;}
+ case 98: 
+ var $440=$rwops;
+ _rwops_error_quit(142,$440);
+ label=99;break;
+ case 99: 
+ var $442=$rwops;
+ var $443=(($442)|0);
+ var $444=HEAP32[(($443)>>2)];
+ var $445=$rwops;
+ var $446=FUNCTION_TABLE[$444]($445,0,0);
+ var $447=0!=($446|0);
+ if($447){label=100;break;}else{label=101;break;}
+ case 100: 
+ var $449=$rwops;
+ _rwops_error_quit(143,$449);
+ label=101;break;
+ case 101: 
+ var $451=$rwops;
+ var $452=(($451)|0);
+ var $453=HEAP32[(($452)>>2)];
+ var $454=$rwops;
+ var $455=FUNCTION_TABLE[$453]($454,-7,2);
+ var $456=20!=($455|0);
+ if($456){label=102;break;}else{label=103;break;}
+ case 102: 
+ var $458=$rwops;
+ _rwops_error_quit(144,$458);
+ label=103;break;
+ case 103: 
+ var $460=$rwops;
+ var $461=(($460+4)|0);
+ var $462=HEAP32[(($461)>>2)];
+ var $463=$rwops;
+ var $464=(($test_buf)|0);
+ var $465=FUNCTION_TABLE[$462]($463,$464,1,7);
+ var $466=7!=($465|0);
+ if($466){label=104;break;}else{label=105;break;}
+ case 104: 
+ var $468=$rwops;
+ _rwops_error_quit(145,$468);
+ label=105;break;
+ case 105: 
+ var $470=(($test_buf)|0);
+ var $471=_SDL_memcmp($470,216,7);
+ var $472=($471|0)!=0;
+ if($472){label=106;break;}else{label=107;break;}
+ case 106: 
+ var $474=$rwops;
+ _rwops_error_quit(146,$474);
+ label=107;break;
+ case 107: 
+ var $476=$rwops;
+ var $477=(($476+4)|0);
+ var $478=HEAP32[(($477)>>2)];
+ var $479=$rwops;
+ var $480=(($test_buf)|0);
+ var $481=FUNCTION_TABLE[$478]($479,$480,1,1);
+ var $482=0!=($481|0);
+ if($482){label=108;break;}else{label=109;break;}
+ case 108: 
+ var $484=$rwops;
+ _rwops_error_quit(147,$484);
+ label=109;break;
+ case 109: 
+ var $486=$rwops;
+ var $487=(($486+4)|0);
+ var $488=HEAP32[(($487)>>2)];
+ var $489=$rwops;
+ var $490=(($test_buf)|0);
+ var $491=FUNCTION_TABLE[$488]($489,$490,10,100);
+ var $492=0!=($491|0);
+ if($492){label=110;break;}else{label=111;break;}
+ case 110: 
+ var $494=$rwops;
+ _rwops_error_quit(148,$494);
+ label=111;break;
+ case 111: 
+ var $496=$rwops;
+ var $497=(($496)|0);
+ var $498=HEAP32[(($497)>>2)];
+ var $499=$rwops;
+ var $500=FUNCTION_TABLE[$498]($499,-27,1);
+ var $501=0!=($500|0);
+ if($501){label=112;break;}else{label=113;break;}
+ case 112: 
+ var $503=$rwops;
+ _rwops_error_quit(149,$503);
+ label=113;break;
+ case 113: 
+ var $505=$rwops;
+ var $506=(($505+4)|0);
+ var $507=HEAP32[(($506)>>2)];
+ var $508=$rwops;
+ var $509=(($test_buf)|0);
+ var $510=FUNCTION_TABLE[$507]($508,$509,10,3);
+ var $511=2!=($510|0);
+ if($511){label=114;break;}else{label=115;break;}
+ case 114: 
+ var $513=$rwops;
+ _rwops_error_quit(150,$513);
+ label=115;break;
+ case 115: 
+ var $515=(($test_buf)|0);
+ var $516=_SDL_memcmp($515,192,20);
+ var $517=($516|0)!=0;
+ if($517){label=116;break;}else{label=117;break;}
+ case 116: 
+ var $519=$rwops;
+ _rwops_error_quit(151,$519);
+ label=117;break;
+ case 117: 
+ var $521=$rwops;
+ var $522=(($521+12)|0);
+ var $523=HEAP32[(($522)>>2)];
+ var $524=$rwops;
+ var $525=FUNCTION_TABLE[$523]($524);
+ var $526=_printf(160,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = (((STACKTOP)+7)&-8),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
+ var $527=_SDL_RWFromFile(240,296);
+ $rwops=$527;
+ var $528=$rwops;
+ var $529=($528|0)!=0;
+ if($529){label=119;break;}else{label=118;break;}
+ case 118: 
+ var $531=$rwops;
+ _rwops_error_quit(157,$531);
+ label=119;break;
+ case 119: 
+ var $533=$rwops;
+ var $534=(($533+8)|0);
+ var $535=HEAP32[(($534)>>2)];
+ var $536=$rwops;
+ var $537=FUNCTION_TABLE[$535]($536,224,10,1);
+ var $538=1!=($537|0);
+ if($538){label=120;break;}else{label=121;break;}
+ case 120: 
+ var $540=$rwops;
+ _rwops_error_quit(158,$540);
+ label=121;break;
+ case 121: 
+ var $542=$rwops;
+ var $543=(($542+8)|0);
+ var $544=HEAP32[(($543)>>2)];
+ var $545=$rwops;
+ var $546=FUNCTION_TABLE[$544]($545,224,1,10);
+ var $547=10!=($546|0);
+ if($547){label=122;break;}else{label=123;break;}
+ case 122: 
+ var $549=$rwops;
+ _rwops_error_quit(159,$549);
+ label=123;break;
+ case 123: 
+ var $551=$rwops;
+ var $552=(($551+8)|0);
+ var $553=HEAP32[(($552)>>2)];
+ var $554=$rwops;
+ var $555=FUNCTION_TABLE[$553]($554,216,1,7);
+ var $556=7!=($555|0);
+ if($556){label=124;break;}else{label=125;break;}
+ case 124: 
+ var $558=$rwops;
+ _rwops_error_quit(160,$558);
+ label=125;break;
+ case 125: 
+ var $560=$rwops;
+ var $561=(($560)|0);
+ var $562=HEAP32[(($561)>>2)];
+ var $563=$rwops;
+ var $564=FUNCTION_TABLE[$562]($563,0,0);
+ var $565=0!=($564|0);
+ if($565){label=126;break;}else{label=127;break;}
+ case 126: 
+ var $567=$rwops;
+ _rwops_error_quit(161,$567);
+ label=127;break;
+ case 127: 
+ var $569=$rwops;
+ var $570=(($569+4)|0);
+ var $571=HEAP32[(($570)>>2)];
+ var $572=$rwops;
+ var $573=(($test_buf)|0);
+ var $574=FUNCTION_TABLE[$571]($572,$573,1,1);
+ var $575=1!=($574|0);
+ if($575){label=128;break;}else{label=129;break;}
+ case 128: 
+ var $577=$rwops;
+ _rwops_error_quit(163,$577);
+ label=129;break;
+ case 129: 
+ var $579=$rwops;
+ var $580=(($579)|0);
+ var $581=HEAP32[(($580)>>2)];
+ var $582=$rwops;
+ var $583=FUNCTION_TABLE[$581]($582,0,0);
+ var $584=0!=($583|0);
+ if($584){label=130;break;}else{label=131;break;}
+ case 130: 
+ var $586=$rwops;
+ _rwops_error_quit(164,$586);
+ label=131;break;
+ case 131: 
+ var $588=$rwops;
+ var $589=(($588)|0);
+ var $590=HEAP32[(($589)>>2)];
+ var $591=$rwops;
+ var $592=FUNCTION_TABLE[$590]($591,-7,2);
+ var $593=47!=($592|0);
+ if($593){label=132;break;}else{label=133;break;}
+ case 132: 
+ var $595=$rwops;
+ _rwops_error_quit(166,$595);
+ label=133;break;
+ case 133: 
+ var $597=$rwops;
+ var $598=(($597+4)|0);
+ var $599=HEAP32[(($598)>>2)];
+ var $600=$rwops;
+ var $601=(($test_buf)|0);
+ var $602=FUNCTION_TABLE[$599]($600,$601,1,7);
+ var $603=7!=($602|0);
+ if($603){label=134;break;}else{label=135;break;}
+ case 134: 
+ var $605=$rwops;
+ _rwops_error_quit(167,$605);
+ label=135;break;
+ case 135: 
+ var $607=(($test_buf)|0);
+ var $608=_SDL_memcmp($607,216,7);
+ var $609=($608|0)!=0;
+ if($609){label=136;break;}else{label=137;break;}
+ case 136: 
+ var $611=$rwops;
+ _rwops_error_quit(168,$611);
+ label=137;break;
+ case 137: 
+ var $613=$rwops;
+ var $614=(($613+4)|0);
+ var $615=HEAP32[(($614)>>2)];
+ var $616=$rwops;
+ var $617=(($test_buf)|0);
+ var $618=FUNCTION_TABLE[$615]($616,$617,1,1);
+ var $619=0!=($618|0);
+ if($619){label=138;break;}else{label=139;break;}
+ case 138: 
+ var $621=$rwops;
+ _rwops_error_quit(169,$621);
+ label=139;break;
+ case 139: 
+ var $623=$rwops;
+ var $624=(($623+4)|0);
+ var $625=HEAP32[(($624)>>2)];
+ var $626=$rwops;
+ var $627=(($test_buf)|0);
+ var $628=FUNCTION_TABLE[$625]($626,$627,10,100);
+ var $629=0!=($628|0);
+ if($629){label=140;break;}else{label=141;break;}
+ case 140: 
+ var $631=$rwops;
+ _rwops_error_quit(170,$631);
+ label=141;break;
+ case 141: 
+ var $633=$rwops;
+ var $634=(($633)|0);
+ var $635=HEAP32[(($634)>>2)];
+ var $636=$rwops;
+ var $637=FUNCTION_TABLE[$635]($636,-27,1);
+ var $638=27!=($637|0);
+ if($638){label=142;break;}else{label=143;break;}
+ case 142: 
+ var $640=$rwops;
+ _rwops_error_quit(172,$640);
+ label=143;break;
+ case 143: 
+ var $642=$rwops;
+ var $643=(($642)|0);
+ var $644=HEAP32[(($643)>>2)];
+ var $645=$rwops;
+ var $646=FUNCTION_TABLE[$644]($645,0,0);
+ var $647=0!=($646|0);
+ if($647){label=144;break;}else{label=145;break;}
+ case 144: 
+ var $649=$rwops;
+ _rwops_error_quit(174,$649);
+ label=145;break;
+ case 145: 
+ var $651=$rwops;
+ var $652=(($651+4)|0);
+ var $653=HEAP32[(($652)>>2)];
+ var $654=$rwops;
+ var $655=(($test_buf)|0);
+ var $656=FUNCTION_TABLE[$653]($654,$655,10,3);
+ var $657=3!=($656|0);
+ if($657){label=146;break;}else{label=147;break;}
+ case 146: 
+ var $659=$rwops;
+ _rwops_error_quit(175,$659);
+ label=147;break;
+ case 147: 
+ var $661=(($test_buf)|0);
+ var $662=_SDL_memcmp($661,128,30);
+ var $663=($662|0)!=0;
+ if($663){label=148;break;}else{label=149;break;}
+ case 148: 
+ var $665=$rwops;
+ _rwops_error_quit(177,$665);
+ label=149;break;
+ case 149: 
+ var $667=$rwops;
+ var $668=(($667+12)|0);
+ var $669=HEAP32[(($668)>>2)];
+ var $670=$rwops;
+ var $671=FUNCTION_TABLE[$669]($670);
+ var $672=_printf(112,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 1)|0,STACKTOP = (((STACKTOP)+7)&-8),(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=0,tempVarArgs)); STACKTOP=tempVarArgs;
+ _cleanup();
+ STACKTOP=sp;return 0;
   default: assert(0, "bad label: " + label);
  }
 }
 Module["_main"] = _main;
-function _cleanup() {
- var label = 0;
- var $1=_unlink(((240)|0));
- var $2=_unlink(((40)|0));
+function _cleanup(){
+ var label=0;
+ var $1=_unlink(240);
+ var $2=_unlink(40);
  return;
 }
-function _rwops_error_quit($line, $rwops) {
- var label = 0;
- var tempVarArgs = 0;
- var sp  = STACKTOP; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
+function _rwops_error_quit($line,$rwops){
+ var label=0;
+ var tempVarArgs=0;
+ var sp=STACKTOP; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
  label = 1; 
- while(1) switch(label) {
-  case 1: 
-   var $1;
-   var $2;
-   $1=$line;
-   $2=$rwops;
-   var $3=$1;
-   var $4=_printf(((72)|0), (tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$3,tempVarArgs)); STACKTOP=tempVarArgs;
-   var $5=$2;
-   var $6=(($5)|(0))!=0;
-   if ($6) { label = 2; break; } else { label = 3; break; }
-  case 2: 
-   var $8=$2;
-   var $9=(($8+12)|0);
-   var $10=HEAP32[(($9)>>2)];
-   var $11=$2;
-   var $12=FUNCTION_TABLE[$10]($11);
-   label = 3; break;
-  case 3: 
-   _cleanup();
-   _exit(1);
-   throw "Reached an unreachable!";
-   STACKTOP = sp;
-   return;
+ while(1)switch(label){
+ case 1: 
+ var $1;
+ var $2;
+ $1=$line;
+ $2=$rwops;
+ var $3=$1;
+ var $4=_printf(72,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$3,tempVarArgs)); STACKTOP=tempVarArgs;
+ var $5=$2;
+ var $6=($5|0)!=0;
+ if($6){label=2;break;}else{label=3;break;}
+ case 2: 
+ var $8=$2;
+ var $9=(($8+12)|0);
+ var $10=HEAP32[(($9)>>2)];
+ var $11=$2;
+ var $12=FUNCTION_TABLE[$10]($11);
+ label=3;break;
+ case 3: 
+ _cleanup();
+ _exit(1);
+ throw ensureExc("Reached an unreachable!");
+ STACKTOP=sp;return;
   default: assert(0, "bad label: " + label);
  }
 }
@@ -5667,10 +6491,10 @@ ExitStatus.prototype.constructor = ExitStatus;
 var initialStackTop;
 var preloadStartTime = null;
 var calledMain = false;
-var calledRun = false;
-dependenciesFulfilled = function() {
+dependenciesFulfilled = function runCaller() {
   // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
-  if (!calledRun && shouldRunNow) run();
+  if (!Module['calledRun'] && shouldRunNow) run();
+  if (!Module['calledRun']) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
 }
 Module['callMain'] = Module.callMain = function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on __ATMAIN__)');
@@ -5712,7 +6536,8 @@ Module['callMain'] = Module.callMain = function callMain(args) {
       Module['noExitRuntime'] = true;
       return;
     } else {
-      throw e;
+      if (e && typeof e === 'object' && e.stack) Module.printErr('exception thrown: ' + [e, e.stack]);
+      throw ensureExc(e);
     }
   } finally {
     calledMain = true;
@@ -5733,7 +6558,7 @@ function run(args) {
   function doRun() {
     ensureInitRuntime();
     preMain();
-    calledRun = true;
+    Module['calledRun'] = true;
     if (Module['_main'] && shouldRunNow) {
       Module['callMain'](args);
     }
@@ -5776,7 +6601,7 @@ function abort(text) {
   }
   ABORT = true;
   EXITSTATUS = 1;
-  throw ensureExc('abort() at ' + (new Error().stack));
+  throw ensureExc('abort() at ' + stackTrace());
 }
 Module['abort'] = Module.abort = abort;
 // {{PRE_RUN_ADDITIONS}}

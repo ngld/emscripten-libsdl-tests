@@ -1612,7 +1612,7 @@ function copyTempDouble(ptr) {
             else while (attr.size > contents.length) contents.push(0);
           }
         },lookup:function (parent, name) {
-          throw FS.genericErrors[ERRNO_CODES.ENOENT];
+          throw ensureExc(FS.genericErrors[ERRNO_CODES.ENOENT]);
         },mknod:function (parent, name, mode, dev) {
           return MEMFS.createNode(parent, name, mode, dev);
         },rename:function (old_node, new_dir, new_name) {
@@ -1949,7 +1949,7 @@ function copyTempDouble(ptr) {
             stat.mode = stat.mode | ((stat.mode & 146) >> 1);
           }
         } catch (e) {
-          if (!e.code) throw e;
+          if (!e.code) throw ensureExc(e);
           throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
         }
         return stat.mode;
@@ -1974,7 +1974,7 @@ function copyTempDouble(ptr) {
           try {
             stat = fs.lstatSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           // node.js v0.10.20 doesn't report blksize and blocks on Windows. Fake them with default blksize of 4096.
@@ -2016,7 +2016,7 @@ function copyTempDouble(ptr) {
               fs.truncateSync(path, attr.size);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },lookup:function (parent, name) {
@@ -2034,7 +2034,7 @@ function copyTempDouble(ptr) {
               fs.writeFileSync(path, '', { mode: node.mode });
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           return node;
@@ -2044,7 +2044,7 @@ function copyTempDouble(ptr) {
           try {
             fs.renameSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },unlink:function (parent, name) {
@@ -2052,7 +2052,7 @@ function copyTempDouble(ptr) {
           try {
             fs.unlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },rmdir:function (parent, name) {
@@ -2060,7 +2060,7 @@ function copyTempDouble(ptr) {
           try {
             fs.rmdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readdir:function (node) {
@@ -2068,7 +2068,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },symlink:function (parent, newName, oldPath) {
@@ -2076,7 +2076,7 @@ function copyTempDouble(ptr) {
           try {
             fs.symlinkSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readlink:function (node) {
@@ -2084,7 +2084,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         }},stream_ops:{open:function (stream) {
@@ -2094,7 +2094,7 @@ function copyTempDouble(ptr) {
               stream.nfd = fs.openSync(path, NODEFS.flagsToPermissionString(stream.flags));
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },close:function (stream) {
@@ -2103,7 +2103,7 @@ function copyTempDouble(ptr) {
               fs.closeSync(stream.nfd);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },read:function (stream, buffer, offset, length, position) {
@@ -2159,7 +2159,7 @@ function copyTempDouble(ptr) {
       // http://pubs.opengroup.org/onlinepubs/000095399/functions/fflush.html
       // we don't currently perform any user-space buffering of data
     }var FS={root:null,mounts:[],devices:[null],streams:[null],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:null,genericErrors:{},handleFSError:function (e) {
-        if (!(e instanceof FS.ErrnoError)) throw e + ' : ' + stackTrace();
+        if (!(e instanceof FS.ErrnoError)) throw ensureExc(e + ' : ' + stackTrace());
         return ___setErrNo(e.errno);
       },lookupPath:function (path, opts) {
         path = PATH.resolve(FS.cwd(), path);
@@ -2624,7 +2624,7 @@ function copyTempDouble(ptr) {
         try {
           old_dir.node_ops.rename(old_node, new_dir, new_name);
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           // add the node back to the hash (in case node_ops.rename
           // changed its name)
@@ -2860,7 +2860,7 @@ function copyTempDouble(ptr) {
             stream.stream_ops.close(stream);
           }
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           FS.closeStream(stream.fd);
         }
@@ -3957,7 +3957,7 @@ function copyTempDouble(ptr) {
         flags = flags || 0;
         var surf = _malloc(60);  // SDL_Surface has 15 fields of quantum size
         var buffer = _malloc(width*height*4); // TODO: only allocate when locked the first time
-        var pixelFormat = _malloc(44);
+        var pixelFormat = _malloc(48);
         flags |= 1; // SDL_HWSURFACE - this tells SDL_MUSTLOCK that this needs to be locked
         //surface with SDL_HWPALETTE flag is 8bpp surface (1 byte)
         var is_SDL_HWPALETTE = flags & 0x00200000;  
@@ -3971,7 +3971,7 @@ function copyTempDouble(ptr) {
         HEAP32[(((surf)+(20))>>2)]=buffer      // SDL_Surface.pixels
         HEAP32[(((surf)+(36))>>2)]=0      // SDL_Surface.offset
         HEAP32[(((surf)+(56))>>2)]=1
-        HEAP32[((pixelFormat)>>2)]=0 /* XXX missing C define SDL_PIXELFORMAT_RGBA8888 */ // SDL_PIXELFORMAT_RGBA8888
+        HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
         HEAP32[(((pixelFormat)+(4))>>2)]=0 // TODO
         HEAP8[(((pixelFormat)+(8))|0)]=bpp * 8
         HEAP8[(((pixelFormat)+(9))|0)]=bpp
@@ -4781,8 +4781,8 @@ function copyTempDouble(ptr) {
             try {
               sock.sock_ops.listen(sock, 0);
             } catch (e) {
-              if (!(e instanceof FS.ErrnoError)) throw e;
-              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              if (!(e instanceof FS.ErrnoError)) throw ensureExc(e);
+              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw ensureExc(e);
             }
           }
         },connect:function (sock, addr, port) {
@@ -5793,7 +5793,7 @@ function copyTempDouble(ptr) {
             return;
           } else {
             if (e && typeof e === 'object' && e.stack) Module.printErr('exception thrown: ' + [e, e.stack]);
-            throw e;
+            throw ensureExc(e);
           }
         }
         if (Module['postMainLoop']) {
@@ -6381,7 +6381,7 @@ function _quit($rc){
  _SDL_Quit();
  var $2=$1;
  _exit($2);
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  return;
 }
 function _hflip($s){
@@ -7142,7 +7142,7 @@ function _main_loop(){
  case 61: 
  _SDL_Quit();
  _exit(0);
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 62: 
  _emscripten_run_script(576);
  STACKTOP=sp;return;
@@ -7211,7 +7211,7 @@ function _malloc($bytes){
  label=11;break;
  case 10: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 11: 
  var $40=$17<<3;
  var $41=$40|3;
@@ -7294,7 +7294,7 @@ function _malloc($bytes){
  label=20;break;
  case 19: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 20: 
  var $105=$82<<3;
  var $106=((($105)-($8))|0);
@@ -7342,7 +7342,7 @@ function _malloc($bytes){
  if($136){label=24;break;}else{var $F4_0=$133;var $_pre_phi=$132;label=25;break;}
  case 24: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 25: 
  var $_pre_phi;
  var $F4_0;
@@ -7456,7 +7456,7 @@ function _malloc($bytes){
  var $R_1_i=$203;label=47;break;
  case 39: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 40: 
  var $220=(($v_0_i+20)|0);
  var $221=HEAP32[(($220)>>2)];
@@ -7488,7 +7488,7 @@ function _malloc($bytes){
  var $R_1_i=$R_0_i;label=47;break;
  case 46: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 47: 
  var $R_1_i;
  var $240=($201|0)==0;
@@ -7531,7 +7531,7 @@ function _malloc($bytes){
  label=56;break;
  case 55: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 56: 
  var $266=($R_1_i|0)==0;
  if($266){label=67;break;}else{label=57;break;}
@@ -7560,7 +7560,7 @@ function _malloc($bytes){
  label=62;break;
  case 61: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 62: 
  var $285=(($v_0_i+20)|0);
  var $286=HEAP32[(($285)>>2)];
@@ -7579,10 +7579,10 @@ function _malloc($bytes){
  label=67;break;
  case 65: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 66: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 67: 
  var $298=($rsize_0_i>>>0)<16;
  if($298){label=68;break;}else{label=69;break;}
@@ -7641,7 +7641,7 @@ function _malloc($bytes){
  if($334){label=73;break;}else{var $F1_0_i=$331;var $_pre_phi_i=$330;label=74;break;}
  case 73: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 74: 
  var $_pre_phi_i;
  var $F1_0_i;
@@ -7659,7 +7659,7 @@ function _malloc($bytes){
  label=77;break;
  case 76: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 77: 
  var $342=(($v_0_i+8)|0);
  var $343=$342;
@@ -7868,7 +7868,7 @@ function _malloc($bytes){
  var $R_1_i122=$474;label=113;break;
  case 105: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 106: 
  var $491=(($v_3_lcssa_i+20)|0);
  var $492=HEAP32[(($491)>>2)];
@@ -7900,7 +7900,7 @@ function _malloc($bytes){
  var $R_1_i122=$R_0_i120;label=113;break;
  case 112: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 113: 
  var $R_1_i122;
  var $511=($472|0)==0;
@@ -7943,7 +7943,7 @@ function _malloc($bytes){
  label=122;break;
  case 121: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 122: 
  var $537=($R_1_i122|0)==0;
  if($537){label=133;break;}else{label=123;break;}
@@ -7972,7 +7972,7 @@ function _malloc($bytes){
  label=128;break;
  case 127: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 128: 
  var $556=(($v_3_lcssa_i+20)|0);
  var $557=HEAP32[(($556)>>2)];
@@ -7991,10 +7991,10 @@ function _malloc($bytes){
  label=133;break;
  case 131: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 132: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 133: 
  var $569=($rsize_3_lcssa_i>>>0)<16;
  if($569){label=134;break;}else{label=135;break;}
@@ -8051,7 +8051,7 @@ function _malloc($bytes){
  if($603){label=139;break;}else{var $F5_0_i=$600;var $_pre_phi_i128=$599;label=140;break;}
  case 139: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 140: 
  var $_pre_phi_i128;
  var $F5_0_i;
@@ -8186,7 +8186,7 @@ function _malloc($bytes){
  label=159;break;
  case 153: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 154: 
  var $694=(($T_0_i+8)|0);
  var $695=HEAP32[(($694)>>2)];
@@ -8217,10 +8217,10 @@ function _malloc($bytes){
  label=159;break;
  case 157: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 158: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 159: 
  var $711=(($v_3_lcssa_i+8)|0);
  var $712=$711;
@@ -8307,7 +8307,7 @@ function _malloc($bytes){
  if($765){label=170;break;}else{label=169;break;}
  case 169: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 170: 
  HEAP32[((824)>>2)]=$762;
  HEAP32[((820)>>2)]=$762;
@@ -8811,10 +8811,10 @@ function _malloc($bytes){
  label=279;break;
  case 244: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 245: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 246: 
  var $1081=$1004;
  var $_sum34_i_i=$1003|24;
@@ -8855,7 +8855,7 @@ function _malloc($bytes){
  var $R_1_i_i=$1087;label=259;break;
  case 251: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 252: 
  var $_sum67_i_i=$1003|16;
  var $_sum103_i=((($_sum2_i23_i)+($_sum67_i_i))|0);
@@ -8893,7 +8893,7 @@ function _malloc($bytes){
  var $R_1_i_i=$R_0_i_i;label=259;break;
  case 258: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 259: 
  var $R_1_i_i;
  var $1129=($1084|0)==0;
@@ -8939,7 +8939,7 @@ function _malloc($bytes){
  label=268;break;
  case 267: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 268: 
  var $1156=($R_1_i_i|0)==0;
  if($1156){label=279;break;}else{label=269;break;}
@@ -8971,7 +8971,7 @@ function _malloc($bytes){
  label=274;break;
  case 273: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 274: 
  var $_sum101_i=((($_sum2_i23_i)+($_sum3233_i_i))|0);
  var $1176=(($tbase_245_i+$_sum101_i)|0);
@@ -8992,10 +8992,10 @@ function _malloc($bytes){
  label=279;break;
  case 277: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 278: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 279: 
  var $_sum9_i_i=$1041|$1003;
  var $_sum102_i=((($_sum9_i_i)+($tsize_244_i))|0);
@@ -9047,7 +9047,7 @@ function _malloc($bytes){
  if($1219){label=284;break;}else{var $F4_0_i_i=$1216;var $_pre_phi_i25_i=$1215;label=285;break;}
  case 284: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 285: 
  var $_pre_phi_i25_i;
  var $F4_0_i_i;
@@ -9182,7 +9182,7 @@ function _malloc($bytes){
  label=303;break;
  case 298: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 299: 
  var $1310=(($T_0_i27_i+8)|0);
  var $1311=HEAP32[(($1310)>>2)];
@@ -9213,7 +9213,7 @@ function _malloc($bytes){
  label=303;break;
  case 302: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 303: 
  var $_sum1819_i_i=$993|8;
  var $1326=(($tbase_245_i+$_sum1819_i_i)|0);
@@ -9356,7 +9356,7 @@ function _malloc($bytes){
  if($1415){label=319;break;}else{var $F_0_i_i=$1412;var $_pre_phi_i_i=$1411;label=320;break;}
  case 319: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 320: 
  var $_pre_phi_i_i;
  var $F_0_i_i;
@@ -9471,7 +9471,7 @@ function _malloc($bytes){
  label=338;break;
  case 333: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 334: 
  var $1494=(($T_0_i_i+8)|0);
  var $1495=HEAP32[(($1494)>>2)];
@@ -9498,7 +9498,7 @@ function _malloc($bytes){
  label=338;break;
  case 337: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 338: 
  var $1507=HEAP32[((2020)>>2)];
  var $1508=($1507>>>0)>($nb_0>>>0);
@@ -9637,10 +9637,10 @@ function _free($mem){
  var $p_0=$25;var $psize_0=$26;label=56;break;
  case 19: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 20: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 21: 
  var $69=$24;
  var $_sum266=((($_sum232)+(24))|0);
@@ -9677,7 +9677,7 @@ function _free($mem){
  var $R_1=$75;label=34;break;
  case 26: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 27: 
  var $_sum269=((($_sum232)+(20))|0);
  var $93=(($mem+$_sum269)|0);
@@ -9713,7 +9713,7 @@ function _free($mem){
  var $R_1=$R_0;label=34;break;
  case 33: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 34: 
  var $R_1;
  var $115=($72|0)==0;
@@ -9758,7 +9758,7 @@ function _free($mem){
  label=43;break;
  case 42: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 43: 
  var $142=($R_1|0)==0;
  if($142){var $p_0=$25;var $psize_0=$26;label=56;break;}else{label=44;break;}
@@ -9789,7 +9789,7 @@ function _free($mem){
  label=49;break;
  case 48: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 49: 
  var $_sum272=((($_sum232)+(20))|0);
  var $162=(($mem+$_sum272)|0);
@@ -9810,10 +9810,10 @@ function _free($mem){
  var $p_0=$25;var $psize_0=$26;label=56;break;
  case 52: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 53: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 54: 
  var $_sum233=((($14)-(4))|0);
  var $176=(($mem+$_sum233)|0);
@@ -9951,10 +9951,10 @@ function _free($mem){
  label=110;break;
  case 75: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 76: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 77: 
  var $262=$15;
  var $_sum235=((($14)+(16))|0);
@@ -9991,7 +9991,7 @@ function _free($mem){
  var $R7_1=$268;label=90;break;
  case 82: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 83: 
  var $_sum239=((($14)+(12))|0);
  var $287=(($mem+$_sum239)|0);
@@ -10028,7 +10028,7 @@ function _free($mem){
  var $R7_1=$R7_0;label=90;break;
  case 89: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 90: 
  var $R7_1;
  var $310=($265|0)==0;
@@ -10073,7 +10073,7 @@ function _free($mem){
  label=99;break;
  case 98: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 99: 
  var $337=($R7_1|0)==0;
  if($337){label=110;break;}else{label=100;break;}
@@ -10104,7 +10104,7 @@ function _free($mem){
  label=105;break;
  case 104: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 105: 
  var $_sum252=((($14)+(12))|0);
  var $357=(($mem+$_sum252)|0);
@@ -10125,10 +10125,10 @@ function _free($mem){
  label=110;break;
  case 108: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 109: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 110: 
  var $371=$222|1;
  var $372=(($p_0+4)|0);
@@ -10182,7 +10182,7 @@ function _free($mem){
  if($402){label=117;break;}else{var $F16_0=$399;var $_pre_phi=$398;label=118;break;}
  case 117: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 118: 
  var $_pre_phi;
  var $F16_0;
@@ -10297,7 +10297,7 @@ function _free($mem){
  label=136;break;
  case 131: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 132: 
  var $481=(($T_0+8)|0);
  var $482=HEAP32[(($481)>>2)];
@@ -10324,7 +10324,7 @@ function _free($mem){
  label=136;break;
  case 135: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 136: 
  var $495=HEAP32[((2040)>>2)];
  var $496=((($495)-(1))|0);
@@ -10342,7 +10342,7 @@ function _free($mem){
  label=140;break;
  case 139: 
  _abort();
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  case 140: 
  return;
   default: assert(0, "bad label: " + label);
@@ -10426,7 +10426,7 @@ Module['callMain'] = Module.callMain = function callMain(args) {
       return;
     } else {
       if (e && typeof e === 'object' && e.stack) Module.printErr('exception thrown: ' + [e, e.stack]);
-      throw e;
+      throw ensureExc(e);
     }
   } finally {
     calledMain = true;

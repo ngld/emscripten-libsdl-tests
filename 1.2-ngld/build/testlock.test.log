@@ -26,3 +26,4 @@
         atexit(SDL_Quit_Wrapper);
 [0;1;32m        ^
 [0m7 warnings generated.
+warning: unresolved symbol: raise

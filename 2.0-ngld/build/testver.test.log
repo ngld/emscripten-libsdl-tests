@@ -1,0 +1,3 @@
+warning: unresolved symbol: SDL_GetVersion
+warning: unresolved symbol: SDL_GetRevisionNumber
+warning: unresolved symbol: SDL_GetRevision

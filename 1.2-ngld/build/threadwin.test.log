@@ -1,13 +1,13 @@
 [1mthreadwin.c:139:56: [0m[0;1;31merror: [0m[1mtoo few arguments to function call, expected 5, have 4[0m
                 found = SDL_PeepEvents(events, 10, SDL_GETEVENT, mask);
 [0;1;32m                        ~~~~~~~~~~~~~~                               ^
-[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:488:1: [0m[0;1;30mnote: [0m'SDL_PeepEvents' declared here[0m
+[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:489:1: [0m[0;1;30mnote: [0m'SDL_PeepEvents' declared here[0m
 extern DECLSPEC int SDLCALL SDL_PeepEvents(SDL_Event * events, int numevents,
 [0;1;32m^
 [0m[1mthreadwin.c:176:56: [0m[0;1;31merror: [0m[1mtoo few arguments to function call, expected 5, have 4[0m
                 found = SDL_PeepEvents(events, 10, SDL_GETEVENT, mask);
 [0;1;32m                        ~~~~~~~~~~~~~~                               ^
-[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:488:1: [0m[0;1;30mnote: [0m'SDL_PeepEvents' declared here[0m
+[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:489:1: [0m[0;1;30mnote: [0m'SDL_PeepEvents' declared here[0m
 extern DECLSPEC int SDLCALL SDL_PeepEvents(SDL_Event * events, int numevents,
 [0;1;32m^
 [0m[1mthreadwin.c:248:18: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_INIT_EVENTTHREAD'[0m
@@ -16,7 +16,7 @@ extern DECLSPEC int SDLCALL SDL_PeepEvents(SDL_Event * events, int numevents,
 [0m[1mthreadwin.c:296:33: [0m[0;1;31merror: [0m[1mtoo few arguments to function call, expected 2, have 1[0m
         SDL_SetEventFilter(FilterEvents);
 [0;1;32m        ~~~~~~~~~~~~~~~~~~             ^
-[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:572:1: [0m[0;1;30mnote: [0m'SDL_SetEventFilter' declared here[0m
+[0m[1m/home/ngld/dev/em-dev/emscripten/system/include/SDL/SDL_events.h:573:1: [0m[0;1;30mnote: [0m'SDL_SetEventFilter' declared here[0m
 extern DECLSPEC void SDLCALL SDL_SetEventFilter(SDL_EventFilter filter,
 [0;1;32m^
 [0m[1mthreadwin.c:325:24: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'SDL_INIT_EVENTTHREAD'[0m

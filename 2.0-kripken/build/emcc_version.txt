@@ -1,2 +1,2 @@
-emcc (Emscripten GCC-like replacement) 1.7.8 (commit 37d83ff57f5ddcf584e93695cadba623614b1fdc)
+emcc (Emscripten GCC-like replacement) 1.7.8 (commit 29906a675d9da025fc428d1cb95ed1a0f7bfb691)
 nope

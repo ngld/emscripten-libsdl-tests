@@ -1612,7 +1612,7 @@ function copyTempDouble(ptr) {
             else while (attr.size > contents.length) contents.push(0);
           }
         },lookup:function (parent, name) {
-          throw FS.genericErrors[ERRNO_CODES.ENOENT];
+          throw ensureExc(FS.genericErrors[ERRNO_CODES.ENOENT]);
         },mknod:function (parent, name, mode, dev) {
           return MEMFS.createNode(parent, name, mode, dev);
         },rename:function (old_node, new_dir, new_name) {
@@ -1949,7 +1949,7 @@ function copyTempDouble(ptr) {
             stat.mode = stat.mode | ((stat.mode & 146) >> 1);
           }
         } catch (e) {
-          if (!e.code) throw e;
+          if (!e.code) throw ensureExc(e);
           throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
         }
         return stat.mode;
@@ -1974,7 +1974,7 @@ function copyTempDouble(ptr) {
           try {
             stat = fs.lstatSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           // node.js v0.10.20 doesn't report blksize and blocks on Windows. Fake them with default blksize of 4096.
@@ -2016,7 +2016,7 @@ function copyTempDouble(ptr) {
               fs.truncateSync(path, attr.size);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },lookup:function (parent, name) {
@@ -2034,7 +2034,7 @@ function copyTempDouble(ptr) {
               fs.writeFileSync(path, '', { mode: node.mode });
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
           return node;
@@ -2044,7 +2044,7 @@ function copyTempDouble(ptr) {
           try {
             fs.renameSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },unlink:function (parent, name) {
@@ -2052,7 +2052,7 @@ function copyTempDouble(ptr) {
           try {
             fs.unlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },rmdir:function (parent, name) {
@@ -2060,7 +2060,7 @@ function copyTempDouble(ptr) {
           try {
             fs.rmdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readdir:function (node) {
@@ -2068,7 +2068,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readdirSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },symlink:function (parent, newName, oldPath) {
@@ -2076,7 +2076,7 @@ function copyTempDouble(ptr) {
           try {
             fs.symlinkSync(oldPath, newPath);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },readlink:function (node) {
@@ -2084,7 +2084,7 @@ function copyTempDouble(ptr) {
           try {
             return fs.readlinkSync(path);
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         }},stream_ops:{open:function (stream) {
@@ -2094,7 +2094,7 @@ function copyTempDouble(ptr) {
               stream.nfd = fs.openSync(path, NODEFS.flagsToPermissionString(stream.flags));
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },close:function (stream) {
@@ -2103,7 +2103,7 @@ function copyTempDouble(ptr) {
               fs.closeSync(stream.nfd);
             }
           } catch (e) {
-            if (!e.code) throw e;
+            if (!e.code) throw ensureExc(e);
             throw ensureExc(new FS.ErrnoError(ERRNO_CODES[e.code]));
           }
         },read:function (stream, buffer, offset, length, position) {
@@ -2159,7 +2159,7 @@ function copyTempDouble(ptr) {
       // http://pubs.opengroup.org/onlinepubs/000095399/functions/fflush.html
       // we don't currently perform any user-space buffering of data
     }var FS={root:null,mounts:[],devices:[null],streams:[null],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:null,genericErrors:{},handleFSError:function (e) {
-        if (!(e instanceof FS.ErrnoError)) throw e + ' : ' + stackTrace();
+        if (!(e instanceof FS.ErrnoError)) throw ensureExc(e + ' : ' + stackTrace());
         return ___setErrNo(e.errno);
       },lookupPath:function (path, opts) {
         path = PATH.resolve(FS.cwd(), path);
@@ -2624,7 +2624,7 @@ function copyTempDouble(ptr) {
         try {
           old_dir.node_ops.rename(old_node, new_dir, new_name);
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           // add the node back to the hash (in case node_ops.rename
           // changed its name)
@@ -2860,7 +2860,7 @@ function copyTempDouble(ptr) {
             stream.stream_ops.close(stream);
           }
         } catch (e) {
-          throw e;
+          throw ensureExc(e);
         } finally {
           FS.closeStream(stream.fd);
         }
@@ -3957,7 +3957,7 @@ function copyTempDouble(ptr) {
         flags = flags || 0;
         var surf = _malloc(60);  // SDL_Surface has 15 fields of quantum size
         var buffer = _malloc(width*height*4); // TODO: only allocate when locked the first time
-        var pixelFormat = _malloc(44);
+        var pixelFormat = _malloc(48);
         flags |= 1; // SDL_HWSURFACE - this tells SDL_MUSTLOCK that this needs to be locked
         //surface with SDL_HWPALETTE flag is 8bpp surface (1 byte)
         var is_SDL_HWPALETTE = flags & 0x00200000;  
@@ -3971,7 +3971,7 @@ function copyTempDouble(ptr) {
         HEAP32[(((surf)+(20))>>2)]=buffer      // SDL_Surface.pixels
         HEAP32[(((surf)+(36))>>2)]=0      // SDL_Surface.offset
         HEAP32[(((surf)+(56))>>2)]=1
-        HEAP32[((pixelFormat)>>2)]=0 /* XXX missing C define SDL_PIXELFORMAT_RGBA8888 */ // SDL_PIXELFORMAT_RGBA8888
+        HEAP32[((pixelFormat)>>2)]=-2042224636 // SDL_PIXELFORMAT_RGBA8888
         HEAP32[(((pixelFormat)+(4))>>2)]=0 // TODO
         HEAP8[(((pixelFormat)+(8))|0)]=bpp * 8
         HEAP8[(((pixelFormat)+(9))|0)]=bpp
@@ -4878,8 +4878,8 @@ function copyTempDouble(ptr) {
             try {
               sock.sock_ops.listen(sock, 0);
             } catch (e) {
-              if (!(e instanceof FS.ErrnoError)) throw e;
-              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              if (!(e instanceof FS.ErrnoError)) throw ensureExc(e);
+              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw ensureExc(e);
             }
           }
         },connect:function (sock, addr, port) {
@@ -6482,7 +6482,7 @@ function _quit($rc){
  _SDLTest_CommonQuit($2);
  var $3=$1;
  _exit($3);
- throw "Reached an unreachable!";
+ throw ensureExc("Reached an unreachable!");
  return;
 }
 function _SDLTest_CommonCreateState($argv,$flags){
@@ -10979,7 +10979,7 @@ Module['callMain'] = Module.callMain = function callMain(args) {
       return;
     } else {
       if (e && typeof e === 'object' && e.stack) Module.printErr('exception thrown: ' + [e, e.stack]);
-      throw e;
+      throw ensureExc(e);
     }
   } finally {
     calledMain = true;
